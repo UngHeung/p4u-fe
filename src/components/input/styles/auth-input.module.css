@@ -6,12 +6,12 @@
   font-size: var(--font-size-20);
   font-weight: var(--font-weight-regular);
   text-align: center;
-  color: #111111;
+  color: var(--font-color-basic);
 }
 
 .authInput {
   border: none;
-  border-bottom: 2px solid #111111;
+  border-bottom: 2px solid var(--color-input-border);
 }
 
 .authInputLabel {
