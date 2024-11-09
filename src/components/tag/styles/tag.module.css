@@ -1,0 +1,29 @@
+.tagWrap {
+  display: inline-block;
+  position: relative;
+  margin-right: 5px;
+  padding: 1px 10px 0 20px;
+  background-color: var(--color-tag-bg);
+  border-radius: 15px
+}
+
+.tagIcon {
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.tagIcon>img {
+  object-fit: contain;
+  object-position: -60px -50px;
+}
+
+.tagKeyword {
+  height: var(--tag-height);
+  line-height: var(--tag-height);
+  color: var(--font-color-nagative);
+}
