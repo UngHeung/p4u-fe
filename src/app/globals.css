@@ -16,7 +16,7 @@
   --color-message-bg: var(--color-main);
 
   --font-color-basic: #111111;
-  --font-color-nagative: #ffffff;
+  --font-color-negative: #ffffff;
 
   --font-family-basic: 'Pretendard Variable';
 
@@ -39,11 +39,22 @@
   --input-font-size: var(--font-size-20);
   --input-font-weight: var(--font-weight-regular);
 
-  --button-height-100: 100px;
+  --button-height-40: 40px;
   --button-font-size: var(--font-size-16);
   --button-font-weight: var(--font-weight-bold);
 
   --tag-height: 30px;
   --tag-font-size: var(--font-size-14);
   --tag-font-weight: var(--font-weight-regular);
+}
+
+* {
+  font-family: var(--font-family-basic);
+  letter-spacing: -.7px;
+  color: var(--font-color-basic);
+}
+
+body {
+  width: 100%;
+  height: 100svh;
 }
