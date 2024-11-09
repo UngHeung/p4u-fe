@@ -4,9 +4,8 @@
   background-color: var(--color-button-submit);
 }
 
-/* sign up */
-
-.signUpForm {
+.signUpForm,
+.signInForm {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,6 +15,8 @@
   max-width: 600px;
   margin: 0 auto;
 }
+
+/* sign up */
 
 .inputNameWrap,
 .inputIdWrap {
@@ -31,8 +32,8 @@
   left: 50%;
   padding: 100px 0;
   background-color: #ffffff;
-  transform: translate(-50%, -60%);
   transition: opacity .5s;
+  transform: translate(-50%, -60%);
   z-index: 2;
 }
 
@@ -54,19 +55,11 @@
   align-items: center;
   gap: 5px;
   margin-left: 10px;
+  transition: background-color .3s;
 }
 
-/* .icon {
-  position: absolute;
-  top: 10px;
+.button:disabled {
+  background-color: #757575;
 }
-
-.icon:not(:last-of-type) {
-  left: 90px;
-}
-
-.icon:last-of-type {
-  right: 24px;
-} */
 
 /* sign in */
