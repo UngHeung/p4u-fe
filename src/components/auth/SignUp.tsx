@@ -7,7 +7,8 @@ import AuthIcons from "./AuthIcons";
 import style from "./styles/sign.module.css";
 
 const SignUp = () => {
-  const [inputNameWrapLeft, setInputNameWrapLeft] = useState("50%");
+  const [opacity, setOpacity] = useState("1");
+  const [zIndex, setZIndex] = useState("2");
 
   return (
     <form
@@ -16,7 +17,7 @@ const SignUp = () => {
       }}
       className={style.signUpForm}
     >
-      <section className={style.inputNameWrap} style={{ left: inputNameWrapLeft }}>
+      <section className={style.inputNameWrap} style={{ opacity, zIndex }}>
         <div className={style.inputWrap}>
           <AuthInput
             id={"nameInput"}
@@ -30,11 +31,15 @@ const SignUp = () => {
         <div className={style.buttonWrap}>
           <AuthButton
             id={"nextButton"}
-            value={"다음"}
+            value={{ text: "다음", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
             className={`${style.button} ${style.submit}`}
-            onClick={() => setInputNameWrapLeft("-150%")}
+            onClick={() => {
+              setOpacity("0");
+              setTimeout(() => {
+                setZIndex("-99");
+              }, 500);
+            }}
           />
-          <AuthIcons size="small" type="enter" className={style.icon} />
         </div>
       </section>
 
@@ -60,19 +65,20 @@ const SignUp = () => {
         <div className={style.buttonWrap}>
           <AuthButton
             id={"backButton"}
-            value={"이전"}
+            value={{ text: "이전", icon: <AuthIcons size="small" type="cancel" className={style.icon} /> }}
             className={style.button}
-            onClick={() => setInputNameWrapLeft("50%")}
+            onClick={() => {
+              setZIndex("2");
+              setOpacity("1");
+            }}
           />
-          <AuthIcons size="small" type="cancel" className={style.icon} />
           <AuthButton
             id={"submitButton"}
             type={"submit"}
-            value={"가입"}
+            value={{ text: "가입", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
             className={`${style.button} ${style.submit}`}
             onClick={() => {}}
           />
-          <AuthIcons size="small" type="enter" className={style.icon} />
         </div>
       </section>
     </form>

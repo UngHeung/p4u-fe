@@ -28,10 +28,11 @@
 .inputNameWrap {
   position: absolute;
   top: 50%;
+  left: 50%;
   padding: 100px 0;
   background-color: #ffffff;
   transform: translate(-50%, -60%);
-  transition: left .5s;
+  transition: opacity .5s;
   z-index: 2;
 }
 
@@ -48,11 +49,14 @@
 }
 
 .button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
   margin-left: 10px;
-  padding-right: 50px;
 }
 
-.icon {
+/* .icon {
   position: absolute;
   top: 10px;
 }
@@ -63,6 +67,6 @@
 
 .icon:last-of-type {
   right: 24px;
-}
+} */
 
 /* sign in */
