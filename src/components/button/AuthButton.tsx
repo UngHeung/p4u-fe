@@ -3,7 +3,7 @@ import style from "./styles/auth-button.module.css";
 
 interface AuthButtonProps extends Partial<BaseButtonProps> {
   id: string;
-  value: string;
+  value: { text?: string; icon?: JSX.Element };
 }
 
 const AuthButton = ({ id, value, type, className, onClick, disabled }: AuthButtonProps) => {

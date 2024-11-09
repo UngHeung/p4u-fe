@@ -2,7 +2,7 @@ export type BaseButtonTypes = "button" | "submit";
 export type BaseButtonIconTypes = "submit" | "back" | "none";
 export interface BaseButtonProps {
   id: string;
-  value: string;
+  value: { text?: string; icon?: JSX.Element };
   type: BaseButtonTypes;
   className: string;
   onClick?: () => void;
@@ -21,7 +21,7 @@ const BaseButton = ({ id, value, type, className, onClick, disabled }: BaseButto
         }}
         disabled={disabled ?? false}
       >
-        {value}
+        {value.text} {value.icon}
       </button>
     </>
   );
