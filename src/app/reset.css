@@ -21,6 +21,7 @@ li {
 button {
   background-color: inherit;
   border: none;
+  cursor: pointer;
 }
 
 h1,
