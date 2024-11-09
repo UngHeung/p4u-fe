@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import style from "./styles/auth-icons.module.css";
 
 export interface AuthIconsProps {
-  type: "enter" | "cancel";
+  type: "enter" | "cancel" | "logout";
   size: "large" | "medium" | "small";
   className?: string;
 }
@@ -25,34 +25,49 @@ const AuthIcons = ({ type, size, className }: AuthIconsProps) => {
     setPosition(position);
   }, []);
 
-  const handlePosition = () => {
-    const result = {
-      x: 120,
-      y: 100,
-    };
-
+  const handlePosition = (): { x: number; y: number } => {
     if (type === "enter") {
       if (size === "large") {
         // none
       } else if (size === "medium") {
-        result.x = -90;
-        result.y = 0;
-      } else {
-        result.x = -40;
-        result.y = -30;
+        return {
+          x: -90,
+          y: 0,
+        };
+      } else if (size === "small") {
+        return {
+          x: -40,
+          y: -30,
+        };
       }
     } else if (type === "cancel") {
       if (size === "large") {
         // none
       } else if (size === "medium") {
         // none
-      } else {
-        result.x = -60;
-        result.y = -30;
+      } else if (size === "small") {
+        return {
+          x: -60,
+          y: -30,
+        };
+      }
+    } else if (type === "logout") {
+      if (size === "large") {
+        // none
+      } else if (size === "medium") {
+        // none
+      } else if (size === "small") {
+        return {
+          x: -40,
+          y: -50,
+        };
       }
     }
 
-    return result;
+    return {
+      x: 0,
+      y: 0,
+    };
   };
 
   return (
