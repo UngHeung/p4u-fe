@@ -1,0 +1,20 @@
+.authInput,
+.authInputLabel {
+  width: 100%;
+  max-width: 250px;
+  height: var(--input-height-50);
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-regular);
+  text-align: center;
+  color: var(--font-color-basic);
+}
+
+.authInput {
+  border: none;
+  border-bottom: 2px solid var(--color-input-border);
+}
+
+.authInputLabel {
+  display: block;
+  line-height: var(--input-height-50);
+}

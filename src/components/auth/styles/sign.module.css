@@ -1,0 +1,59 @@
+.button.submit {
+  background-color: var(--color-button-submit);
+}
+
+.signUpForm,
+.signInForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.inputNameWrap,
+.inputIdWrap {
+  width: 100%;
+  max-width: 250px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.inputNameWrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 100px 0;
+  background-color: #ffffff;
+  transition: opacity .5s;
+  transform: translate(-50%, -60%);
+  z-index: 2;
+}
+
+.inputIdWrap {
+  margin-bottom: 170px;
+}
+
+.buttonWrap {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  text-align: right;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+  transition: background-color .3s;
+}
+
+.button:disabled {
+  background-color: var(--color-button-back);
+}

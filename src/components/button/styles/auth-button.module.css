@@ -1,0 +1,9 @@
+.authButton {
+  height: var(--button-height-40);
+  padding: 0 30px;
+  background-color: var(--color-button-back);
+  border-radius: calc(var(--button-height-40) / 2);
+  font-size: var(--font-size-16);
+  color: var(--font-color-negative);
+  font-weight: var(--font-weight-bold);
+}
