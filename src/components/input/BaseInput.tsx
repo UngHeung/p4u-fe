@@ -1,10 +1,11 @@
-"ues client";
+import { useState } from "react";
 
-import React, { useState } from "react";
+export type BaseInputTypes = "text" | "password";
 
 export interface BaseInputProps {
   id: string;
   name: string;
+  type: BaseInputTypes;
   className: string;
   readonly?: boolean;
   onChange?: () => void;
@@ -12,7 +13,7 @@ export interface BaseInputProps {
   labelClass?: string;
 }
 
-const BaseInput = ({ id, name, onChange, readonly, className, labelValue, labelClass }: BaseInputProps) => {
+const BaseInput = ({ id, name, onChange, type, readonly, className, labelValue, labelClass }: BaseInputProps) => {
   const [value, setValue] = useState("");
 
   return (
@@ -26,6 +27,7 @@ const BaseInput = ({ id, name, onChange, readonly, className, labelValue, labelC
         id={id}
         value={value}
         name={name}
+        type={type}
         className={className}
         onChange={(event) => {
           setValue(event.target.value);
