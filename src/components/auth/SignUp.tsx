@@ -9,6 +9,7 @@ import style from "./styles/sign.module.css";
 const SignUp = () => {
   const [opacity, setOpacity] = useState("1");
   const [zIndex, setZIndex] = useState("2");
+  const [disabled, setDisabled] = useState(false);
 
   return (
     <form
@@ -77,7 +78,15 @@ const SignUp = () => {
             type={"submit"}
             value={{ text: "가입", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
             className={`${style.button} ${style.submit}`}
-            onClick={() => {}}
+            onClick={() => {
+              setDisabled(true);
+
+              setTimeout(() => {
+                console.log("login!");
+                setDisabled(false);
+              }, 1000);
+            }}
+            disabled={disabled}
           />
         </div>
       </section>
