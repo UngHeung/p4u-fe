@@ -17,6 +17,7 @@ const SignIn = () => {
 
   const handleSignIn = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget);
     const data = {
       account: formData.get("account"),
@@ -37,13 +38,7 @@ const SignIn = () => {
   };
 
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        handleSignIn(event);
-      }}
-      className={style.signInForm}
-    >
+    <form onSubmit={handleSignIn} className={style.signInForm}>
       <section className={style.inputIdWrap}>
         <div className={style.inputWrap}>
           <AuthInput
