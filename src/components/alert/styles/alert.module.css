@@ -1,0 +1,48 @@
+.alertWrap {
+  position: relative;
+  bottom: 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 250px;
+  height: 80px;
+  padding: 10px;
+  background-color: #E22929;
+  border-radius: 20px;
+  transform: translateX(-50%);
+  transition: bottom, opacity .3s, .3s;
+}
+
+.alertIcon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.alertIcon>img {
+  object-fit: contain;
+  object-position: 0px -50px;
+}
+
+.alertMessage {
+  width: calc(100% - 30px);
+  font-size: var(--font-size-14);
+  color: #ffffff;
+}
+
+/* alert queue */
+
+.alertQueue {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  height: 150px;
+}
