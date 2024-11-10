@@ -1,20 +1,46 @@
 "use client";
 
+import { AlertStore, useAlertStore } from "@/stores/alert/alertStore";
 import Link from "next/link";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import { ALERT_MESSAGE_ENUM } from "../alert/constants/message.enum";
 import AuthButton from "../button/AuthButton";
 import AuthInput from "../input/AuthInput";
 import AuthIcons from "./AuthIcons";
 import style from "./styles/sign.module.css";
 
 const SignIn = () => {
+  const pushAlertQueue = useAlertStore((state: AlertStore) => state.pushAlertQueue);
+
   const [disabled, setDisabled] = useState(false);
   const [passwordIsShow, setPasswordIsShow] = useState(false);
+
+  const handleSignIn = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      account: formData.get("account"),
+      password: formData.get("password"),
+    };
+
+    if (!data.account) {
+      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_ID);
+      return;
+    }
+
+    if (!data.password) {
+      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_PASSWORD);
+      return;
+    }
+
+    console.log(data);
+  };
 
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
+        handleSignIn(event);
       }}
       className={style.signInForm}
     >
@@ -52,14 +78,6 @@ const SignIn = () => {
             type={"submit"}
             value={{ text: "로그인", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
             className={`${style.button} ${style.submit}`}
-            onClick={() => {
-              setDisabled(true);
-
-              setTimeout(() => {
-                console.log("login!");
-                setDisabled(false);
-              }, 1000);
-            }}
             disabled={disabled}
           />
         </div>
