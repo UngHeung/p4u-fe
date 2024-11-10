@@ -1,29 +1,38 @@
 "use client";
 
 import icons from "@/public/icons/icon.png";
+import { AlertStore, useAlertStore } from "@/stores/alert/alertStore";
 import Image from "next/image";
-import { ALERT_MESSAGE_ENUM, AlertMessageEnumTypes } from "./constants/message.enum";
+import { useEffect, useState } from "react";
 import style from "./styles/alert.module.css";
 
-export interface AlertItemProps {
-  message: AlertMessageEnumTypes;
-}
+const Alert = ({ message, index }: { message: string; index: number }) => {
+  const deleteAlertQueue = useAlertStore((state: AlertStore) => state.deleteAlertQueue);
 
-const Alert = () => {
-  const messageEnum = ALERT_MESSAGE_ENUM;
-  // expired, isShow,
+  const [opacity, setOpacity] = useState(0);
+  const [bottom, setBottom] = useState(0);
+
+  useEffect(() => {
+    setOpacity(1);
+    setBottom(15);
+
+    setTimeout(() => {
+      setOpacity(0);
+      setBottom(0);
+    }, 2700);
+  }, []);
 
   return (
-    <article className={style.alertWrap}>
+    <article className={style.alertWrap} style={{ opacity, bottom }}>
       <span
         className={style.alertIcon}
         onClick={() => {
-          console.log("alert close!");
+          deleteAlertQueue(index);
         }}
       >
         <Image src={icons} alt={"태그_아이콘"} width={120} height={100} sizes="100%" />
       </span>
-      <pre className={style.alertMessage}>{"이름은 한글, 영문 대소문자만\n입력이 가능합니다."}</pre>
+      <pre className={style.alertMessage}>{message}</pre>
     </article>
   );
 };
