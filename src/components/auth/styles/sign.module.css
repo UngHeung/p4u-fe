@@ -14,6 +14,20 @@
   margin: 0 auto;
 }
 
+.inputWrap {
+  position: relative;
+}
+
+.togglePasswordIsShow {
+  position: absolute;
+  right: 10px;
+  bottom: 15px;
+}
+
+.togglePasswordIsShow>div {
+  cursor: pointer;
+}
+
 .inputNameWrap,
 .inputIdWrap {
   width: 100%;
@@ -43,6 +57,13 @@
   justify-content: flex-end;
   margin-top: 10px;
   text-align: right;
+}
+
+.buttonWrap>a {
+  display: inline-block;
+  line-height: var(--button-height-40);
+  color: var(--color-main);
+  font-weight: var(--font-weight-bold)
 }
 
 .button {

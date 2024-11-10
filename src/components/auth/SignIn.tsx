@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import AuthButton from "../button/AuthButton";
 import AuthInput from "../input/AuthInput";
@@ -8,6 +9,7 @@ import style from "./styles/sign.module.css";
 
 const SignIn = () => {
   const [disabled, setDisabled] = useState(false);
+  const [passwordIsShow, setPasswordIsShow] = useState(false);
 
   return (
     <form
@@ -25,10 +27,18 @@ const SignIn = () => {
             labelClass={style.inputLabel}
             className={style.input}
           />
+
+          <span className={style.togglePasswordIsShow} onClick={() => setPasswordIsShow((prev) => !prev)}>
+            {passwordIsShow ? (
+              <AuthIcons type="pwIsNotShow" size="small" />
+            ) : (
+              <AuthIcons type="pwIsShow" size="small" />
+            )}
+          </span>
           <AuthInput
             id={"password"}
             name={"password"}
-            type={"password"}
+            type={passwordIsShow ? "text" : "password"}
             labelValue={"비밀번호를 입력해주세요."}
             labelClass={style.inputLabel}
             className={style.input}
@@ -36,6 +46,7 @@ const SignIn = () => {
         </div>
 
         <div className={style.buttonWrap}>
+          <Link href={"/signup"}>가입 하러가기!</Link>
           <AuthButton
             id={"submitButton"}
             type={"submit"}
