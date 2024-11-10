@@ -1,7 +1,6 @@
 "use client";
 
-import Alert from "@/components/alert/Alert";
-import Header from "@/components/layout/Header";
+import Layout from "@/components/common/Layout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./globals.css";
@@ -18,9 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <QueryClientProvider client={queryClient}>
-          <Header />
-          {children}
-          <Alert />
+          <Layout>{children}</Layout>
           <ReactQueryDevtools />
         </QueryClientProvider>
       </body>
