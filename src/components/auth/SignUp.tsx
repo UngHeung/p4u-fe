@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import AuthButton from "../button/AuthButton";
 import AuthInput from "../input/AuthInput";
@@ -10,6 +11,7 @@ const SignUp = () => {
   const [opacity, setOpacity] = useState("1");
   const [zIndex, setZIndex] = useState("2");
   const [disabled, setDisabled] = useState(false);
+  const [passwordIsShow, setPasswordIsShow] = useState(false);
 
   return (
     <form
@@ -30,6 +32,7 @@ const SignUp = () => {
         </div>
 
         <div className={style.buttonWrap}>
+          <Link href={"/"}>이미 계정이 있어요!</Link>
           <AuthButton
             id={"nextButton"}
             value={{ text: "다음", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
@@ -53,10 +56,18 @@ const SignUp = () => {
             labelClass={style.inputLabel}
             className={style.input}
           />
+
+          <span className={style.togglePasswordIsShow} onClick={() => setPasswordIsShow((prev) => !prev)}>
+            {passwordIsShow ? (
+              <AuthIcons type="pwIsNotShow" size="small" />
+            ) : (
+              <AuthIcons type="pwIsShow" size="small" />
+            )}
+          </span>
           <AuthInput
             id={"password"}
             name={"password"}
-            type={"password"}
+            type={passwordIsShow ? "text" : "password"}
             labelValue={"비밀번호를 입력해주세요."}
             labelClass={style.inputLabel}
             className={style.input}
