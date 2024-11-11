@@ -85,8 +85,206 @@
   font-size: var(--font-size-16)
 }
 
-@media (max-width: 400) {
-  .cardWrap {
-    width: 100%;
+/* card write */
+
+.cardWriteForm {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.checkAnonymityWrap {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.checkAnonymityWrap>input {
+  display: none;
+}
+
+.anonymityOrName {
+  display: inline-block;
+  color: var(--font-color-negative);
+}
+
+.checkAnonymityBg {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+  background-color: #ffffff;
+  border-radius: 19px;
+  cursor: pointer;
+}
+
+.checkAnonymityStick {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 23px;
+  height: 23px;
+  background-color: #222222;
+  border-radius: 12px;
+  transition: background-color, left .3s, .3s;
+}
+
+.checkAnonymityStick.isAnonymity {
+  left: 24px;
+  background-color: #878787;
+}
+
+.cardWriteWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 375px;
+  padding: 20px;
+  background-color: #222222;
+  border-radius: 25px;
+}
+
+.writeTitleWrap {
+  width: 100%;
+  height: 50px;
+  margin-top: 90px;
+}
+
+.writeTitleWrap>input {
+  width: 100%;
+  background-color: inherit;
+  border: none;
+  border-bottom: 2px solid #ffffff;
+  font-size: 36px;
+  font-weight: var(--font-weight-bold);
+  color: var(--font-color-negative);
+}
+
+.writeTitleWrap>input::placeholder {
+  color: #494949
+}
+
+.writeContentWrap {
+  width: 100%;
+  height: 150px;
+}
+
+.writeContentWrap>textarea {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+  border: none;
+  font-size: var(--font-size-23);
+  font-weight: var(--font-weight-regular);
+  color: var(--font-color-negative);
+  text-align: left;
+  resize: none;
+}
+
+/* tag */
+.tagWrap {
+  width: 100%;
+  margin-top: 20px;
+  border: 2px solid #222222;
+  border-radius: 25px;
+}
+
+.addTagWrap {
+  width: 100%;
+  min-height: 50px;
+  padding: 10px;
+}
+
+.addTagWrap>ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+}
+
+.addTagWrap li {
+  cursor: pointer;
+}
+
+.inputTagWrap {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  padding: 0 20px;
+}
+
+.inputTagWrap>input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #222222;
+  text-indent: 10px;
+  font-size: var(--font-size-16);
+}
+
+.tagIcon {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+}
+
+.tagIcon>img {
+  object-position: -80px -30px;
+}
+
+/* button */
+.buttonWrap {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 10px;
+  text-align: right;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+  transition: background-color .3s;
+}
+
+.button:disabled {
+  background-color: var(--color-button-back);
+}
+
+.button.submit {
+  background-color: var(--color-button-submit);
+}
+
+@media screen and (max-width: 600px) {
+  .cardWriteForm {
+    padding: 0 10px;
+  }
+
+  .checkAnonymityWrap {
+    right: 30px;
+  }
+
+  .writeTitleWrap>input {
+    font-size: var(--font-size-24);
+  }
+
+  .writeContentWrap>textarea {
+    font-size: var(--font-size-16);
   }
 }
