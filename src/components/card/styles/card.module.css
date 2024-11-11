@@ -234,14 +234,10 @@
 .tagIcon {
   position: absolute;
   bottom: 10px;
-  right: 20px;
+  right: 30px;
   width: 20px;
   height: 20px;
   overflow: hidden;
-}
-
-.tagIcon>img {
-  object-position: -80px -30px;
 }
 
 /* button */
