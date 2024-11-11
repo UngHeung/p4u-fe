@@ -12,6 +12,7 @@
   --color-button-submit: var(--color-main);
   --color-button-back: #616161;
   --color-tag-bg: #434343;
+  --color-tag-bg-answered: #196548;
   --color-tag-none-select-bg: #dedede;
   --color-message-bg: var(--color-main);
 
