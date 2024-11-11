@@ -1,7 +1,7 @@
 "use client";
 
-import AuthIcons from "../auth/AuthIcons";
 import BaseButton from "../button/BaseButton";
+import { svgIcons } from "../common/functions/getSvg";
 import style from "./styles/layout.module.css";
 
 const Header = () => {
@@ -16,7 +16,7 @@ const Header = () => {
           id={""}
           type={"button"}
           className={""}
-          value={{ icon: <AuthIcons type={"logout"} size={"small"} className={style.logout} /> }}
+          value={{ icon: svgIcons.loggedOut() }}
           onClick={() => {
             console.log("logout!");
           }}
