@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { svgIcons } from "../common/functions/getSvg";
 import Tag from "../tag/Tag";
-import CardIcons from "./CardIcons";
 import style from "./styles/card.module.css";
 
 export interface CardProps {
@@ -26,17 +26,17 @@ const Card = ({ writer, title, content, intercessors, tags, answered }: CardProp
       <section className={style.cardFront}>
         <header className={style.cardHeader}>
           <span className={style.cardInfo}>
-            <CardIcons type="heart" />
+            {svgIcons.heart()}
             <strong>{`${intercessors.length}명`}</strong>
             <span>{"이 이 기도제목을 위해 기도하고있습니다."}</span>
           </span>
 
-          <span>{answered ? <CardIcons type={"answerd"} /> : <CardIcons type={"heart-none-check"} />}</span>
+          <span>{answered ? svgIcons.answered() : svgIcons.checked(false)}</span>
         </header>
         <strong className={style.cardTitle}>{title}</strong>
         <span className={style.cardWriter}>{writer.name}</span>
-        <section className={style.tagWrap}>
-          <ul className={style.tagList}>
+        <section className={style.cardTagWrap}>
+          <ul className={style.cardTagList}>
             {tags.length > 0 &&
               tags.map((item, idx) => {
                 return (
@@ -52,12 +52,11 @@ const Card = ({ writer, title, content, intercessors, tags, answered }: CardProp
       <section className={style.cardBack}>
         <header className={style.cardHeader}>
           <span className={style.cardInfo}>
-            <CardIcons type="heart" />
+            {svgIcons.heart()}
             <strong>{`${intercessors.length}명`}</strong>
             <span>{"이 이 기도제목을 위해 기도하고있습니다."}</span>
           </span>
-
-          <span>{answered && <CardIcons type="answerd" />}</span>
+          <span>{answered ? svgIcons.answered() : svgIcons.checked(false)}</span>
         </header>
 
         <pre className={style.cardContent}>{content}</pre>
