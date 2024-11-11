@@ -1,0 +1,86 @@
+.cardWrap {
+  position: relative;
+  width: 400px;
+  height: 250px;
+  padding: 20px;
+  border-radius: 25px;
+  background-color: #222222;
+  transition: 0.3s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.cardWrap.answered {
+  background-color: var(--color-green-good);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  backface-visibility: hidden;
+}
+
+.cardInfo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.cardInfo>strong,
+.cardInfo>span {
+  font-size: var(--font-size-16);
+  color: var(--font-color-negative);
+}
+
+.cardFront,
+.cardBack {
+  position: absolute;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  background-color: inherit;
+}
+
+.cardBack {
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+}
+
+.cardTitle,
+.cardWriter,
+.cardContent {
+  color: var(--font-color-negative);
+}
+
+.cardTitle {
+  display: block;
+  margin-top: 30px;
+  font-size: var(--font-size-26);
+  text-align: center;
+}
+
+.cardWriter {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.tagWrap {
+  width: 100%;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.cardContent {
+  margin-top: 20px;
+  font-size: var(--font-size-16)
+}
