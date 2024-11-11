@@ -1,8 +1,7 @@
-import icons from "@/public/icons/icon.png";
-import Image from "next/image";
 import { useState } from "react";
 import AuthIcons from "../auth/AuthIcons";
 import MainButton from "../button/MainButton";
+import { svgIcons } from "../common/functions/getSvg";
 import Tag from "../tag/Tag";
 import style from "./styles/card.module.css";
 
@@ -66,7 +65,7 @@ const CardWrite = () => {
                 setTagList((prev) => [...prev, tag]);
               }}
             >
-              <Image src={icons} width={120} height={100} sizes={"100%"} alt={"아이콘"} />
+              {svgIcons.enter("medium", "#222222")}
             </button>
           </section>
         </div>

@@ -28,6 +28,10 @@
   align-items: center;
 }
 
+.cardInfo>strong {
+  margin-left: 3px;
+}
+
 .cardInfo>strong,
 .cardInfo>span {
   font-size: var(--font-size-16);
@@ -55,7 +59,7 @@
 
 .cardTitle {
   display: block;
-  margin-top: 30px;
+  margin-top: 20px;
   font-size: var(--font-size-26);
   text-align: center;
 }
@@ -66,18 +70,18 @@
   text-align: center;
 }
 
-.tagWrap {
+.cardTagWrap {
   width: 100%;
 }
 
-.tagList {
+.cardTagList {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
   gap: 8px;
   width: 100%;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .cardContent {
@@ -234,14 +238,10 @@
 .tagIcon {
   position: absolute;
   bottom: 10px;
-  right: 20px;
+  right: 30px;
   width: 20px;
   height: 20px;
   overflow: hidden;
-}
-
-.tagIcon>img {
-  object-position: -80px -30px;
 }
 
 /* button */

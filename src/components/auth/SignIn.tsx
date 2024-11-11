@@ -5,8 +5,8 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { ALERT_MESSAGE_ENUM } from "../alert/constants/message.enum";
 import MainButton from "../button/MainButton";
+import { svgIcons } from "../common/functions/getSvg";
 import AuthInput from "../input/AuthInput";
-import AuthIcons from "./AuthIcons";
 import style from "./styles/sign.module.css";
 
 const SignIn = () => {
@@ -49,11 +49,7 @@ const SignIn = () => {
           />
 
           <span className={style.togglePasswordIsShow} onClick={() => setPasswordIsShow((prev) => !prev)}>
-            {passwordIsShow ? (
-              <AuthIcons type="pwIsNotShow" size="small" />
-            ) : (
-              <AuthIcons type="pwIsShow" size="small" />
-            )}
+            {passwordIsShow ? svgIcons.visible(false) : svgIcons.visible(true)}
           </span>
           <AuthInput
             id={"password"}
@@ -70,7 +66,7 @@ const SignIn = () => {
           <MainButton
             id={"submitButton"}
             type={"submit"}
-            value={{ text: "로그인", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
+            value={{ text: "로그인", icon: svgIcons.enter("medium") }}
             className={`${style.button} ${style.submit}`}
             disabled={disabled}
           />

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { ALERT_MESSAGE_ENUM } from "../alert/constants/message.enum";
 import MainButton from "../button/MainButton";
+import { svgIcons } from "../common/functions/getSvg";
 import AuthInput from "../input/AuthInput";
 import AuthIcons from "./AuthIcons";
 import style from "./styles/sign.module.css";
@@ -60,7 +61,7 @@ const SignUp = () => {
           <Link href={"/"}>이미 계정이 있어요!</Link>
           <MainButton
             id={"nextButton"}
-            value={{ text: "다음", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
+            value={{ text: "다음", icon: svgIcons.enter("medium") }}
             className={`${style.button} ${style.submit}`}
             onClick={() => {
               setOpacity("0");
@@ -102,7 +103,7 @@ const SignUp = () => {
         <div className={style.buttonWrap}>
           <MainButton
             id={"backButton"}
-            value={{ text: "이전", icon: <AuthIcons size="small" type="cancel" className={style.icon} /> }}
+            value={{ text: "이전", icon: svgIcons.back() }}
             className={style.button}
             onClick={() => {
               setZIndex("2");
@@ -112,7 +113,7 @@ const SignUp = () => {
           <MainButton
             id={"submitButton"}
             type={"submit"}
-            value={{ text: "가입", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
+            value={{ text: "가입", icon: svgIcons.enter("medium") }}
             className={`${style.button} ${style.submit}`}
             onClick={() => {
               setDisabled(true);
