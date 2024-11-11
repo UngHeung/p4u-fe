@@ -6,7 +6,7 @@ interface AuthButtonProps extends Partial<BaseButtonProps> {
   value: { text?: string; icon?: JSX.Element };
 }
 
-const AuthButton = ({ id, value, type, className, onClick, disabled }: AuthButtonProps) => {
+const MainButton = ({ id, value, type, className, onClick, disabled }: AuthButtonProps) => {
   return (
     <BaseButton
       id={id}
@@ -19,4 +19,4 @@ const AuthButton = ({ id, value, type, className, onClick, disabled }: AuthButto
   );
 };
 
-export default AuthButton;
+export default MainButton;

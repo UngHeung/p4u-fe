@@ -1,25 +1,50 @@
 "use client";
 
+import { AlertStore, useAlertStore } from "@/stores/alert/alertStore";
 import Link from "next/link";
-import { useState } from "react";
-import AuthButton from "../button/AuthButton";
+import { FormEvent, useState } from "react";
+import { ALERT_MESSAGE_ENUM } from "../alert/constants/message.enum";
+import MainButton from "../button/MainButton";
 import AuthInput from "../input/AuthInput";
 import AuthIcons from "./AuthIcons";
 import style from "./styles/sign.module.css";
 
 const SignUp = () => {
+  const pushAlertQueue = useAlertStore((state: AlertStore) => state.pushAlertQueue);
+
   const [opacity, setOpacity] = useState("1");
   const [zIndex, setZIndex] = useState("2");
   const [disabled, setDisabled] = useState(false);
   const [passwordIsShow, setPasswordIsShow] = useState(false);
 
+  const handleSignUp = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      name: formData.get("name"),
+      account: formData.get("account"),
+      password: formData.get("password"),
+    };
+
+    if (!data.name) {
+      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_NAME);
+      return;
+    }
+
+    if (!data.account) {
+      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_ID);
+      return;
+    }
+
+    if (!data.password) {
+      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_PASSWORD);
+      return;
+    }
+  };
+
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-      }}
-      className={style.signUpForm}
-    >
+    <form onSubmit={handleSignUp} className={style.signUpForm}>
       <section className={style.inputNameWrap} style={{ opacity, zIndex }}>
         <div className={style.inputWrap}>
           <AuthInput
@@ -33,7 +58,7 @@ const SignUp = () => {
 
         <div className={style.buttonWrap}>
           <Link href={"/"}>이미 계정이 있어요!</Link>
-          <AuthButton
+          <MainButton
             id={"nextButton"}
             value={{ text: "다음", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
             className={`${style.button} ${style.submit}`}
@@ -75,7 +100,7 @@ const SignUp = () => {
         </div>
 
         <div className={style.buttonWrap}>
-          <AuthButton
+          <MainButton
             id={"backButton"}
             value={{ text: "이전", icon: <AuthIcons size="small" type="cancel" className={style.icon} /> }}
             className={style.button}
@@ -84,7 +109,7 @@ const SignUp = () => {
               setOpacity("1");
             }}
           />
-          <AuthButton
+          <MainButton
             id={"submitButton"}
             type={"submit"}
             value={{ text: "가입", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}

@@ -1,10 +1,13 @@
 .tagWrap {
   display: inline-block;
   position: relative;
-  margin-right: 5px;
   padding: 1px 10px 0 20px;
   background-color: var(--color-tag-bg);
   border-radius: 15px
+}
+
+.tagWrap.answered {
+  background-color: var(--color-tag-bg-answered);
 }
 
 .tagIcon {
@@ -25,5 +28,5 @@
 .tagKeyword {
   height: var(--tag-height);
   line-height: var(--tag-height);
-  color: var(--font-color-nagative);
+  color: var(--font-color-negative);
 }
