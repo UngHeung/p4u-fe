@@ -84,3 +84,9 @@
   margin-top: 20px;
   font-size: var(--font-size-16)
 }
+
+@media (max-width: 400) {
+  .cardWrap {
+    width: 100%;
+  }
+}
