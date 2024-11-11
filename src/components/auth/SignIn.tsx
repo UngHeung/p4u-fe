@@ -4,7 +4,7 @@ import { AlertStore, useAlertStore } from "@/stores/alert/alertStore";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { ALERT_MESSAGE_ENUM } from "../alert/constants/message.enum";
-import AuthButton from "../button/AuthButton";
+import MainButton from "../button/MainButton";
 import AuthInput from "../input/AuthInput";
 import AuthIcons from "./AuthIcons";
 import style from "./styles/sign.module.css";
@@ -15,8 +15,9 @@ const SignIn = () => {
   const [disabled, setDisabled] = useState(false);
   const [passwordIsShow, setPasswordIsShow] = useState(false);
 
-  const handleSignIn = (event: FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setDisabled(true);
 
     const formData = new FormData(event.currentTarget);
     const data = {
@@ -33,8 +34,6 @@ const SignIn = () => {
       pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_PASSWORD);
       return;
     }
-
-    console.log(data);
   };
 
   return (
@@ -68,7 +67,7 @@ const SignIn = () => {
 
         <div className={style.buttonWrap}>
           <Link href={"/signup"}>가입 하러가기!</Link>
-          <AuthButton
+          <MainButton
             id={"submitButton"}
             type={"submit"}
             value={{ text: "로그인", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}

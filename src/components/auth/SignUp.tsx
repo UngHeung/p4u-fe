@@ -4,7 +4,7 @@ import { AlertStore, useAlertStore } from "@/stores/alert/alertStore";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { ALERT_MESSAGE_ENUM } from "../alert/constants/message.enum";
-import AuthButton from "../button/AuthButton";
+import MainButton from "../button/MainButton";
 import AuthInput from "../input/AuthInput";
 import AuthIcons from "./AuthIcons";
 import style from "./styles/sign.module.css";
@@ -58,7 +58,7 @@ const SignUp = () => {
 
         <div className={style.buttonWrap}>
           <Link href={"/"}>이미 계정이 있어요!</Link>
-          <AuthButton
+          <MainButton
             id={"nextButton"}
             value={{ text: "다음", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
             className={`${style.button} ${style.submit}`}
@@ -100,7 +100,7 @@ const SignUp = () => {
         </div>
 
         <div className={style.buttonWrap}>
-          <AuthButton
+          <MainButton
             id={"backButton"}
             value={{ text: "이전", icon: <AuthIcons size="small" type="cancel" className={style.icon} /> }}
             className={style.button}
@@ -109,7 +109,7 @@ const SignUp = () => {
               setOpacity("1");
             }}
           />
-          <AuthButton
+          <MainButton
             id={"submitButton"}
             type={"submit"}
             value={{ text: "가입", icon: <AuthIcons size="small" type="enter" className={style.icon} /> }}
