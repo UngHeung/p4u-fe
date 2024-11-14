@@ -25,3 +25,34 @@
   line-height: var(--tag-height);
   color: var(--font-color-negative);
 }
+
+/* search tag */
+
+.searchTagWrap .tagWrap {
+  background-color: #DEDEDE;
+  cursor: pointer;
+}
+
+.searchTagWrap .tagWrap.checked {
+  background-color: var(--color-main);
+}
+
+.searchTagWrap .tagWrap>span {
+  color: var(--font-color-basic);
+}
+
+.searchTagWrap .tagWrap.checked>span {
+  color: var(--font-color-negative)
+}
+
+.searchTagWrap .tagWrap svg>path {
+  fill: var(--font-color-basic);
+}
+
+.searchTagWrap .tagWrap.checked svg>path {
+  fill: var(--font-color-negative);
+}
+
+.searchTagWrap input {
+  display: none;
+}
