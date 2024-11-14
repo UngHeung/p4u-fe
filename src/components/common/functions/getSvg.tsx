@@ -1,5 +1,3 @@
-import React from "react";
-
 export type SvgTypes =
   | "answered"
   | "checked"
@@ -10,7 +8,8 @@ export type SvgTypes =
   | "heart"
   | "write"
   | "delete"
-  | "loggedOut";
+  | "loggedOut"
+  | "search";
 
 export const svgIcons = {
   answered: (color: string = "#ffffff") => (
@@ -226,7 +225,7 @@ export const svgIcons = {
     </svg>
   ),
 
-  loading: (color: string = "#FFFFFF") => (
+  loading: (color: string = "#ffffff") => (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -239,6 +238,18 @@ export const svgIcons = {
           strokeLinecap="round"
         ></path>{" "}
       </g>
+    </svg>
+  ),
+
+  search: (color: string = "#222222") => (
+    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M25 23.75L20.3713 19.1213M22.7941 13.2721C22.7941 8.70353 19.0906 5 14.5221 5C9.95353 5 6.25 8.70353 6.25 13.2721C6.25 17.8406 9.95353 21.5441 14.5221 21.5441C19.0906 21.5441 22.7941 17.8406 22.7941 13.2721Z"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   ),
 };
