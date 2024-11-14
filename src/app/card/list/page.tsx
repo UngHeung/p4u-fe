@@ -1,7 +1,11 @@
-import React from "react";
+import CardList from "@/components/card/CardList";
 
 const CardListPage = () => {
-  return <>page</>;
+  return (
+    <>
+      <CardList />
+    </>
+  );
 };
 
 export default CardListPage;

@@ -1,5 +1,3 @@
-import React from "react";
-
 export type SvgTypes =
   | "answered"
   | "checked"
@@ -10,7 +8,8 @@ export type SvgTypes =
   | "heart"
   | "write"
   | "delete"
-  | "loggedOut";
+  | "loggedOut"
+  | "search";
 
 export const svgIcons = {
   answered: (color: string = "#ffffff") => (
@@ -222,6 +221,34 @@ export const svgIcons = {
       <path
         d="M11.1333 2.16129C11.1333 1.51895 10.6269 1 10 1C9.37313 1 8.86667 1.51895 8.86667 2.16129V10.2903C8.86667 10.9327 9.37313 11.4516 10 11.4516C10.6269 11.4516 11.1333 10.9327 11.1333 10.2903V2.16129ZM6.01562 5.37661C6.49729 4.96653 6.56104 4.23347 6.16083 3.73992C5.76063 3.24637 5.04521 3.18105 4.56354 3.59113C2.69354 5.1879 1.5 7.59758 1.5 10.2903C1.5 15.0988 5.30729 19 10 19C14.6927 19 18.5 15.0988 18.5 10.2903C18.5 7.59758 17.3029 5.1879 15.4329 3.59113C14.9513 3.18105 14.2358 3.25 13.8356 3.73992C13.4354 4.22984 13.5027 4.96653 13.9808 5.37661C15.3585 6.54879 16.2298 8.31613 16.2298 10.2903C16.2298 13.8177 13.439 16.6774 9.99646 16.6774C6.55396 16.6774 3.76312 13.8177 3.76312 10.2903C3.76312 8.31613 4.63792 6.54879 6.01208 5.37661H6.01562Z"
         fill={color}
+      />
+    </svg>
+  ),
+
+  loading: (color: string = "#ffffff") => (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+      <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+      <g id="SVGRepo_iconCarrier">
+        {" "}
+        <path
+          d="M20.0001 12C20.0001 13.3811 19.6425 14.7386 18.9623 15.9405C18.282 17.1424 17.3022 18.1477 16.1182 18.8587C14.9341 19.5696 13.5862 19.9619 12.2056 19.9974C10.825 20.0328 9.45873 19.7103 8.23975 19.0612"
+          stroke={color}
+          strokeWidth="1.488"
+          strokeLinecap="round"
+        ></path>{" "}
+      </g>
+    </svg>
+  ),
+
+  search: (color: string = "#222222") => (
+    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M25 23.75L20.3713 19.1213M22.7941 13.2721C22.7941 8.70353 19.0906 5 14.5221 5C9.95353 5 6.25 8.70353 6.25 13.2721C6.25 17.8406 9.95353 21.5441 14.5221 21.5441C19.0906 21.5441 22.7941 17.8406 22.7941 13.2721Z"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   ),

@@ -3,7 +3,7 @@ import { useState } from "react";
 export type BaseInputTypes = "text" | "password";
 
 export interface BaseInputProps {
-  id: string;
+  id?: string;
   name: string;
   type: BaseInputTypes;
   className: string;
@@ -11,9 +11,20 @@ export interface BaseInputProps {
   onChange?: () => void;
   labelValue?: string;
   labelClass?: string;
+  placeholder?: string;
 }
 
-const BaseInput = ({ id, name, onChange, type, readonly, className, labelValue, labelClass }: BaseInputProps) => {
+const BaseInput = ({
+  id,
+  name,
+  onChange,
+  type,
+  readonly,
+  className,
+  labelValue,
+  labelClass,
+  placeholder,
+}: BaseInputProps) => {
   const [value, setValue] = useState("");
 
   return (
@@ -29,6 +40,7 @@ const BaseInput = ({ id, name, onChange, type, readonly, className, labelValue, 
         name={name}
         type={type}
         className={className}
+        placeholder={placeholder}
         onChange={(event) => {
           setValue(event.target.value);
           onChange && onChange();
