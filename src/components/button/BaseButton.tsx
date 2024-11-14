@@ -16,8 +16,7 @@ const BaseButton = ({ id, value, type, className, onClick, disabled }: BaseButto
         id={id}
         type={type}
         className={className}
-        onClick={(event) => {
-          event.preventDefault();
+        onClick={() => {
           onClick && onClick();
         }}
         disabled={disabled ?? false}
