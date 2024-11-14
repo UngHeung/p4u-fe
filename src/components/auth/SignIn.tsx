@@ -1,16 +1,24 @@
 "use client";
 
+import { baseAxios } from "@/apis/axiosInstance";
 import { AlertStore, useAlertStore } from "@/stores/alert/alertStore";
+import { UserStore, useUserStore } from "@/stores/user/userStore";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { ALERT_MESSAGE_ENUM } from "../alert/constants/message.enum";
 import MainButton from "../button/MainButton";
+import { setToken } from "../common/constants/accessToken";
+import { BASE_URL } from "../common/constants/baseUrl";
 import { svgIcons } from "../common/functions/getSvg";
 import AuthInput from "../input/AuthInput";
 import style from "./styles/sign.module.css";
 
 const SignIn = () => {
+  const router = useRouter();
+
   const pushAlertQueue = useAlertStore((state: AlertStore) => state.pushAlertQueue);
+  const setUser = useUserStore((state: UserStore) => state.setUser);
 
   const [disabled, setDisabled] = useState(false);
   const [passwordIsShow, setPasswordIsShow] = useState(false);
@@ -34,6 +42,41 @@ const SignIn = () => {
       pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_PASSWORD);
       return;
     }
+
+    const prefix = "Basic";
+    const base64String = Buffer.from(`${data.account}:${data.password}`).toString("base64");
+    const basicToken = `${prefix} ${base64String}`;
+
+    try {
+      const response = await baseAxios.post(`${BASE_URL}/auth/signin`, data, {
+        headers: {
+          Authorization: basicToken,
+        },
+      });
+
+      const { accessToken, refreshToken } = response.data;
+
+      setToken({ accessToken, refreshToken });
+
+      const payload = accessToken.split(".")[1];
+      const buffer = Buffer.from(payload, "base64");
+      const dataString = buffer.toString().replaceAll(/['"]/g, "");
+      const dataParts = dataString.split(",");
+
+      const user = {
+        id: +dataParts[0].split(":")[1],
+        name: dataParts[1].split(":")[1],
+        account: dataParts[2].split(":")[1],
+      };
+
+      setUser(user);
+
+      router.replace("/card/list");
+    } catch (error: any) {
+      console.error(error);
+    }
+
+    setDisabled(false);
   };
 
   return (
