@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { authAxios } from "@/apis/axiosInstance";
+import { FormEvent, useState } from "react";
 import AuthIcons from "../auth/AuthIcons";
 import MainButton from "../button/MainButton";
+import { BASE_URL } from "../common/constants/baseUrl";
 import { svgIcons } from "../common/functions/getSvg";
+import CardTextarea from "../common/textarea/CardTextarea";
+import CardInput from "../input/CardInput";
 import Tag from "../tag/Tag";
 import style from "./styles/card.module.css";
 
 const CardWrite = () => {
-  const [isAnonymity, setIsAnonymity] = useState(true);
+  const [isAnonymity, setIsAnonymity] = useState(false);
   const [tag, setTag] = useState("");
   const [tagList, setTagList] = useState<string[]>([]);
   const [disabled, setDisabled] = useState(false);
@@ -15,24 +19,52 @@ const CardWrite = () => {
     setTagList(tagList.filter((item, i) => (idx !== i ? item : null)));
   };
 
+  const handleWriteCard = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setDisabled(true);
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      title: formData.get("title"),
+      content: formData.get("content"),
+      keywords: tagList,
+      isAnonymity,
+    };
+
+    try {
+      const response = await authAxios.post(`${BASE_URL}/card/new`, data);
+
+      console.log(response.data);
+    } catch (error: any) {
+      console.error(error);
+    } finally {
+      setDisabled(false);
+    }
+  };
+
   return (
     <>
-      <form className={style.cardWriteForm}>
+      <form className={style.cardWriteForm} onSubmit={handleWriteCard}>
         <div className={style.cardWriteWrap}>
           <section className={style.checkAnonymityWrap}>
             <span className={style.anonymityOrName}>{isAnonymity ? "익명" : "실명"}</span>
-            <label htmlFor="anonymity" className={style.checkAnonymityBg}>
+            <label htmlFor={"anonymity"} className={style.checkAnonymityBg}>
               <span className={`${style.checkAnonymityStick}${isAnonymity ? " " + style.isAnonymity : ""}`}> </span>
             </label>
-            <input type="checkbox" name="anonymity" id={"anonymity"} onChange={() => setIsAnonymity((prev) => !prev)} />
+            <input
+              type={"checkbox"}
+              name={"anonymity"}
+              id={"anonymity"}
+              onChange={() => setIsAnonymity((prev) => !prev)}
+            />
           </section>
 
           <section className={style.writeTitleWrap}>
-            <input name={"title"} type={"text"} placeholder={"하나의 카드에 하나의 기도제목!"} />
+            <CardInput name={"title"} placeholder={"하나의 카드에 하나의 기도제목!"} />
           </section>
 
           <section className={style.writeContentWrap}>
-            <textarea name={"content"} placeholder={"내용을 작성해주세요."}></textarea>
+            <CardTextarea name={"content"} placeholder={"내용을 작성해주세요."} />
           </section>
         </div>
         <div className={style.tagWrap}>
@@ -57,10 +89,12 @@ const CardWrite = () => {
               value={tag}
               onChange={(event) => setTag(event.target.value)}
             />
+
             <button
-              type={"button"}
+              type={"submit"}
               className={style.tagIcon}
-              onClick={() => {
+              onClick={(event) => {
+                event.preventDefault();
                 setTag("");
                 setTagList((prev) => [...prev, tag]);
               }}
