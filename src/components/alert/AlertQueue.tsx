@@ -26,7 +26,7 @@ const AlertQueue = ({ alerts }: { alerts: AlertProps[] }) => {
       {alerts.map((alert, idx) => {
         return (
           <li key={idx}>
-            <Alert message={alert.message} index={idx} />
+            <Alert message={alert.message} index={idx} type={alert.type} />
           </li>
         );
       })}
