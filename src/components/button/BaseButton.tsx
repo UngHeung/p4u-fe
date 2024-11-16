@@ -1,5 +1,5 @@
-export type BaseButtonTypes = "button" | "submit";
-export type BaseButtonIconTypes = "submit" | "back" | "none";
+export type BaseButtonTypes = 'button' | 'submit';
+export type BaseButtonIconTypes = 'submit' | 'back' | 'none';
 export interface BaseButtonProps {
   id: string;
   value: { text?: string; icon?: JSX.Element };
@@ -9,7 +9,14 @@ export interface BaseButtonProps {
   disabled?: boolean;
 }
 
-const BaseButton = ({ id, value, type, className, onClick, disabled }: BaseButtonProps) => {
+const BaseButton = ({
+  id,
+  value,
+  type,
+  className,
+  onClick,
+  disabled,
+}: BaseButtonProps) => {
   return (
     <>
       <button
@@ -17,7 +24,9 @@ const BaseButton = ({ id, value, type, className, onClick, disabled }: BaseButto
         type={type}
         className={className}
         onClick={() => {
-          onClick && onClick();
+          if (onClick) {
+            onClick();
+          }
         }}
         disabled={disabled ?? false}
       >

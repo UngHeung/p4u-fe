@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Tag from "./Tag";
-import style from "./styles/tag.module.css";
+import React, { useState } from 'react';
+import Tag from './Tag';
+import style from './styles/tag.module.css';
 
 const SearchTag = ({
   keyword,
@@ -23,12 +23,12 @@ const SearchTag = ({
         name="selectTag"
         id={`tag_${index}`}
         onChange={() => {
-          setChecked((prev) => !prev);
+          setChecked(prev => !prev);
 
           if (checked) {
-            setSelectTagList((prev) => prev.filter((item) => item !== keyword));
+            setSelectTagList(prev => prev.filter(item => item !== keyword));
           } else {
-            setSelectTagList((prev) => [...prev, keyword]);
+            setSelectTagList(prev => [...prev, keyword]);
           }
         }}
         checked={checked}

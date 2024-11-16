@@ -1,6 +1,6 @@
-import { refreshAxios } from "@/apis/axiosInstance";
-import { setToken } from "../constants/accessToken";
-import { BASE_URL } from "../constants/baseUrl";
+import { refreshAxios } from '@/apis/axiosInstance';
+import { setToken } from '../constants/accessToken';
+import { BASE_URL } from '../constants/baseUrl';
 
 const reissueToken = async (isAccess: boolean) => {
   try {
@@ -14,7 +14,7 @@ const reissueToken = async (isAccess: boolean) => {
       return refreshToken;
     }
   } catch (error: any) {
-    console.error;
+    console.error(error);
   }
 };
 

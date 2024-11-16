@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Layout from "@/components/common/Layout";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import "./globals.css";
-import "./reset.css";
+import Layout from '@/components/common/Layout';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import './globals.css';
+import './reset.css';
 
 export default function RootLayout({
   children,

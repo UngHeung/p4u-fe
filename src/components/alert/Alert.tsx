@@ -1,13 +1,15 @@
-"use client";
+'use client';
 
-import icons from "@/public/icons/icon.png";
-import { AlertStore, useAlertStore } from "@/stores/alert/alertStore";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import style from "./styles/alert.module.css";
+import icons from '@/public/icons/icon.png';
+import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import style from './styles/alert.module.css';
 
 const Alert = ({ message, index }: { message: string; index: number }) => {
-  const deleteAlertQueue = useAlertStore((state: AlertStore) => state.deleteAlertQueue);
+  const deleteAlertQueue = useAlertStore(
+    (state: AlertStore) => state.deleteAlertQueue,
+  );
 
   const [opacity, setOpacity] = useState(0);
   const [bottom, setBottom] = useState(0);
@@ -30,7 +32,13 @@ const Alert = ({ message, index }: { message: string; index: number }) => {
           deleteAlertQueue(index);
         }}
       >
-        <Image src={icons} alt={"태그_아이콘"} width={120} height={100} sizes="100%" />
+        <Image
+          src={icons}
+          alt={'태그_아이콘'}
+          width={120}
+          height={100}
+          sizes="100%"
+        />
       </span>
       <pre className={style.alertMessage}>{message}</pre>
     </article>

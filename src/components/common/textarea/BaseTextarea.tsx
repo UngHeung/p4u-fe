@@ -1,15 +1,21 @@
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, useState } from 'react';
 
 export interface BaseTextareaProps {
   id?: string;
   name: string;
   className?: string;
   placeholder?: string;
-  onChange?: ChangeEventHandler<HTMLTextAreaElement>;
+  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const BaseTextarea = ({ id, name, className, placeholder, onChange }: BaseTextareaProps) => {
-  const [value, setValue] = useState("");
+const BaseTextarea = ({
+  id,
+  name,
+  className,
+  placeholder,
+  onChange,
+}: BaseTextareaProps) => {
+  const [value, setValue] = useState('');
 
   return (
     <textarea
@@ -17,9 +23,12 @@ const BaseTextarea = ({ id, name, className, placeholder, onChange }: BaseTextar
       name={name}
       className={className}
       placeholder={placeholder}
-      onChange={(event) => {
+      onChange={event => {
         setValue(event.target.value);
-        onChange;
+
+        if (onChange) {
+          onChange(event);
+        }
       }}
       value={value}
     />
