@@ -60,6 +60,10 @@ body {
   height: 100svh;
 }
 
+::-webkit-scrollbar {
+  width: 0;
+}
+
 main {
   width: 100%;
   height: calc(100svh - 50px);
