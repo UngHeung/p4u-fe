@@ -1,3 +1,10 @@
+/* card main */
+
+.cardMain {
+  position: relative;
+  height: auto;
+}
+
 /* card search */
 
 .searchForm {
@@ -73,7 +80,7 @@
   position: relative;
   width: 100%;
   max-width: 400px;
-  height: 250px;
+  height: 240px;
   margin: 0 auto;
   padding: 20px;
   border-radius: 25px;
@@ -115,7 +122,7 @@
 .cardBack {
   position: absolute;
   width: calc(100% - 40px);
-  height: calc(100% - 40px);
+  height: calc(100% - 30px);
   background-color: inherit;
 }
 
@@ -151,10 +158,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .cardContent {
@@ -168,7 +175,7 @@
   position: relative;
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 40px auto 0;
 }
 
 .checkAnonymityWrap {
@@ -239,10 +246,17 @@
   width: 100%;
   background-color: inherit;
   border: none;
-  border-bottom: 2px solid #ffffff;
+  border-bottom: 3px solid #858585;
   font-size: 36px;
   font-weight: var(--font-weight-bold);
   color: var(--font-color-negative);
+  transition: border-bottom-color .3s;
+}
+
+.writeTitleWrap>input:hover,
+.writeTitleWrap>input:focus,
+.writeTitleWrap>input:not(:placeholder-shown) {
+  border-bottom-color: #ffffff;
 }
 
 .writeTitleWrap>input::placeholder {
@@ -347,6 +361,11 @@
 @media screen and (max-width: 600px) {
   .searchForm {
     padding: 0 10px;
+  }
+
+  .cardInfo>strong,
+  .cardInfo>span {
+    font-size: var(--font-size-14);
   }
 
 
