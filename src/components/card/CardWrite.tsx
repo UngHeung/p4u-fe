@@ -1,5 +1,8 @@
 import { authAxios } from '@/apis/axiosInstance';
+import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
+import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
+import { ALERT_MESSAGE_ENUM } from '../alert/constants/message.enum';
 import AuthIcons from '../auth/AuthIcons';
 import MainButton from '../button/MainButton';
 import { BASE_URL } from '../common/constants/baseUrl';
@@ -10,10 +13,16 @@ import Tag from '../tag/Tag';
 import style from './styles/card.module.css';
 
 const CardWrite = () => {
+  const router = useRouter();
+
   const [isAnonymity, setIsAnonymity] = useState(false);
   const [tag, setTag] = useState('');
   const [tagList, setTagList] = useState<string[]>([]);
   const [disabled, setDisabled] = useState(false);
+
+  const pushAlertQueue = useAlertStore(
+    (state: AlertStore) => state.pushAlertQueue,
+  );
 
   const handleDeleteTag = (idx: number) => {
     setTagList(tagList.filter((item, i) => (idx !== i ? item : null)));
@@ -31,14 +40,39 @@ const CardWrite = () => {
       isAnonymity,
     };
 
-    console.log(data);
+    if (!data.title) {
+      pushAlertQueue(ALERT_MESSAGE_ENUM.WRONG_EMPTY_CARD_TITLE, 'failure');
+      setDisabled(false);
+      return;
+    }
+
+    if (!data.content) {
+      pushAlertQueue(ALERT_MESSAGE_ENUM.WRONG_EMPTY_CARD_CONTENT, 'failure');
+      setDisabled(false);
+      return;
+    }
+
+    if (!data.keywords.length) {
+      pushAlertQueue(ALERT_MESSAGE_ENUM.WRONG_EMPTY_CARD_TAGS_LIST, 'failure');
+      setDisabled(false);
+      return;
+    }
 
     try {
       const response = await authAxios.post(`${BASE_URL}/card/new`, data);
 
-      console.log(response.data);
+      if (response.status === 201) {
+        pushAlertQueue(ALERT_MESSAGE_ENUM.SUCCESS_WRITE_CARD, 'success');
+        router.push('/card/list');
+      }
+
+      console.log(response.status);
     } catch (error: any) {
-      console.error(error);
+      if (error?.status === 401) {
+        pushAlertQueue(ALERT_MESSAGE_ENUM.NEED_LOGGED_IN, 'failure');
+      } else {
+        pushAlertQueue(ALERT_MESSAGE_ENUM.INTERNAL_SERVER_ERROR, 'failure');
+      }
     } finally {
       setDisabled(false);
     }
@@ -110,7 +144,19 @@ const CardWrite = () => {
               onClick={event => {
                 event.preventDefault();
                 setTag('');
-                setTagList(prev => [...prev, tag]);
+                if (tagList.includes(tag)) {
+                  pushAlertQueue(
+                    ALERT_MESSAGE_ENUM.WRONG_IS_ALEADY_TAG_KEYWORD,
+                    'failure',
+                  );
+                } else if (tagList.length === 5) {
+                  pushAlertQueue(
+                    ALERT_MESSAGE_ENUM.WRONG_FULL_CARD_TAGS_LIST,
+                    'failure',
+                  );
+                } else {
+                  setTagList(prev => [...prev, tag]);
+                }
               }}
             >
               {svgIcons.enter('medium', '#222222')}
