@@ -1,9 +1,13 @@
 /* card search */
 
 .searchForm {
+  position: sticky;
+  top: 0;
   width: 100%;
   max-width: 400px;
-  margin: 0 auto;
+  margin: 40px auto 0;
+  background-color: #ffffff;
+  z-index: 3;
 }
 
 .searchInputWrap {
@@ -35,6 +39,7 @@
   gap: 5px;
   width: 100%;
   margin-top: 20px;
+  padding-bottom: 20px;
 }
 
 /* card list */
@@ -46,8 +51,7 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  margin-top: 20px;
-  padding: 20px 0;
+  padding: 20px 10px;
 }
 
 .cardListWrap>li {
@@ -341,6 +345,11 @@
 }
 
 @media screen and (max-width: 600px) {
+  .searchForm {
+    padding: 0 10px;
+  }
+
+
   .cardWriteForm {
     padding: 0 10px;
   }
