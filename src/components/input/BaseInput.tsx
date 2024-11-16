@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { ChangeEvent, SetStateAction, useState } from 'react';
 
-export type BaseInputTypes = "text" | "password";
+export type BaseInputTypes = 'text' | 'password';
 
 export interface BaseInputProps {
   id?: string;
@@ -8,10 +8,12 @@ export interface BaseInputProps {
   type: BaseInputTypes;
   className: string;
   readonly?: boolean;
-  onChange?: () => void;
+  onChange?: (event?: ChangeEvent<HTMLInputElement>) => void;
   labelValue?: string;
   labelClass?: string;
   placeholder?: string;
+  value?: string;
+  setValue?: React.Dispatch<SetStateAction<string>>;
 }
 
 const BaseInput = ({
@@ -24,8 +26,10 @@ const BaseInput = ({
   labelValue,
   labelClass,
   placeholder,
+  value,
+  setValue,
 }: BaseInputProps) => {
-  const [value, setValue] = useState("");
+  const [baseValue, setBaseValue] = useState('');
 
   return (
     <>
@@ -36,13 +40,15 @@ const BaseInput = ({
       )}
       <input
         id={id}
-        value={value}
+        value={value ?? baseValue}
         name={name}
         type={type}
         className={className}
         placeholder={placeholder}
-        onChange={(event) => {
-          setValue(event.target.value);
+        onChange={event => {
+          setValue
+            ? setValue(event.target.value)
+            : setBaseValue(event.target.value);
           onChange && onChange();
         }}
         readOnly={readonly ?? false}

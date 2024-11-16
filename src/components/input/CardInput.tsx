@@ -1,19 +1,30 @@
-import BaseInput, { BaseInputProps } from "./BaseInput";
+import BaseInput, { BaseInputProps } from './BaseInput';
 
 interface CardInputProps extends Partial<BaseInputProps> {
   name: string;
 }
 
-const CardInput = ({ id, name, className, onChange, readonly, placeholder }: CardInputProps) => {
+const CardInput = ({
+  id,
+  name,
+  className,
+  onChange,
+  readonly,
+  placeholder,
+  value,
+  setValue,
+}: CardInputProps) => {
   return (
     <BaseInput
       id={id}
-      type={"text"}
+      type={'text'}
       name={name}
-      className={className ?? ""}
+      className={className ?? ''}
       onChange={onChange}
       readonly={readonly}
       placeholder={placeholder}
+      value={value}
+      setValue={setValue}
     />
   );
 };
