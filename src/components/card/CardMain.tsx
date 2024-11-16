@@ -37,10 +37,10 @@ const CardMain = () => {
   };
 
   return (
-    <section>
+    <>
       <CardSearch setIsLoading={setIsLoading} />
       <CardList isLoading={isLoading} />
-    </section>
+    </>
   );
 };
 
