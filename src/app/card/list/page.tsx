@@ -1,9 +1,9 @@
-import CardList from "@/components/card/CardList";
+import CardMain from '@/components/card/CardMain';
 
 const CardListPage = () => {
   return (
     <>
-      <CardList />
+      <CardMain />
     </>
   );
 };
