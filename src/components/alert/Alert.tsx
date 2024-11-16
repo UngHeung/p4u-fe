@@ -1,12 +1,16 @@
 'use client';
 
 import icons from '@/public/icons/icon.png';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
+import {
+  AlertProps,
+  AlertStore,
+  useAlertStore,
+} from '@/stores/alert/alertStore';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import style from './styles/alert.module.css';
 
-const Alert = ({ message, index }: { message: string; index: number }) => {
+const Alert = ({ message, index, type }: AlertProps) => {
   const deleteAlertQueue = useAlertStore(
     (state: AlertStore) => state.deleteAlertQueue,
   );
@@ -25,11 +29,23 @@ const Alert = ({ message, index }: { message: string; index: number }) => {
   }, []);
 
   return (
-    <article className={style.alertWrap} style={{ opacity, bottom }}>
+    <article
+      className={style.alertWrap}
+      style={{
+        opacity,
+        bottom,
+        backgroundColor:
+          type === 'success'
+            ? '#02975E'
+            : type === 'failure'
+              ? '#E22929'
+              : '#f3c90f',
+      }}
+    >
       <span
         className={style.alertIcon}
         onClick={() => {
-          deleteAlertQueue(index);
+          deleteAlertQueue(index!);
         }}
       >
         <Image
