@@ -59,7 +59,9 @@
   text-align: center;
 }
 
-.loading {}
+.loading {
+  width: 100%;
+}
 
 /* card */
 

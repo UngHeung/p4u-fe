@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 export interface UserProps {
   id: number;
@@ -12,12 +12,14 @@ export interface UserStore {
   deleteUser: () => void;
 }
 
-export const useUserStore = create<UserStore>((set) => ({
-  user: {
-    id: -1,
-    name: "",
-    account: "",
-  },
+const initialUser = {
+  id: -1,
+  name: '',
+  account: '',
+};
+
+export const useUserStore = create<UserStore>(set => ({
+  user: initialUser,
 
   setUser: (user: UserProps) => {
     set({ user });
@@ -25,11 +27,7 @@ export const useUserStore = create<UserStore>((set) => ({
 
   deleteUser: () => {
     set({
-      user: {
-        id: -1,
-        name: "",
-        account: "",
-      },
+      user: initialUser,
     });
   },
 }));
