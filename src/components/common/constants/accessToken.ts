@@ -1,5 +1,5 @@
 export const token = {
-  access: "",
+  access: '',
 };
 
 export const setToken = ({
@@ -16,7 +16,7 @@ export const setToken = ({
   }
 
   if (isAccess === undefined || !isAccess) {
-    localStorage.setItem("refreshToken", refreshToken!);
+    localStorage.setItem('refreshToken', refreshToken!);
   }
 };
 
@@ -25,5 +25,5 @@ export const getToken = (isAccess: boolean) => {
     return token.access;
   }
 
-  return localStorage.getItem("refreshToken");
+  return localStorage.getItem('refreshToken');
 };

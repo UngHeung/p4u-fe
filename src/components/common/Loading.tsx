@@ -1,5 +1,5 @@
-import { svgIcons } from "./functions/getSvg";
-import style from "./styles/loading.module.css";
+import { svgIcons } from './functions/getSvg';
+import style from './styles/loading.module.css';
 
 const Loading = ({ color }: { color?: string }) => {
   const icon = svgIcons.loading(color);

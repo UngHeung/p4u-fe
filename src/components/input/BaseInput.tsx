@@ -46,10 +46,15 @@ const BaseInput = ({
         className={className}
         placeholder={placeholder}
         onChange={event => {
-          setValue
-            ? setValue(event.target.value)
-            : setBaseValue(event.target.value);
-          onChange && onChange();
+          if (setValue) {
+            setValue(event.target.value);
+          } else {
+            setBaseValue(event.target.value);
+          }
+
+          if (onChange) {
+            onChange();
+          }
         }}
         readOnly={readonly ?? false}
       />
