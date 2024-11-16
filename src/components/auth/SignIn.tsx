@@ -36,12 +36,14 @@ const SignIn = () => {
     };
 
     if (!data.account) {
-      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_ID);
+      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_ID, 'failure');
+      setDisabled(false);
       return;
     }
 
     if (!data.password) {
-      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_PASSWORD);
+      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_PASSWORD, 'failure');
+      setDisabled(false);
       return;
     }
 
@@ -75,12 +77,14 @@ const SignIn = () => {
 
       setUser(user);
 
+      pushAlertQueue(ALERT_MESSAGE_ENUM.SUCCESS_SIGN_IN, 'success');
+
       router.replace('/card/list');
     } catch (error: any) {
       console.error(error);
+    } finally {
+      setDisabled(false);
     }
-
-    setDisabled(false);
   };
 
   return (
