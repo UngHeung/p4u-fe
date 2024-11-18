@@ -59,7 +59,7 @@ const CardWrite = () => {
     }
 
     try {
-      const response = await authAxios.post(`${BASE_URL}/card/new`, data);
+      const response = await authAxios.post(`/card/new`, data);
 
       if (response.status === 201) {
         pushAlertQueue(ALERT_MESSAGE_ENUM.SUCCESS_WRITE_CARD, 'success');

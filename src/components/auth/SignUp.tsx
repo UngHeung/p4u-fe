@@ -54,7 +54,7 @@ const SignUp = () => {
     }
 
     try {
-      const response = await baseAxios.post(`${BASE_URL}/auth/signup`, data);
+      const response = await baseAxios.post(`/auth/signup`, data);
 
       if (response.status === 201) {
         pushAlertQueue(ALERT_MESSAGE_ENUM.SUCCESS_SIGN_UP, 'success');

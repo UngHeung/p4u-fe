@@ -24,7 +24,7 @@ const CardMain = () => {
     setIsLoading(true);
 
     try {
-      const response = await authAxios.get(`${BASE_URL}/card`);
+      const response = await authAxios.get(`/card`);
 
       if (response.status === 200) {
         setCardList(response.data);
