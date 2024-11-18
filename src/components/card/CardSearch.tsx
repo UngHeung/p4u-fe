@@ -57,22 +57,6 @@ const CardSearch = ({
     };
   }, [searchTagKeyword]);
 
-  // const handleGetBestTags = async () => {
-  //   setIsTagLoading(true);
-
-  //   const url = `${BASE_URL}/tag/best`;
-
-  //   try {
-  //     const response = await baseAxios.get(url);
-
-  //     setTagList(response.data);
-  //   } catch (error: any) {
-  //     console.error(error);
-  //   } finally {
-  //     setIsTagLoading(false);
-  //   }
-  // };
-
   const handleSearch = async (event?: FormEvent<HTMLFormElement>) => {
     setIsLoading(true);
 
@@ -83,7 +67,7 @@ const CardSearch = ({
 
       try {
         const query = `?keyword=${keyword}`;
-        const url = `${BASE_URL}/card/search${query}`;
+        const url = `/card/search${query}`;
         const response = await baseAxios.get(url);
 
         setKeywordCardList(response.data);
@@ -101,7 +85,7 @@ const CardSearch = ({
       }
 
       const query = `?keywords=${selectTagList.join('_')}`;
-      const url = `${BASE_URL}/card/search/tag${query}`;
+      const url = `/card/search/tag${query}`;
 
       try {
         const response = await baseAxios.get(url);
@@ -118,7 +102,7 @@ const CardSearch = ({
 
   const handleTagSearch = async () => {
     try {
-      const url = `${BASE_URL}/tag/keyword?keyword=${searchTagKeyword}`;
+      const url = `/tag/keyword?keyword=${searchTagKeyword}`;
       const response = await baseAxios.get(url);
 
       setTagList(response.data);

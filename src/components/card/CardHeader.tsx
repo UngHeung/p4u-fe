@@ -45,7 +45,7 @@ const CardHeader = ({
     };
 
     try {
-      const url = `${BASE_URL}/card/${id}/answered`;
+      const url = `/card/${id}/answered`;
       const response = await authAxios.patch(url, data);
       const isAnswered = response.data.isAnswered;
 
@@ -66,7 +66,7 @@ const CardHeader = ({
     setDisabled(true);
 
     try {
-      const url = `${BASE_URL}/card/${id}/pick`;
+      const url = `/card/${id}/pick`;
       const response = await authAxios.patch(url);
       const pickers: Pick<UserProps, 'id'>[] = response.data.pickers;
       const isToggled = pickers.find(picker => picker.id === user.id)

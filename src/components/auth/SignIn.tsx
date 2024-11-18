@@ -54,8 +54,9 @@ const SignIn = () => {
     const basicToken = `${prefix} ${base64String}`;
 
     try {
-      const response = await baseAxios.post(`${BASE_URL}/auth/signin`, data, {
+      const response = await baseAxios.post(`/auth/signin`, data, {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: basicToken,
         },
       });
