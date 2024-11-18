@@ -29,23 +29,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-
-  async rewrites() {
-    return [
-      {
-        source: '/auth/:path*',
-        destination: `${PROTOCOL}://${AWS_DB_HOST}/auth/:path*`,
-      },
-      {
-        source: '/card/:path*',
-        destination: `${PROTOCOL}://${AWS_DB_HOST}/user/:path*`,
-      },
-      {
-        source: '/user/:path*',
-        destination: `${PROTOCOL}://${AWS_DB_HOST}/team/:path*`,
-      },
-    ];
-  },
 };
 
 export default nextConfig;
