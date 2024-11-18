@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/auth/:path*',
-        destination: `${PROTOCOL}://${AWS_DB_HOST}:3000/auth/:path*`,
+        destination: `${PROTOCOL}://${AWS_DB_HOST}/auth/:path*`,
       },
       {
         source: '/card/:path*',
