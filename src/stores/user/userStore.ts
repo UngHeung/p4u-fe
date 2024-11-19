@@ -10,6 +10,9 @@ export interface UserStore {
   user: UserProps;
   setUser: (user: UserProps) => void;
   deleteUser: () => void;
+
+  isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
 const initialUser = {
@@ -20,14 +23,9 @@ const initialUser = {
 
 export const useUserStore = create<UserStore>(set => ({
   user: initialUser,
+  setUser: (user: UserProps) => set({ user }),
+  deleteUser: () => set({ user: initialUser }),
 
-  setUser: (user: UserProps) => {
-    set({ user });
-  },
-
-  deleteUser: () => {
-    set({
-      user: initialUser,
-    });
-  },
+  isLoggedIn: false,
+  setIsLoggedIn: (isLoggedIn: boolean) => set({ isLoggedIn }),
 }));
