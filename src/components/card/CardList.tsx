@@ -20,13 +20,13 @@ const CardList = ({ isLoading }: { isLoading: boolean }) => {
 
   const cardListType = useCardStore((state: CardStore) => state.cardListType);
 
-  const [cards, setCards] = useState<CardProps[]>([]);
+  const [cards, setCards] = useState<CardProps[]>(baseCardList);
 
   useEffect(() => {
-    if (cardListType === 'my') {
-      setCards(myCardList);
-    } else if (cardListType === 'list') {
+    if (cardListType === 'list') {
       setCards(baseCardList);
+    } else if (cardListType === 'my') {
+      setCards(myCardList);
     } else if (cardListType === 'tag') {
       setCards(tagCardList);
     } else if (cardListType === 'keyword') {

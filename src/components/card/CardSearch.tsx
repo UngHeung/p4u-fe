@@ -1,11 +1,12 @@
-import { baseAxios } from '@/apis/axiosInstance';
 import { CardStore, useCardStore } from '@/stores/card/cardStore';
-import React, { FormEvent, SetStateAction, useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import { svgIcons } from '../common/functions/getSvg';
 import CardInput from '../common/input/CardInput';
 import Loading from '../common/Loading';
 import SearchTag from '../tag/SearchTag';
 import { TagProps } from '../tag/Tag';
+import { handleSearch } from './handlers/handleSearch';
+import { handleTagSearch } from './handlers/handleSearchTag';
 import style from './styles/card.module.css';
 
 const CardSearch = ({
@@ -13,12 +14,7 @@ const CardSearch = ({
 }: {
   setIsLoading: React.Dispatch<SetStateAction<boolean>>;
 }) => {
-  const setKeywordCardList = useCardStore(
-    (state: CardStore) => state.setKeywordCardList,
-  );
-  const setTagCardList = useCardStore(
-    (state: CardStore) => state.setTagCardList,
-  );
+  const setCardList = useCardStore((state: CardStore) => state.setCardList);
   const setCardListType = useCardStore(
     (state: CardStore) => state.setCardListType,
   );
@@ -31,7 +27,16 @@ const CardSearch = ({
   useEffect(() => {
     setIsLoading(true);
 
-    const timer = setTimeout(() => handleSearch(), 500);
+    const timer = setTimeout(
+      () =>
+        handleSearch({
+          setIsLoading,
+          setCardListType,
+          setCardList,
+          selectTagList,
+        }),
+      500,
+    );
 
     return () => {
       setIsLoading(false);
@@ -47,7 +52,7 @@ const CardSearch = ({
     }
 
     const timer = setTimeout(async () => {
-      handleTagSearch();
+      handleTagSearch({ searchTagKeyword, setTagList, setIsTagLoading });
     }, 500);
 
     return () => {
@@ -56,64 +61,21 @@ const CardSearch = ({
     };
   }, [searchTagKeyword]);
 
-  const handleSearch = async (event?: FormEvent<HTMLFormElement>) => {
-    setIsLoading(true);
-
-    if (event) {
-      event.preventDefault();
-      const formData = new FormData(event.currentTarget);
-      const keyword = formData.get('keyword');
-
-      try {
-        const query = `?keyword=${keyword}`;
-        const url = `/card/search${query}`;
-        const response = await baseAxios.get(url);
-
-        setKeywordCardList(response.data);
-        setCardListType('keyword');
-      } catch (error: any) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      if (!selectTagList.length) {
-        setCardListType('list');
-        setIsLoading(false);
-        return;
-      }
-
-      const query = `?keywords=${selectTagList.join('_')}`;
-      const url = `/card/search/tag${query}`;
-
-      try {
-        const response = await baseAxios.get(url);
-
-        setTagCardList(response.data);
-        setCardListType('tag');
-      } catch (error: any) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-
-  const handleTagSearch = async () => {
-    try {
-      const url = `/tag/keyword?keyword=${searchTagKeyword}`;
-      const response = await baseAxios.get(url);
-
-      setTagList(response.data);
-    } catch (error: any) {
-      console.error(error);
-    } finally {
-      setIsTagLoading(false);
-    }
-  };
-
   return (
-    <form className={style.searchForm} onSubmit={handleSearch}>
+    <form
+      className={style.searchForm}
+      onSubmit={event =>
+        handleSearch(
+          {
+            setIsLoading,
+            setCardListType,
+            setCardList,
+            selectTagList,
+          },
+          event,
+        )
+      }
+    >
       <section className={style.searchInputWrap}>
         <CardInput
           name="keyword"
