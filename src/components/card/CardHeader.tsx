@@ -2,7 +2,6 @@ import { authAxios } from '@/apis/axiosInstance';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { UserProps, UserStore, useUserStore } from '@/stores/user/userStore';
 import { SetStateAction, useEffect, useState } from 'react';
-import { BASE_URL } from '../common/constants/baseUrl';
 import { svgIcons } from '../common/functions/getSvg';
 import style from './styles/card.module.css';
 
@@ -57,6 +56,11 @@ const CardHeader = ({
       setAnswered(isAnswered);
     } catch (error: any) {
       console.error(error);
+      if (error.status === 401) {
+        pushAlertQueue('권한이 없습니다.', 'failure');
+      } else {
+        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
+      }
     } finally {
       setDisabled(false);
     }
@@ -83,6 +87,8 @@ const CardHeader = ({
       console.error(error);
       if (error.status === 401) {
         pushAlertQueue('로그인이 필요합니다.', 'failure');
+      } else {
+        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
       }
     } finally {
       setDisabled(false);
