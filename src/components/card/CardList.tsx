@@ -5,24 +5,34 @@ import Card, { CardProps } from './Card';
 import style from './styles/card.module.css';
 
 const CardList = ({ isLoading }: { isLoading: boolean }) => {
-  const cardListType = useCardStore((state: CardStore) => state.cardListType);
-  const cardList = useCardStore((state: CardStore) => state.cardList);
-  const keywordCardList = useCardStore(
-    (state: CardStore) => state.keywordCardList,
+  const baseCardList = useCardStore(
+    (state: CardStore) => state.cardList.baseCardList,
   );
-  const tagCardList = useCardStore((state: CardStore) => state.tagCardList);
+  const myCardList = useCardStore(
+    (state: CardStore) => state.cardList.myCardList,
+  );
+  const keywordCardList = useCardStore(
+    (state: CardStore) => state.cardList.keywordCardList,
+  );
+  const tagCardList = useCardStore(
+    (state: CardStore) => state.cardList.tagCardList,
+  );
+
+  const cardListType = useCardStore((state: CardStore) => state.cardListType);
 
   const [cards, setCards] = useState<CardProps[]>([]);
 
   useEffect(() => {
-    if (cardListType === 'list') {
-      setCards(cardList);
+    if (cardListType === 'my') {
+      setCards(myCardList);
+    } else if (cardListType === 'list') {
+      setCards(baseCardList);
     } else if (cardListType === 'tag') {
       setCards(tagCardList);
     } else if (cardListType === 'keyword') {
       setCards(keywordCardList);
     }
-  }, [cardListType, tagCardList, cardList, keywordCardList]);
+  }, [cardListType, baseCardList, tagCardList, keywordCardList]);
 
   return (
     <>

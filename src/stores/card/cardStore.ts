@@ -1,7 +1,14 @@
 import { CardProps } from '@/components/card/Card';
 import { create } from 'zustand';
 
-export type CardListType = 'list' | 'keyword' | 'tag';
+export type CardListType = 'list' | 'keyword' | 'tag' | 'my';
+
+export interface CardListProps {
+  myCardList: CardProps[];
+  baseCardList: CardProps[];
+  tagCardList: CardProps[];
+  keywordCardList: CardProps[];
+}
 
 export interface CardStore {
   card: CardProps;
@@ -11,20 +18,13 @@ export interface CardStore {
   cardListType: CardListType;
   setCardListType: (type: CardListType) => void;
 
-  cardList: CardProps[];
-  setCardList: (cardList: CardProps[]) => void;
-  resetCardList: () => void;
-
-  keywordCardList: CardProps[];
-  setKeywordCardList: (cardList: CardProps[]) => void;
-  resetKeywordCardList: () => void;
-
-  tagCardList: CardProps[];
-  setTagCardList: (cardList: CardProps[]) => void;
-  resetTagCardList: () => void;
+  cardList: CardListProps;
+  setCardList: (cardList: CardProps[], type: CardListType) => void;
+  resetCardList: (type: CardListType) => void;
 
   addCard: (card: CardProps, type: CardListType) => void;
-  removeCard: (id: number, type: CardListType) => void;
+  updateCard: (id: number, card: CardProps) => void;
+  removeCard: (id: number) => void;
 }
 
 const initialCard = {
@@ -41,6 +41,13 @@ const initialCard = {
   tags: [],
 };
 
+const initialCardList = {
+  baseCardList: [],
+  myCardList: [],
+  keywordCardList: [],
+  tagCardList: [],
+};
+
 export const useCardStore = create<CardStore>(set => ({
   card: initialCard,
   setCard: (card: CardProps) => set({ card }),
@@ -49,57 +56,80 @@ export const useCardStore = create<CardStore>(set => ({
   cardListType: 'list',
   setCardListType: (cardListType: CardListType) => set({ cardListType }),
 
-  cardList: [],
-  setCardList: (cardList: CardProps[]) => set({ cardList }),
-  resetCardList: () =>
-    set({
-      cardList: [],
-    }),
+  cardList: initialCardList,
 
-  keywordCardList: [],
-  setKeywordCardList: (keywordCardList: CardProps[]) =>
-    set({ keywordCardList }),
-  resetKeywordCardList: () =>
-    set({
-      keywordCardList: [],
-    }),
+  setCardList: (cardList: CardProps[], type: CardListType) =>
+    set(state => ({
+      cardList: mappedCardList(type, state.cardList, cardList),
+    })),
+  resetCardList: (type: CardListType) =>
+    set(state => ({
+      cardList: mappedCardList(type, state.cardList, []),
+    })),
 
-  tagCardList: [],
-  setTagCardList: (tagCardList: CardProps[]) => set({ tagCardList }),
-  resetTagCardList: () =>
-    set({
-      tagCardList: [],
-    }),
-
-  addCard: (card: CardProps, type: CardListType) => {
-    if (type === 'list') {
-      return set(state => ({
-        cardList: [card, ...state.cardList],
-      }));
-    } else if (type === 'keyword') {
-      return set(state => ({
-        keywordCardList: [card, ...state.keywordCardList],
-      }));
-    } else if (type === 'tag') {
-      return set(state => ({
-        tagCardList: [card, ...state.tagCardList],
-      }));
-    }
-  },
-
-  removeCard: (id: number, type: CardListType) => {
-    if (type === 'list') {
-      return set(state => ({
-        cardList: state.cardList.filter(item => item.id !== id),
-      }));
-    } else if (type === 'keyword') {
-      return set(state => ({
-        keywordCardList: state.keywordCardList.filter(item => item.id !== id),
-      }));
-    } else if (type === 'tag') {
-      return set(state => ({
-        tagCardList: state.tagCardList.filter(item => item.id !== id),
-      }));
-    }
-  },
+  addCard: (card: CardProps, type: CardListType) => {},
+  updateCard: (id: number, card: CardProps) =>
+    set(state => ({
+      cardList: changeCard(id, state.cardList, card),
+    })),
+  removeCard: (id: number) =>
+    set(state => ({
+      cardList: removeCard(id, state.cardList),
+    })),
 }));
+
+const mappedCardList = (
+  type: CardListType,
+  currCardLists: CardListProps,
+  cardList: CardProps[],
+) => {
+  const mappedlist = {
+    baseCardList: type === 'list' ? currCardLists.baseCardList : cardList,
+    myCardList: type === 'my' ? currCardLists.myCardList : cardList,
+    keywordCardList:
+      type === 'keyword' ? currCardLists.keywordCardList : cardList,
+    tagCardList: type === 'tag' ? currCardLists.tagCardList : cardList,
+  };
+
+  return mappedlist;
+};
+
+const changeCard = (
+  id: number,
+  currCardLists: CardListProps,
+  newCard: CardProps,
+) => {
+  currCardLists = {
+    baseCardList: currCardLists.baseCardList.map(currCard =>
+      currCard.id === id ? newCard : currCard,
+    ),
+    myCardList: currCardLists.myCardList.map(currCard =>
+      currCard.id === id ? newCard : currCard,
+    ),
+    keywordCardList: currCardLists.keywordCardList.map(currCard =>
+      currCard.id === id ? newCard : currCard,
+    ),
+    tagCardList: currCardLists.tagCardList.map(currCard =>
+      currCard.id === id ? newCard : currCard,
+    ),
+  };
+
+  return currCardLists;
+};
+
+const removeCard = (id: number, currCardLists: CardListProps) => {
+  currCardLists = {
+    baseCardList: currCardLists.baseCardList.filter(
+      card => card.id !== id && card,
+    ),
+    myCardList: currCardLists.myCardList.filter(card => card.id !== id && card),
+    keywordCardList: currCardLists.keywordCardList.filter(
+      card => card.id !== id && card,
+    ),
+    tagCardList: currCardLists.tagCardList.filter(
+      card => card.id !== id && card,
+    ),
+  };
+
+  return currCardLists;
+};
