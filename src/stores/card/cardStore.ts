@@ -67,7 +67,10 @@ export const useCardStore = create<CardStore>(set => ({
       cardList: mappedCardList(type, state.cardList, []),
     })),
 
-  addCard: (card: CardProps, type: CardListType) => {},
+  addCard: (card: CardProps) =>
+    set(state => ({
+      cardList: addCard(state.cardList, card),
+    })),
   updateCard: (id: number, card: CardProps) =>
     set(state => ({
       cardList: changeCard(id, state.cardList, card),
@@ -84,14 +87,25 @@ const mappedCardList = (
   cardList: CardProps[],
 ) => {
   const mappedlist = {
-    baseCardList: type === 'list' ? currCardLists.baseCardList : cardList,
-    myCardList: type === 'my' ? currCardLists.myCardList : cardList,
+    baseCardList: type === 'list' ? cardList : currCardLists.baseCardList,
+    myCardList: type === 'my' ? cardList : currCardLists.myCardList,
     keywordCardList:
-      type === 'keyword' ? currCardLists.keywordCardList : cardList,
-    tagCardList: type === 'tag' ? currCardLists.tagCardList : cardList,
+      type === 'keyword' ? cardList : currCardLists.keywordCardList,
+    tagCardList: type === 'tag' ? cardList : currCardLists.tagCardList,
   };
 
   return mappedlist;
+};
+
+const addCard = (currCardLists: CardListProps, newCard: CardProps) => {
+  currCardLists = {
+    baseCardList: [newCard, ...currCardLists.baseCardList],
+    myCardList: [newCard, ...currCardLists.myCardList],
+    keywordCardList: currCardLists.keywordCardList,
+    tagCardList: currCardLists.tagCardList,
+  };
+
+  return currCardLists;
 };
 
 const changeCard = (
