@@ -41,6 +41,10 @@ const nextConfig: NextConfig = {
         destination: `${PROTOCOL}://${AWS_DB_HOST}/card/:path*`,
       },
       {
+        source: '/tag/:path*',
+        destination: `${PROTOCOL}://${AWS_DB_HOST}/tag/:path*`,
+      },
+      {
         source: '/user/:path*',
         destination: `${PROTOCOL}://${AWS_DB_HOST}/user/:path*`,
       },

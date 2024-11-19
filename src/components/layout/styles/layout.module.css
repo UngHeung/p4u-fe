@@ -2,8 +2,9 @@
 
 .mainHeader {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  gap: 30px;
   width: 100%;
   height: 50px;
   padding: 0 20px;
@@ -14,4 +15,23 @@
   font-size: var(--font-size-36);
   font-weight: var(--font-weight-black);
   letter-spacing: -3px;
+}
+
+.mainNav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-medium);
+  color: #333333;
+}
+
+@media screen and (max-width: 600px) {
+  .mainHeader {
+    justify-content: space-between;
+    gap: 0;
+    margin-right: 0;
+  }
 }

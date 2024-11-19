@@ -7,11 +7,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { ALERT_MESSAGE_ENUM } from '../alert/constants/message.enum';
-import MainButton from '../button/MainButton';
+import MainButton from '../common/button/MainButton';
 import { setToken } from '../common/constants/accessToken';
-import { BASE_URL } from '../common/constants/baseUrl';
 import { svgIcons } from '../common/functions/getSvg';
-import AuthInput from '../input/AuthInput';
+import AuthInput from '../common/input/AuthInput';
 import style from './styles/sign.module.css';
 
 const SignIn = () => {
@@ -21,6 +20,7 @@ const SignIn = () => {
     (state: AlertStore) => state.pushAlertQueue,
   );
   const setUser = useUserStore((state: UserStore) => state.setUser);
+  const setIsLoggedIn = useUserStore((state: UserStore) => state.setIsLoggedIn);
 
   const [disabled, setDisabled] = useState(false);
   const [passwordIsShow, setPasswordIsShow] = useState(false);
@@ -77,12 +77,18 @@ const SignIn = () => {
       };
 
       setUser(user);
+      setIsLoggedIn(true);
 
       pushAlertQueue(ALERT_MESSAGE_ENUM.SUCCESS_SIGN_IN, 'success');
 
       router.replace('/card/list');
     } catch (error: any) {
       console.error(error);
+      if (error.status === 404 || error.status === 401) {
+        pushAlertQueue('아이디 또는 비밀번호를 확인해주세요.', 'failure');
+      } else {
+        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
+      }
     } finally {
       setDisabled(false);
     }

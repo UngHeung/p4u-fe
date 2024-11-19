@@ -1,9 +1,9 @@
-import { authAxios } from '@/apis/axiosInstance';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { UserProps, UserStore, useUserStore } from '@/stores/user/userStore';
 import { SetStateAction, useEffect, useState } from 'react';
-import { BASE_URL } from '../common/constants/baseUrl';
 import { svgIcons } from '../common/functions/getSvg';
+import { handleAnswered } from './handlers/handleAnswered';
+import { handlePicked } from './handlers/handlePicked';
 import style from './styles/card.module.css';
 
 const CardHeader = ({
@@ -29,6 +29,7 @@ const CardHeader = ({
   );
 
   const [isPicker, setIsPicker] = useState(false);
+  const [pickCount, setPickCount] = useState(pickers ? pickers.length : 0);
 
   useEffect(() => {
     const exist = pickers.find(picker => picker.id === user.id);
@@ -37,64 +38,11 @@ const CardHeader = ({
     }
   }, []);
 
-  const handleAnswered = async () => {
-    setDisabled(true);
-
-    const data = {
-      isAnswered: !answered,
-    };
-
-    try {
-      const url = `/card/${id}/answered`;
-      const response = await authAxios.patch(url, data);
-      const isAnswered = response.data.isAnswered;
-
-      pushAlertQueue(
-        `기도제목이 ${isAnswered ? '-응답받았음-' : '-아직 응답받지 못했음-'}\n으로 표시되었습니다.`,
-        'success',
-      );
-
-      setAnswered(isAnswered);
-    } catch (error: any) {
-      console.error(error);
-    } finally {
-      setDisabled(false);
-    }
-  };
-
-  const handlePicked = async () => {
-    setDisabled(true);
-
-    try {
-      const url = `/card/${id}/pick`;
-      const response = await authAxios.patch(url);
-      const pickers: Pick<UserProps, 'id'>[] = response.data.pickers;
-      const isToggled = pickers.find(picker => picker.id === user.id)
-        ? true
-        : false;
-
-      pushAlertQueue(
-        `기도대상${isToggled ? '으로 선택' : '에서 제외'}되었습니다.`,
-        'success',
-      );
-
-      setIsPicker(isToggled);
-    } catch (error: any) {
-      console.error(error);
-      if (error.status === 401) {
-        pushAlertQueue('로그인이 필요합니다.', 'failure');
-      }
-    } finally {
-      setDisabled(false);
-    }
-    console.log('pick~!');
-  };
-
   return (
     <header className={style.cardHeader}>
       <span className={style.cardInfo}>
         {svgIcons.heart()}
-        <strong>{`${pickers ? pickers.length : 0}명`}</strong>
+        <strong>{`${pickCount}명`}</strong>
         <span>{`이 이 기도제목을 위해 기도${answered ? '했습니다.' : '하고있습니다.'}`}</span>
       </span>
 
@@ -105,7 +53,13 @@ const CardHeader = ({
             name={'isAnswered'}
             onClick={event => {
               event.stopPropagation();
-              handleAnswered();
+              handleAnswered({
+                cardId: id,
+                answered,
+                setAnswered,
+                setDisabled,
+                pushAlertQueue,
+              });
             }}
             disabled={disabled}
           >
@@ -119,7 +73,14 @@ const CardHeader = ({
             name={'pick'}
             onClick={event => {
               event.stopPropagation();
-              handlePicked();
+              handlePicked({
+                user,
+                cardId: id,
+                setDisabled,
+                setIsPicker,
+                setPickCount,
+                pushAlertQueue,
+              });
             }}
           >
             {svgIcons.checked(isPicker)}

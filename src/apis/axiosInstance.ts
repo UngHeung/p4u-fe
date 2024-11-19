@@ -67,8 +67,6 @@ export const callbackResponseError = async (error: any, isAccess: boolean) => {
         return refreshTokenResponse;
       }
 
-      console.log(refreshTokenResponse);
-
       error.config.header = {
         Authorization: `Bearer ${isAccess ? getToken(true) : getToken(false)}`,
       };

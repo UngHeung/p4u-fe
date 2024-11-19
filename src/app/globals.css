@@ -32,8 +32,9 @@
   --font-size-14: .875rem;
 
   --font-weight-light: 100;
-  --font-weight-regular: 400;
-  --font-weight-bold: 600;
+  --font-weight-regular: 300;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
   --font-weight-black: 900;
 
   --input-height-50: 50px;

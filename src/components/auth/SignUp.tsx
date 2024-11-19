@@ -6,10 +6,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { ALERT_MESSAGE_ENUM } from '../alert/constants/message.enum';
-import MainButton from '../button/MainButton';
-import { BASE_URL } from '../common/constants/baseUrl';
+import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
-import AuthInput from '../input/AuthInput';
+import AuthInput from '../common/input/AuthInput';
 import AuthIcons from './AuthIcons';
 import style from './styles/sign.module.css';
 
@@ -64,6 +63,24 @@ const SignUp = () => {
       console.log(error);
       if (error.status === 409) {
         pushAlertQueue(ALERT_MESSAGE_ENUM.FAILURE_CONFLICT_ID, 'failure');
+      } else if (error.status === 400) {
+        const errMessage = error.response.data.message + '';
+        if (errMessage.startsWith('name')) {
+          pushAlertQueue(
+            '이름은 한글 또는 영문\n2~12자로 입력해주세요.',
+            'failure',
+          );
+        } else if (errMessage.startsWith('password')) {
+          pushAlertQueue(
+            '비밀번호는 영문 대소문자 포함\n8~16자로 입력해주세요.',
+            'failure',
+          );
+        } else if (errMessage.startsWith('account')) {
+          pushAlertQueue(
+            '아이디는 영문 소문자, 숫자\n6~12자로 입력해주세요.',
+            'failure',
+          );
+        }
       }
     } finally {
       setDisabled(false);
