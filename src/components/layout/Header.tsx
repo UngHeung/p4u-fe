@@ -12,7 +12,7 @@ import style from './styles/layout.module.css';
 
 const Header = () => {
   const router = useRouter();
-
+  const isLoggedIn = useUserStore((state: UserStore) => state.isLoggedIn);
   const setIsLoggedIn = useUserStore((state: UserStore) => state.setIsLoggedIn);
 
   const handleLogout = async () => {
@@ -35,13 +35,15 @@ const Header = () => {
       </section>
 
       <section className={style.buttonWrap}>
-        <BaseButton
-          id={''}
-          type={'button'}
-          className={''}
-          value={{ icon: svgIcons.loggedOut() }}
-          onClick={handleLogout}
-        />
+        {isLoggedIn && (
+          <BaseButton
+            id={''}
+            type={'button'}
+            className={''}
+            value={{ text: '로그아웃' }}
+            onClick={handleLogout}
+          />
+        )}
       </section>
     </header>
   );
