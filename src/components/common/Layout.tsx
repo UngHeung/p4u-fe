@@ -13,12 +13,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const alerts = useAlertStore((state: AlertStore) => state.alertQueue);
   const user = useUserStore((state: UserStore) => state.user);
   const setUser = useUserStore((state: UserStore) => state.setUser);
+  const isHydrate = useUserStore((state: UserStore) => state.isHydrated);
 
   return (
     <>
-      <Header />
-      {children}
-      {alerts.length > 0 && <AlertQueue alerts={alerts} />}
+      {isHydrate && (
+        <>
+          <Header />
+          {children}
+          {alerts.length > 0 && <AlertQueue alerts={alerts} />}
+        </>
+      )}
     </>
   );
 };
