@@ -1,19 +1,25 @@
 'use client';
 
 import { baseAxios } from '@/apis/axiosInstance';
-import Link from 'next/link';
+import { UserStore, useUserStore } from '@/stores/user/userStore';
 import { useRouter } from 'next/navigation';
 import BaseButton from '../common/button/BaseButton';
+import { setToken } from '../common/constants/accessToken';
 import { BASE_URL } from '../common/constants/baseUrl';
 import { svgIcons } from '../common/functions/getSvg';
+import MainNav from './MainNav';
 import style from './styles/layout.module.css';
 
 const Header = () => {
   const router = useRouter();
 
+  const setIsLoggedIn = useUserStore((state: UserStore) => state.setIsLoggedIn);
+
   const handleLogout = async () => {
     const response = await baseAxios.post(`${BASE_URL}/auth/logout`);
 
+    setIsLoggedIn(false);
+    setToken({ isAccess: true, accessToken: '' });
     localStorage.clear();
     router.push('/');
   };
@@ -25,10 +31,7 @@ const Header = () => {
       </section>
 
       <section>
-        <Link href={'/'}>로그인</Link>
-        <Link href={'/signup'}>회원가입</Link>
-        <Link href={'/card/write'}>새카드</Link>
-        <Link href={'/card/list'}>내카드</Link>
+        <MainNav />
       </section>
 
       <section className={style.buttonWrap}>
