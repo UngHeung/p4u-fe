@@ -14,7 +14,7 @@ const reissueToken = async (isAccess: boolean) => {
       return refreshToken;
     }
   } catch (error: any) {
-    console.error(error);
+    return error;
   }
 };
 
