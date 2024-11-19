@@ -1,11 +1,10 @@
 'use client';
 
-import { authAxios } from '@/apis/axiosInstance';
 import { CardStore, useCardStore } from '@/stores/card/cardStore';
 import { useEffect, useState } from 'react';
-import { BASE_URL } from '../common/constants/baseUrl';
 import CardList from './CardList';
 import CardSearch from './CardSearch';
+import { handleInitialCardList } from './handlers/handleInitialCardList';
 
 const CardMain = () => {
   const setCardList = useCardStore((state: CardStore) => state.setCardList);
@@ -17,24 +16,11 @@ const CardMain = () => {
 
   useEffect(() => {
     setCardListType('list');
-    handleInitialCardList();
+    handleInitialCardList({
+      setIsLoading,
+      setCardList,
+    });
   }, []);
-
-  const handleInitialCardList = async () => {
-    setIsLoading(true);
-
-    try {
-      const response = await authAxios.get(`/card`);
-
-      if (response.status === 200) {
-        setCardList(response.data);
-      }
-    } catch (error: any) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <>
