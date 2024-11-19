@@ -4,11 +4,10 @@ import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { ALERT_MESSAGE_ENUM } from '../alert/constants/message.enum';
 import AuthIcons from '../auth/AuthIcons';
-import MainButton from '../button/MainButton';
-import { BASE_URL } from '../common/constants/baseUrl';
+import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
+import CardInput from '../common/input/CardInput';
 import CardTextarea from '../common/textarea/CardTextarea';
-import CardInput from '../input/CardInput';
 import Tag from '../tag/Tag';
 import style from './styles/card.module.css';
 

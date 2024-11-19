@@ -6,10 +6,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { ALERT_MESSAGE_ENUM } from '../alert/constants/message.enum';
-import MainButton from '../button/MainButton';
-import { BASE_URL } from '../common/constants/baseUrl';
+import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
-import AuthInput from '../input/AuthInput';
+import AuthInput from '../common/input/AuthInput';
 import AuthIcons from './AuthIcons';
 import style from './styles/sign.module.css';
 

@@ -3,7 +3,7 @@
 import { baseAxios } from '@/apis/axiosInstance';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import BaseButton from '../button/BaseButton';
+import BaseButton from '../common/button/BaseButton';
 import { BASE_URL } from '../common/constants/baseUrl';
 import { svgIcons } from '../common/functions/getSvg';
 import style from './styles/layout.module.css';

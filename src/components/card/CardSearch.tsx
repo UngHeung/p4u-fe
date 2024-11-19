@@ -1,10 +1,9 @@
 import { baseAxios } from '@/apis/axiosInstance';
 import { CardStore, useCardStore } from '@/stores/card/cardStore';
 import React, { FormEvent, SetStateAction, useEffect, useState } from 'react';
-import { BASE_URL } from '../common/constants/baseUrl';
 import { svgIcons } from '../common/functions/getSvg';
+import CardInput from '../common/input/CardInput';
 import Loading from '../common/Loading';
-import CardInput from '../input/CardInput';
 import SearchTag from '../tag/SearchTag';
 import { TagProps } from '../tag/Tag';
 import style from './styles/card.module.css';
