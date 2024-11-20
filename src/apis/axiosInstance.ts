@@ -67,11 +67,14 @@ export const callbackResponseError = async (error: any, isAccess: boolean) => {
         return refreshTokenResponse;
       }
 
-      error.config.header = {
-        Authorization: `Bearer ${isAccess ? getToken(true) : getToken(false)}`,
+      const { config } = error;
+
+      config.header = {
+        ...config.header,
+        Authorization: `Bearer ${refreshTokenResponse}`,
       };
 
-      const response = await baseAxios.request(error.config);
+      const response = await authAxios.request(config);
 
       return response;
     } catch (error) {
