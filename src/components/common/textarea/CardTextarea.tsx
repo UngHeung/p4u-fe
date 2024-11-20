@@ -6,6 +6,8 @@ const CardTextarea = ({
   id,
   name,
   className,
+  labelClassName,
+  maxLength,
   onChange,
   placeholder,
 }: CardTextareaProps) => {
@@ -14,6 +16,8 @@ const CardTextarea = ({
       id={id}
       name={name}
       className={className}
+      labelClassName={labelClassName}
+      maxLength={maxLength}
       onChange={onChange}
       placeholder={placeholder}
     />
