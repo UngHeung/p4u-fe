@@ -110,6 +110,7 @@ const CardWrite = () => {
           <section className={style.writeContentWrap}>
             <CardTextarea
               name={'content'}
+              maxLength={500}
               placeholder={'내용을 작성해주세요.'}
             />
           </section>
