@@ -166,7 +166,8 @@
 
 .cardContent {
   margin-top: 40px;
-  font-size: var(--font-size-16)
+  white-space: pre-wrap;
+  font-size: var(--font-size-16);
 }
 
 /* card write */
