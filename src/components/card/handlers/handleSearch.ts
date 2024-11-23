@@ -1,24 +1,20 @@
 import { baseAxios } from '@/apis/axiosInstance';
-import { CardListType } from '@/stores/card/cardStore';
-import React, { FormEvent, SetStateAction } from 'react';
+import { CardListType } from '@/stores/card/cardTypeStore';
+import { FormEvent } from 'react';
 import { CardProps } from '../Card';
 
 export const handleSearch = async (
   {
-    setIsLoading,
     setCardListType,
     setCardList,
     selectTagList,
   }: {
-    setIsLoading: React.Dispatch<SetStateAction<boolean>>;
     setCardListType: (type: CardListType) => void;
     setCardList: (cardList: CardProps[], type: CardListType) => void;
     selectTagList: string[];
   },
   event?: FormEvent<HTMLFormElement>,
 ) => {
-  setIsLoading(true);
-
   if (event) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -33,13 +29,10 @@ export const handleSearch = async (
       setCardList(response.data, 'keyword');
     } catch (error: any) {
       console.error(error);
-    } finally {
-      setIsLoading(false);
     }
   } else {
     if (!selectTagList.length) {
-      setCardListType('list');
-      setIsLoading(false);
+      setCardListType('all');
       return;
     }
 
@@ -53,8 +46,6 @@ export const handleSearch = async (
       setCardList(response.data, 'tag');
     } catch (error: any) {
       console.error(error);
-    } finally {
-      setIsLoading(false);
     }
   }
 };
