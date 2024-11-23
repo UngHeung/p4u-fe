@@ -12,6 +12,7 @@ const createAxiosInstance = (config: AxiosRequestConfig = {}) => {
     headers: {
       'Content-Type': 'application/json',
     },
+    withCredentials: true,
     ...config,
   });
 };
@@ -47,6 +48,9 @@ authAxios.interceptors.response.use(
     return response;
   },
   async (error: any) => {
+    console.log('Error response:', error.response);
+    console.log('Original request:', error.config);
+
     const originalRequest = error.config;
 
     if (
@@ -60,6 +64,7 @@ authAxios.interceptors.response.use(
         const newToken = await reissueToken(true);
 
         if (!newToken) {
+          window.location.href = '/auth/logout';
           throw new Error('토큰 재발급 실패');
         }
 
@@ -78,3 +83,76 @@ refreshAxios.interceptors.request.use(
   config => setAuthAxios(config, false),
   error => Promise.reject(error),
 );
+
+// baseAxios.interceptors.request.use(
+//   config => callbackRequestConfig(config, false),
+//   error => callbackRequestError(error),
+// );
+
+// authAxios.interceptors.request.use(
+//   config => callbackRequestConfig(config, true),
+//   error => callbackRequestError(error),
+// );
+
+// authAxios.interceptors.response.use(
+//   response => callbackResponse(response),
+//   error => callbackResponseError(error, true),
+// );
+
+// export const refreshAxios = axios.create({});
+
+// refreshAxios.interceptors.request.use(
+//   config => callbackRequestConfig(config, false),
+//   error => callbackRequestError(error),
+// );
+
+// export const callbackRequestConfig = (
+//   config: InternalAxiosRequestConfig,
+//   isAccess: boolean,
+// ) => {
+//   if (isAccess) {
+//     const accessToken = getToken(true);
+//     config.headers['Authorization'] = `Bearer ${accessToken}`;
+//   } else {
+//     const refreshToken = getToken(false);
+//     config.headers['Authorization'] = `Bearer ${refreshToken}`;
+//   }
+
+//   return config;
+// };
+
+// export const callbackRequestError = (error: any) => {
+//   return Promise.reject(error);
+// };
+
+// export const callbackResponse = (response: AxiosResponse) => {
+//   if (response.status === 404) {
+//     console.log('404 page');
+//   }
+
+//   return response;
+// };
+
+// export const callbackResponseError = async (error: any, isAccess: boolean) => {
+//   const originalRequest = error.config;
+
+//   if (error.response?.status === 401 && !originalRequest._retry) {
+//     originalRequest._retry = true;
+
+//     try {
+//       const refreshTokenResponse = await reissueToken(isAccess);
+
+//       if (!refreshTokenResponse) {
+//         return Promise.reject(refreshTokenResponse);
+//       }
+
+//       originalRequest.headers['Authorization'] =
+//         `Bearer ${refreshTokenResponse}`;
+
+//       return authAxios.request(originalRequest);
+//     } catch (error) {
+//       return Promise.reject(error);
+//     }
+//   }
+//   return Promise.reject(error);
+// };
