@@ -41,8 +41,12 @@ export const useUserStore = create(
     {
       name: 'user',
       storage: createJSONStorage(() => localStorage),
-      onRehydrateStorage: () => state => {
-        state?.setIsHydrated(true);
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error(error, '아직 정보를 불러오지 못했습니다.');
+        } else {
+          state?.setIsHydrated(true);
+        }
       },
     },
   ),

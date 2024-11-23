@@ -3,16 +3,16 @@ import { TagProps } from '@/components/tag/Tag';
 import { SetStateAction } from 'react';
 
 export const handleTagSearch = async ({
-  searchTagKeyword,
+  keyword,
   setTagList,
   setIsTagLoading,
 }: {
-  searchTagKeyword: string;
+  keyword: string;
   setTagList: React.Dispatch<React.SetStateAction<TagProps[]>>;
   setIsTagLoading: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   try {
-    const url = `/tag/keyword?keyword=${searchTagKeyword}`;
+    const url = `/tag/keyword?keyword=${keyword}`;
     const response = await baseAxios.get(url);
 
     setTagList(response.data);

@@ -1,31 +1,57 @@
 'use client';
 
-import { CardStore, useCardStore } from '@/stores/card/cardStore';
+import { CardTypeStore, useCardTypeStore } from '@/stores/card/cardTypeStore';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import CardList from './CardList';
 import CardSearch from './CardSearch';
-import { handleInitialCardList } from './handlers/handleInitialCardList';
+import { CreateCardListQuery } from './handlers/createCardListQuery';
 
 const CardMain = () => {
-  const setCardList = useCardStore((state: CardStore) => state.setCardList);
-  const setCardListType = useCardStore(
-    (state: CardStore) => state.setCardListType,
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [keyword, setKeyword] = useState('');
+
+  const { cardListType, setCardListType } = useCardTypeStore(
+    (state: CardTypeStore) => state,
   );
 
-  const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    CreateCardListQuery(cardListType, searchKeyword);
+
+  const { ref, inView } = useInView();
 
   useEffect(() => {
-    setCardListType('list');
-    handleInitialCardList({
-      setIsLoading,
-      setCardList,
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['list', ''],
+      exact: true,
     });
-  }, []);
+  }, [cardListType]);
 
   return (
     <>
-      <CardSearch setIsLoading={setIsLoading} />
-      <CardList isLoading={isLoading} />
+      <CardSearch
+        keyword={keyword}
+        setKeyword={setKeyword}
+        setSearchKeyword={setSearchKeyword}
+        setActiveTab={setCardListType}
+      />
+
+      <CardList
+        postList={data?.pages.flatMap(page => page.list) ?? []}
+        isLoading={false}
+        ref={ref}
+        isFetchingNextPage={isFetchingNextPage}
+        hasNextPage={hasNextPage}
+      />
     </>
   );
 };
