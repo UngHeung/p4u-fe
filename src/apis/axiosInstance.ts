@@ -12,7 +12,6 @@ const createAxiosInstance = (config: AxiosRequestConfig = {}) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    withCredentials: true,
     ...config,
   });
 };
@@ -25,19 +24,34 @@ export const refreshAxios = createAxiosInstance({
   },
 });
 
-const setAuthAxios = (
+const setAuthAxios = async (
   config: InternalAxiosRequestConfig,
   isAccess: boolean,
 ) => {
-  const token = getToken(isAccess);
+  let token = getToken(isAccess);
 
   if (!token) {
-    console.log('token is null', { isAccess });
-    return config;
+    token = await initializeAuthToken();
   }
 
   config.headers['Authorization'] = `Bearer ${token}`;
   return config;
+};
+
+const initializeAuthToken = async () => {
+  try {
+    const newToken = await reissueToken(true);
+
+    if (!newToken) {
+      window.location.href = '/auth/logout';
+      throw new Error('토큰 재발급 실패');
+    }
+
+    return newToken;
+  } catch (error) {
+    console.error('Token initialization failed:', error);
+    return null;
+  }
 };
 
 authAxios.interceptors.request.use(
@@ -54,9 +68,6 @@ authAxios.interceptors.response.use(
     return response;
   },
   async (error: any) => {
-    console.log('Error response:', error.response);
-    console.log('Original request:', error.config);
-
     const originalRequest = error.config;
 
     if (
