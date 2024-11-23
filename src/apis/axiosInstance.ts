@@ -30,6 +30,12 @@ const setAuthAxios = (
   isAccess: boolean,
 ) => {
   const token = getToken(isAccess);
+
+  if (!token) {
+    console.log('token is null', { isAccess });
+    return config;
+  }
+
   config.headers['Authorization'] = `Bearer ${token}`;
   return config;
 };
