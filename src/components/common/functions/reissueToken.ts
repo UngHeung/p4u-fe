@@ -1,6 +1,5 @@
 import { refreshAxios } from '@/apis/axiosInstance';
 import { setToken } from '../constants/accessToken';
-import { BASE_URL } from '../constants/baseUrl';
 
 const reissueToken = async (isAccess: boolean) => {
   try {
@@ -20,8 +19,8 @@ const reissueToken = async (isAccess: boolean) => {
 
 export default reissueToken;
 
-const accessReissueUrl = `${BASE_URL}/auth/reissue/access`;
-const refreshReissueUrl = `${BASE_URL}/auth/reissue/refresh`;
+const accessReissueUrl = `/auth/reissue/access`;
+const refreshReissueUrl = `/auth/reissue/refresh`;
 
 /**
  * Reissue access token
