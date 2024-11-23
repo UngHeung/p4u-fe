@@ -31,6 +31,7 @@ const setAuthAxios = async (
   let token = getToken(isAccess);
 
   if (!token) {
+    console.log('token is null', { isAccess });
     token = await initializeAuthToken();
   }
 
@@ -41,6 +42,7 @@ const setAuthAxios = async (
 const initializeAuthToken = async () => {
   try {
     const newToken = await reissueToken(true);
+    console.log('newToken', newToken);
 
     if (!newToken) {
       window.location.href = '/auth/logout';
