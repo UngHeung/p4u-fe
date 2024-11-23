@@ -6,7 +6,6 @@ import { UserStore, useUserStore } from '@/stores/user/userStore';
 import { useRouter } from 'next/navigation';
 import BaseButton from '../common/button/BaseButton';
 import { setToken } from '../common/constants/accessToken';
-import { BASE_URL } from '../common/constants/baseUrl';
 import MainNav from './MainNav';
 import style from './styles/layout.module.css';
 
@@ -20,7 +19,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await baseAxios.post(`${BASE_URL}/auth/logout`);
+      const response = await baseAxios.post(`/auth/logout`);
 
       if (response.status === 201) {
         pushAlertQueue('로그아웃이 완료되었습니다.', 'success');
