@@ -8,7 +8,6 @@ import axios, {
 
 const createAxiosInstance = (config: AxiosRequestConfig = {}) => {
   return axios.create({
-    baseURL: `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_DB_HOST}`,
     headers: {
       'Content-Type': 'application/json',
     },
