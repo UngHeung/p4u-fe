@@ -1,5 +1,4 @@
 import { getToken } from '@/components/common/constants/accessToken';
-import { BASE_URL } from '@/components/common/constants/baseUrl';
 import reissueToken from '@/components/common/functions/reissueToken';
 import axios, {
   AxiosRequestConfig,
@@ -9,7 +8,7 @@ import axios, {
 
 const createAxiosInstance = (config: AxiosRequestConfig = {}) => {
   return axios.create({
-    baseURL: BASE_URL,
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       'Content-Type': 'application/json',
     },
