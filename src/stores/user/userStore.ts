@@ -5,6 +5,7 @@ export interface UserProps {
   id: number;
   name: string;
   account: string;
+  role: string;
 }
 
 export interface UserStore {
@@ -23,6 +24,8 @@ const initialUser = {
   id: -1,
   name: '',
   account: '',
+  role: '',
+  createdAt: '',
 };
 
 export const useUserStore = create(
