@@ -60,6 +60,18 @@ const MainNav = () => {
                 href={'/card/list'}
                 onClick={event => {
                   event.preventDefault();
+                  setCardTypeStore('my');
+                  router.push('/card/list');
+                }}
+              >
+                내카드보기
+              </Link>
+            </li>
+            <li>
+              <Link
+                href={'/card/list'}
+                onClick={event => {
+                  event.preventDefault();
                   setCardTypeStore('all');
                   router.push('/card/list');
                 }}
@@ -68,16 +80,7 @@ const MainNav = () => {
               </Link>
             </li>
             <li>
-              <Link
-                href={'/card/list'}
-                onClick={event => {
-                  event.preventDefault();
-                  setCardTypeStore('my');
-                  router.push('/card/list');
-                }}
-              >
-                내카드보기
-              </Link>
+              <Link href={'/card/today'}>오늘의카드</Link>
             </li>
           </>
         ) : (
