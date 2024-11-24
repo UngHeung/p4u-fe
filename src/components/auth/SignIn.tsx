@@ -11,6 +11,10 @@ import MainButton from '../common/button/MainButton';
 import { setToken } from '../common/constants/accessToken';
 import { svgIcons } from '../common/functions/getSvg';
 import AuthInput from '../common/input/AuthInput';
+import {
+  generateBasicToken,
+  getUserByPayload,
+} from './handlers/handleTokenAndDatasFromPayload';
 import style from './styles/sign.module.css';
 
 const SignIn = () => {
@@ -31,8 +35,8 @@ const SignIn = () => {
 
     const formData = new FormData(event.currentTarget);
     const data = {
-      account: formData.get('account'),
-      password: formData.get('password'),
+      account: formData.get('account') as string,
+      password: formData.get('password') as string,
     };
 
     if (!data.account) {
@@ -47,11 +51,7 @@ const SignIn = () => {
       return;
     }
 
-    const prefix = 'Basic';
-    const base64String = Buffer.from(
-      `${data.account}:${data.password}`,
-    ).toString('base64');
-    const basicToken = `${prefix} ${base64String}`;
+    const basicToken = generateBasicToken(data.account, data.password);
 
     try {
       const response = await baseAxios.post(`/auth/signin`, data, {
@@ -65,17 +65,7 @@ const SignIn = () => {
 
       setToken({ accessToken, refreshToken });
 
-      const payload = accessToken.split('.')[1];
-      const buffer = Buffer.from(payload, 'base64');
-      const dataString = buffer.toString().replaceAll(/['"]/g, '');
-      const dataParts = dataString.split(',');
-
-      const user = {
-        id: +dataParts[0].split(':')[1],
-        name: dataParts[1].split(':')[1],
-        account: dataParts[2].split(':')[1],
-        role: dataParts[3].split(':')[1],
-      };
+      const user = getUserByPayload(accessToken);
 
       setUser(user);
       setIsLoggedIn(true);
