@@ -6,7 +6,11 @@ import { UserStore, useUserStore } from '@/stores/user/userStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import { ALERT_MESSAGE_ENUM } from '../alert/constants/message.enum';
+import {
+  ERROR_MESSAGE_ENUM,
+  SUCCESS_MESSAGE_ENUM,
+  VALIDATION_MESSAGE_ENUM,
+} from '../alert/constants/message.enum';
 import MainButton from '../common/button/MainButton';
 import { setToken } from '../common/constants/accessToken';
 import { svgIcons } from '../common/functions/getSvg';
@@ -40,13 +44,13 @@ const SignIn = () => {
     };
 
     if (!data.account) {
-      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_ID, 'failure');
+      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_ID, 'failure');
       setDisabled(false);
       return;
     }
 
     if (!data.password) {
-      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_PASSWORD, 'failure');
+      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_PASSWORD, 'failure');
       setDisabled(false);
       return;
     }
@@ -70,15 +74,15 @@ const SignIn = () => {
       setUser(user);
       setIsLoggedIn(true);
 
-      pushAlertQueue(ALERT_MESSAGE_ENUM.SUCCESS_SIGN_IN, 'success');
+      pushAlertQueue(SUCCESS_MESSAGE_ENUM.SUCCESS_SIGN_IN, 'success');
 
       router.replace('/card/list');
     } catch (error: any) {
       console.error(error);
       if (error.status === 404 || error.status === 401) {
-        pushAlertQueue('아이디 또는 비밀번호를 확인해주세요.', 'failure');
+        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHORIZED_EXCEPTION, 'failure');
       } else {
-        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
+        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
       }
     } finally {
       setDisabled(false);
