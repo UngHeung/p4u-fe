@@ -74,6 +74,7 @@ const SignIn = () => {
         id: +dataParts[0].split(':')[1],
         name: dataParts[1].split(':')[1],
         account: dataParts[2].split(':')[1],
+        role: dataParts[3].split(':')[1],
       };
 
       setUser(user);
