@@ -1,0 +1,46 @@
+.todayPickWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  height: calc(100svh - 100px);
+  padding: 0 10px;
+}
+
+.todayPickWrap>button {
+  position: fixed;
+  bottom: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 40px;
+  background-color: var(--color-main);
+  border-radius: 20px;
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-medium);
+  color: var(--font-color-negative);
+}
+
+/* guide */
+.todayGuide {
+  top: calc(50% - 140px);
+  right: calc(50% - 188px);
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.todayGuide.show {
+  opacity: 1;
+}
+
+@media (max-width: 420px) {
+  .todayGuide {
+    top: calc(50% - 140px);
+    right: 25px;
+  }
+}
