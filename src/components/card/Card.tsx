@@ -1,5 +1,7 @@
 'use client';
 
+import { useCardSearchStore } from '@/stores/card/cardSearchStore';
+import { useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { UserProps } from '@/stores/user/userStore';
 import { useState } from 'react';
 import { TagProps } from '../tag/Tag';
@@ -28,6 +30,9 @@ const Card = ({
   isAnswered,
   isAnonymity,
 }: CardProps) => {
+  const cardListType = useCardTypeStore(state => state.cardListType);
+  const searchKeyword = useCardSearchStore(state => state.searchKeyword);
+
   const [isFliped, setIsFliped] = useState(false);
   const [answered, setAnswered] = useState<boolean>(isAnswered);
   const [disabled, setDisabled] = useState(false);
@@ -69,10 +74,33 @@ const Card = ({
           setDisabled={setDisabled}
         />
 
-        <pre className={style.cardContent}>{content}</pre>
+        {cardListType === 'keyword' ? (
+          findKeywordFromContent(content, searchKeyword)
+        ) : (
+          <pre key={'content'} className={style.cardContent}>
+            {content}
+          </pre>
+        )}
       </section>
     </article>
   );
 };
 
 export default Card;
+
+const findKeywordFromContent = (content: string, searchKeyword: string) => {
+  const contentArr = content.split(searchKeyword);
+
+  return (
+    <pre key={'contentBySearchKeyword'} className={style.cardContent}>
+      {contentArr.map((text, idx) => (
+        <span key={idx}>
+          {text}
+          {idx === contentArr.length - 1 && text !== ' ' ? null : (
+            <span className={style.keyword}>{searchKeyword}</span>
+          )}
+        </span>
+      ))}
+    </pre>
+  );
+};

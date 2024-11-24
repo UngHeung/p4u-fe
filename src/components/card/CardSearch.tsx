@@ -1,6 +1,7 @@
+import { useCardSearchStore } from '@/stores/card/cardSearchStore';
 import { useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { useQueryClient } from '@tanstack/react-query';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { svgIcons } from '../common/functions/getSvg';
 import CardInput from '../common/input/CardInput';
 import Loading from '../common/Loading';
@@ -9,16 +10,14 @@ import { TagProps } from '../tag/Tag';
 import { handleTagSearch } from './handlers/handleSearchTag';
 import style from './styles/card.module.css';
 
-const CardSearch = ({
-  setTagKeywords,
-  setSearchKeyword,
-  setTagSearchLoading,
-}: {
-  setTagKeywords: Dispatch<SetStateAction<string>>;
-  setSearchKeyword: Dispatch<SetStateAction<string>>;
-  setTagSearchLoading: Dispatch<SetStateAction<boolean>>;
-}) => {
+const CardSearch = () => {
   const setCardListType = useCardTypeStore(state => state.setCardListType);
+
+  const setTagKeywords = useCardSearchStore(state => state.setTagKeywords);
+  const setSearchKeyword = useCardSearchStore(state => state.setSearchKeyword);
+  const setIsLoadingTagSearch = useCardSearchStore(
+    state => state.setIsLoadingTagSearch,
+  );
 
   const [tagList, setTagList] = useState<TagProps[]>([]);
   const [tagLoading, setIsTagLoading] = useState(false);
@@ -45,22 +44,22 @@ const CardSearch = ({
   }, [tagKeyword]);
 
   useEffect(() => {
-    setTagSearchLoading(true);
+    setIsLoadingTagSearch(true);
     if (selectTagList.length === 0) {
       setTagKeywords('');
       setCardListType('all');
-      setTagSearchLoading(false);
+      setIsLoadingTagSearch(false);
       return;
     }
 
     const timer = setTimeout(() => {
       setTagKeywords(selectTagList.join('_'));
       setCardListType('tag');
-      setTagSearchLoading(false);
+      setIsLoadingTagSearch(false);
     }, 700);
 
     return () => {
-      setTagSearchLoading(false);
+      setIsLoadingTagSearch(false);
       clearTimeout(timer);
     };
   }, [selectTagList]);
