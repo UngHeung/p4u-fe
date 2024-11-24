@@ -1,56 +1,51 @@
 'use client';
 
-import { CardTypeStore, useCardTypeStore } from '@/stores/card/cardTypeStore';
-import { useQueryClient } from '@tanstack/react-query';
+import { useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import CardList from './CardList';
 import CardSearch from './CardSearch';
-import { CreateCardListQuery } from './handlers/createCardListQuery';
+import { useCardListQuery } from './handlers/useCardListQuery';
 
 const CardMain = () => {
+  const cardListType = useCardTypeStore(state => state.cardListType);
+
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [keyword, setKeyword] = useState('');
+  const [tagKeywords, setTagKeywords] = useState('');
+  const [tagSearchLoading, setTagSearchLoading] = useState(false);
 
-  const { cardListType, setCardListType } = useCardTypeStore(
-    (state: CardTypeStore) => state,
+  useEffect(() => {
+    console.log(tagSearchLoading);
+  }, [tagSearchLoading]);
+
+  const { data, fetchNextPage, hasNextPage, isLoading } = useCardListQuery(
+    cardListType,
+    searchKeyword,
+    tagKeywords,
   );
-
-  const queryClient = useQueryClient();
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    CreateCardListQuery(cardListType, searchKeyword);
 
   const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
+    if (inView && hasNextPage && !isLoading) {
       fetchNextPage();
     }
   }, [inView]);
 
-  useEffect(() => {
-    queryClient.invalidateQueries({
-      queryKey: ['list', ''],
-      exact: true,
-    });
-  }, [cardListType]);
-
   return (
     <>
       <CardSearch
-        keyword={keyword}
-        setKeyword={setKeyword}
+        setTagKeywords={setTagKeywords}
         setSearchKeyword={setSearchKeyword}
-        setActiveTab={setCardListType}
+        setTagSearchLoading={setTagSearchLoading}
       />
 
       <CardList
         postList={data?.pages.flatMap(page => page.list) ?? []}
-        isLoading={false}
         ref={ref}
-        isFetchingNextPage={isFetchingNextPage}
+        isLoading={isLoading}
         hasNextPage={hasNextPage}
+        tagSearchLoading={tagSearchLoading}
       />
     </>
   );
