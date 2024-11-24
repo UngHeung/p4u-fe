@@ -1,3 +1,4 @@
+import { useCardSearchStore } from '@/stores/card/cardSearchStore';
 import Loading from '../common/Loading';
 import Card, { CardProps } from './Card';
 import style from './styles/card.module.css';
@@ -7,19 +8,21 @@ const CardList = ({
   ref,
   isLoading,
   hasNextPage,
-  tagSearchLoading,
 }: {
   postList: CardProps[];
   ref: (node?: Element | null) => void;
   isLoading: boolean;
   hasNextPage: boolean;
-  tagSearchLoading: boolean;
 }) => {
+  const isLoadingTagSearch = useCardSearchStore(
+    state => state.isLoadingTagSearch,
+  );
+
   return (
     <>
       <section className={style.listWrap}>
         <ul className={style.cardListWrap}>
-          {!tagSearchLoading ? (
+          {!isLoadingTagSearch ? (
             postList && postList.length > 0 ? (
               postList.map((card, idx) => {
                 return (

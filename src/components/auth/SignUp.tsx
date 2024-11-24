@@ -5,7 +5,12 @@ import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import { ALERT_MESSAGE_ENUM } from '../alert/constants/message.enum';
+
+import {
+  FAILURE_MESSAGE_ENUM,
+  SUCCESS_MESSAGE_ENUM,
+  VALIDATION_MESSAGE_ENUM,
+} from '../alert/constants/message.enum';
 import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
 import AuthInput from '../common/input/AuthInput';
@@ -35,19 +40,19 @@ const SignUp = () => {
     };
 
     if (!data.name) {
-      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_NAME, 'failure');
+      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_NAME, 'failure');
       setDisabled(false);
       return;
     }
 
     if (!data.account) {
-      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_ID, 'failure');
+      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_ID, 'failure');
       setDisabled(false);
       return;
     }
 
     if (!data.password) {
-      pushAlertQueue(ALERT_MESSAGE_ENUM.EMPTY_PASSWORD, 'failure');
+      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_PASSWORD, 'failure');
       setDisabled(false);
       return;
     }
@@ -56,30 +61,21 @@ const SignUp = () => {
       const response = await baseAxios.post(`/auth/signup`, data);
 
       if (response.status === 201) {
-        pushAlertQueue(ALERT_MESSAGE_ENUM.SUCCESS_SIGN_UP, 'success');
+        pushAlertQueue(SUCCESS_MESSAGE_ENUM.SUCCESS_SIGN_UP, 'success');
         router.push('/');
       }
     } catch (error: any) {
       console.log(error);
       if (error.status === 409) {
-        pushAlertQueue(ALERT_MESSAGE_ENUM.FAILURE_CONFLICT_ID, 'failure');
+        pushAlertQueue(FAILURE_MESSAGE_ENUM.FAILURE_CONFLICT_ID, 'failure');
       } else if (error.status === 400) {
         const errMessage = error.response.data.message + '';
         if (errMessage.startsWith('name')) {
-          pushAlertQueue(
-            '이름은 한글 또는 영문\n2~12자로 입력해주세요.',
-            'failure',
-          );
+          pushAlertQueue(VALIDATION_MESSAGE_ENUM.WRONG_NAME, 'failure');
         } else if (errMessage.startsWith('password')) {
-          pushAlertQueue(
-            '비밀번호는 영문 대소문자 포함\n8~16자로 입력해주세요.',
-            'failure',
-          );
+          pushAlertQueue(VALIDATION_MESSAGE_ENUM.WRONG_PASSWORD, 'failure');
         } else if (errMessage.startsWith('account')) {
-          pushAlertQueue(
-            '아이디는 영문 소문자, 숫자\n6~12자로 입력해주세요.',
-            'failure',
-          );
+          pushAlertQueue(VALIDATION_MESSAGE_ENUM.WRONG_ID, 'failure');
         }
       }
     } finally {

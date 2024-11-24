@@ -164,12 +164,29 @@
   margin-top: 30px;
 }
 
+.searchTag>article {
+  background-color: var(--color-main) !important;
+}
+
 .cardContent {
   height: 130px;
   margin-top: 30px;
   white-space: pre-wrap;
-  font-size: var(--font-size-16);
   overflow-y: auto;
+}
+
+.cardContent * {
+  font-size: var(--font-size-16);
+  color: var(--font-color-negative);
+}
+
+/* 형광펜효과 적용 */
+.keyword {
+  display: inline-block;
+  background-color: var(--color-main);
+  padding: 0 2px;
+  border-radius: 2px;
+  color: var(--font-color-negative);
 }
 
 .cardWrap.answered .cardContent::-webkit-scrollbar {
