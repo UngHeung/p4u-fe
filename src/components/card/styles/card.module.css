@@ -172,6 +172,14 @@
   overflow-y: auto;
 }
 
+.cardWrap.answered .cardContent::-webkit-scrollbar {
+  background-color: #47c193;
+}
+
+.cardWrap.answered .cardContent::-webkit-scrollbar-thumb {
+  background-color: #008c57;
+}
+
 .cardContent::-webkit-scrollbar {
   width: 2px;
   background-color: #858585;
