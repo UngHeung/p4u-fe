@@ -14,10 +14,6 @@ const CardMain = () => {
   const [tagKeywords, setTagKeywords] = useState('');
   const [tagSearchLoading, setTagSearchLoading] = useState(false);
 
-  useEffect(() => {
-    console.log(tagSearchLoading);
-  }, [tagSearchLoading]);
-
   const { data, fetchNextPage, hasNextPage, isLoading } = useCardListQuery(
     cardListType,
     searchKeyword,
