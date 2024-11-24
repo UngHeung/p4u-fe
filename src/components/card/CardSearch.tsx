@@ -1,4 +1,5 @@
-import { CardListType } from '@/stores/card/cardTypeStore';
+import { useCardTypeStore } from '@/stores/card/cardTypeStore';
+import { useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { svgIcons } from '../common/functions/getSvg';
 import CardInput from '../common/input/CardInput';
@@ -9,19 +10,22 @@ import { handleTagSearch } from './handlers/handleSearchTag';
 import style from './styles/card.module.css';
 
 const CardSearch = ({
-  keyword,
-  setKeyword,
+  setTagKeywords,
   setSearchKeyword,
-  setActiveTab,
+  setTagSearchLoading,
 }: {
-  keyword: string;
-  setKeyword: Dispatch<SetStateAction<string>>;
+  setTagKeywords: Dispatch<SetStateAction<string>>;
   setSearchKeyword: Dispatch<SetStateAction<string>>;
-  setActiveTab: (type: CardListType) => void;
+  setTagSearchLoading: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const setCardListType = useCardTypeStore(state => state.setCardListType);
+
   const [tagList, setTagList] = useState<TagProps[]>([]);
   const [tagLoading, setIsTagLoading] = useState(false);
+  const [tagKeyword, setTagKeyword] = useState('');
   const [selectTagList, setSelectTagList] = useState<string[]>([]);
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     setIsTagLoading(true);
@@ -31,14 +35,35 @@ const CardSearch = ({
     }
 
     const timer = setTimeout(async () => {
-      handleTagSearch({ keyword, setTagList, setIsTagLoading });
+      handleTagSearch({ tagKeyword, setTagList, setIsTagLoading });
     }, 500);
 
     return () => {
       setIsTagLoading(false);
       clearTimeout(timer);
     };
-  }, [keyword]);
+  }, [tagKeyword]);
+
+  useEffect(() => {
+    setTagSearchLoading(true);
+    if (selectTagList.length === 0) {
+      setTagKeywords('');
+      setCardListType('all');
+      setTagSearchLoading(false);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setTagKeywords(selectTagList.join('_'));
+      setCardListType('tag');
+      setTagSearchLoading(false);
+    }, 700);
+
+    return () => {
+      setTagSearchLoading(false);
+      clearTimeout(timer);
+    };
+  }, [selectTagList]);
 
   return (
     <form
@@ -46,8 +71,15 @@ const CardSearch = ({
       onSubmit={async event => {
         event.preventDefault();
 
-        setSearchKeyword(keyword);
-        setActiveTab('keyword');
+        queryClient.removeQueries({ queryKey: ['cards', 'all'] });
+
+        if (tagKeyword.length > 0) {
+          setSearchKeyword(tagKeyword);
+          setCardListType('keyword');
+        } else {
+          setSearchKeyword('');
+          setCardListType('all');
+        }
       }}
     >
       <section className={style.searchInputWrap}>
@@ -55,8 +87,8 @@ const CardSearch = ({
           name="keyword"
           className={style.searchInput}
           placeholder={'기도 제목, 태그로 검색할 수 있습니다.'}
-          value={keyword}
-          setValue={setKeyword}
+          value={tagKeyword}
+          setValue={setTagKeyword}
         />
         <button type={'submit'} className={style.searchButton}>
           <>{svgIcons.search()}</>
