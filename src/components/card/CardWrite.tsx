@@ -2,7 +2,11 @@ import { authAxios } from '@/apis/axiosInstance';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import { ALERT_MESSAGE_ENUM } from '../alert/constants/message.enum';
+import {
+  ERROR_MESSAGE_ENUM,
+  SUCCESS_MESSAGE_ENUM,
+  VALIDATION_MESSAGE_ENUM,
+} from '../alert/constants/message.enum';
 import AuthIcons from '../auth/AuthIcons';
 import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
@@ -40,19 +44,22 @@ const CardWrite = () => {
     };
 
     if (!data.title) {
-      pushAlertQueue(ALERT_MESSAGE_ENUM.WRONG_EMPTY_CARD_TITLE, 'failure');
+      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_CARD_TITLE, 'failure');
       setDisabled(false);
       return;
     }
 
     if (!data.content) {
-      pushAlertQueue(ALERT_MESSAGE_ENUM.WRONG_EMPTY_CARD_CONTENT, 'failure');
+      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_CARD_CONTENT, 'failure');
       setDisabled(false);
       return;
     }
 
     if (!data.keywords.length) {
-      pushAlertQueue(ALERT_MESSAGE_ENUM.WRONG_EMPTY_CARD_TAGS_LIST, 'failure');
+      pushAlertQueue(
+        VALIDATION_MESSAGE_ENUM.WRONG_EMPTY_CARD_TAGS_LIST,
+        'failure',
+      );
       setDisabled(false);
       return;
     }
@@ -61,16 +68,14 @@ const CardWrite = () => {
       const response = await authAxios.post(`/card/new`, data);
 
       if (response.status === 201) {
-        pushAlertQueue(ALERT_MESSAGE_ENUM.SUCCESS_WRITE_CARD, 'success');
+        pushAlertQueue(SUCCESS_MESSAGE_ENUM.SUCCESS_WRITE_CARD, 'success');
         router.push('/card/list');
       }
-
-      console.log(response.status);
     } catch (error: any) {
       if (error?.status === 401) {
-        pushAlertQueue(ALERT_MESSAGE_ENUM.NEED_LOGGED_IN, 'failure');
+        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
       } else {
-        pushAlertQueue(ALERT_MESSAGE_ENUM.INTERNAL_SERVER_ERROR, 'failure');
+        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
       }
     } finally {
       setDisabled(false);
@@ -146,12 +151,12 @@ const CardWrite = () => {
                 setTag('');
                 if (tagList.includes(tag)) {
                   pushAlertQueue(
-                    ALERT_MESSAGE_ENUM.WRONG_IS_ALEADY_TAG_KEYWORD,
+                    VALIDATION_MESSAGE_ENUM.WRONG_IS_ALEADY_TAG,
                     'failure',
                   );
                 } else if (tagList.length === 5) {
                   pushAlertQueue(
-                    ALERT_MESSAGE_ENUM.WRONG_FULL_CARD_TAGS_LIST,
+                    VALIDATION_MESSAGE_ENUM.WRONG_FULL_CARD_TAGS_LIST,
                     'failure',
                   );
                 } else {
