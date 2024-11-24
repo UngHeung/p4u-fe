@@ -66,8 +66,6 @@ export const callbackResponseError = async (error: any, isAccess: boolean) => {
   if (error.response?.status === 401 && !originalRequest._retry) {
     originalRequest._retry = true;
 
-    console.log('originalRequest', originalRequest._retry);
-
     try {
       const newToken = await reissueToken(isAccess);
 
