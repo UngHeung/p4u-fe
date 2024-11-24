@@ -1,0 +1,24 @@
+.cardMain {
+  position: relative;
+  height: auto;
+}
+
+/* warning */
+
+.warning {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  color: var(--color-red-warn);
+}
+
+.warning button {
+  width: fit-content;
+  color: var(--color-red-warn);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-medium);
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--color-red-warn);
+}
