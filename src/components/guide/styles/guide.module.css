@@ -1,0 +1,29 @@
+.guideWrap {
+  position: absolute;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color: var(--color-main);
+  color: var(--font-color-negative);
+  animation: shake 1s infinite;
+}
+
+.guideWrap::after {
+  content: '';
+  position: absolute;
+  top: 83%;
+  right: 10%;
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-main);
+  transform: rotate(45deg);
+}
+
+@keyframes shake {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(5px);
+  }
+}
