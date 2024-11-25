@@ -36,10 +36,10 @@ const Alert = ({ message, index, type }: AlertProps) => {
         bottom,
         backgroundColor:
           type === 'success'
-            ? '#02975E'
+            ? '#00695C'
             : type === 'failure'
-              ? '#E22929'
-              : '#f3c90f',
+              ? '#E53935'
+              : '#FFA000',
       }}
     >
       <span

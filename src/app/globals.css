@@ -1,23 +1,26 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 
 :root {
-  --color-main: #E46A00;
+  --color-main: #00ACC1;
 
-  --color-black-card: #222222;
-  --color-gray-placeholder: #494949;
-  --color-red-warn: #E22929;
-  --color-green-good: #02975E;
+  --color-black-card: #263238;
+  --color-gray-placeholder: #78909C;
+  --color-red-warn: #E53935;
+  --color-green-good: #00695C;
+  --color-green-light: #00897B;
+  --color-green-dark: #004D40;
 
-  --color-input-border: #111111;
+  --color-input-border: #263238;
+  --color-placeholder: #90A4AE;
   --color-button-submit: var(--color-main);
-  --color-button-back: #616161;
-  --color-tag-bg: #434343;
-  --color-tag-bg-answered: #196548;
-  --color-tag-none-select-bg: #dedede;
+  --color-button-back: #546E7A;
+  --color-tag-bg: #37474F;
+  --color-tag-bg-answered: #0f9384;
+  --color-tag-none-select-bg: #ECEFF1;
   --color-message-bg: var(--color-main);
 
-  --font-color-basic: #111111;
-  --font-color-negative: #ffffff;
+  --font-color-basic: #263238;
+  --font-color-negative: #FFFFFF;
 
   --font-family-basic: 'Pretendard Variable';
 
