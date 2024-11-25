@@ -1,5 +1,6 @@
 import { authAxios } from '@/apis/axiosInstance';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import {
@@ -31,14 +32,41 @@ const CardWrite = () => {
     setTagList(tagList.filter((item, i) => (idx !== i ? item : null)));
   };
 
+  const handleWriteCardOnMutation = useMutation({
+    mutationFn: (data: {
+      title: string;
+      content: string;
+      keywords: string[];
+      isAnonymity: boolean;
+    }) => {
+      setDisabled(true);
+
+      return authAxios.post(`/card/new`, data);
+    },
+    onSuccess: () => {
+      pushAlertQueue(SUCCESS_MESSAGE_ENUM.SUCCESS_WRITE_CARD, 'success');
+      router.push('/card/list');
+    },
+    onError: (error: any) => {
+      if (error?.status === 401) {
+        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
+      } else {
+        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
+      }
+    },
+    onSettled: () => {
+      setDisabled(false);
+    },
+  });
+
   const handleWriteCard = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setDisabled(true);
     const formData = new FormData(event.currentTarget);
     const data = {
-      title: formData.get('title'),
-      content: formData.get('content'),
+      title: formData.get('title') as string,
+      content: formData.get('content') as string,
       keywords: tagList,
       isAnonymity,
     };
@@ -64,22 +92,7 @@ const CardWrite = () => {
       return;
     }
 
-    try {
-      const response = await authAxios.post(`/card/new`, data);
-
-      if (response.status === 201) {
-        pushAlertQueue(SUCCESS_MESSAGE_ENUM.SUCCESS_WRITE_CARD, 'success');
-        router.push('/card/list');
-      }
-    } catch (error: any) {
-      if (error?.status === 401) {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
-      } else {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
-      }
-    } finally {
-      setDisabled(false);
-    }
+    handleWriteCardOnMutation.mutate(data);
   };
 
   return (
