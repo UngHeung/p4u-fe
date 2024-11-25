@@ -27,7 +27,7 @@ const CardList = ({
               postList.map((card, idx) => {
                 return (
                   <li key={idx}>
-                    <Card {...card} />
+                    <Card card={card} />
                   </li>
                 );
               })

@@ -19,26 +19,18 @@ export interface CardProps {
   pickers: Pick<UserProps, 'id'>[];
   tags: TagProps[];
   isAnswered: boolean;
+  isActive: boolean;
   isAnonymity: boolean;
 }
 
-const Card = ({
-  id,
-  writer,
-  title,
-  content,
-  pickers,
-  tags,
-  isAnswered,
-  isAnonymity,
-}: CardProps) => {
+const Card = ({ card }: { card: CardProps }) => {
   const cardListType = useCardTypeStore(state => state.cardListType);
   const searchKeyword = useCardSearchStore(state => state.searchKeyword);
 
   const [isFliped, setIsFliped] = useState(false);
-  const [answered, setAnswered] = useState<boolean>(isAnswered);
+  const [answered, setAnswered] = useState<boolean>(card.isAnswered);
+  const [isActive, setIsActive] = useState<boolean>(card.isActive);
   const [disabled, setDisabled] = useState(false);
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -49,40 +41,28 @@ const Card = ({
     >
       <section className={style.cardFront}>
         <CardHeader
-          id={id}
-          writer={writer}
-          answered={answered}
+          card={card}
           setAnswered={setAnswered}
-          pickers={pickers}
           disabled={disabled}
           setDisabled={setDisabled}
         />
 
-        <CardContent
-          title={title}
-          writer={writer}
-          tags={tags}
-          isAnonymity={isAnonymity}
-          answered={answered}
-        />
+        <CardContent card={card} answered={answered} />
       </section>
 
       <section className={style.cardBack}>
         <CardHeader
-          id={id}
-          writer={writer}
-          answered={answered}
+          card={card}
           setAnswered={setAnswered}
-          pickers={pickers}
           disabled={disabled}
           setDisabled={setDisabled}
         />
 
         {cardListType === 'keyword' ? (
-          findKeywordFromContent(content, searchKeyword)
+          findKeywordFromContent(card.content, searchKeyword)
         ) : (
           <pre key={'content'} className={style.cardContent}>
-            {content}
+            {card.content}
           </pre>
         )}
       </section>
@@ -91,9 +71,10 @@ const Card = ({
         <section className={style.cardMenuWrap}>
           {isMenuOpen && (
             <CardMenu
-              cardId={id}
-              writer={writer}
+              card={card}
               setIsMenuOpen={setIsMenuOpen}
+              isActive={isActive}
+              setIsActive={setIsActive}
             />
           )}
           <button

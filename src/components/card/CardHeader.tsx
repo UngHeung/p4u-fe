@@ -1,24 +1,19 @@
 import { authAxios } from '@/apis/axiosInstance';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
-import { UserProps, UserStore, useUserStore } from '@/stores/user/userStore';
+import { UserStore, useUserStore } from '@/stores/user/userStore';
 import { useMutation } from '@tanstack/react-query';
 import { SetStateAction, useState } from 'react';
 import { svgIcons } from '../common/functions/getSvg';
+import { CardProps } from './Card';
 import style from './styles/card.module.css';
 
 const CardHeader = ({
-  id,
-  writer,
-  pickers,
-  answered,
+  card,
   setAnswered,
   disabled,
   setDisabled,
 }: {
-  id: number;
-  writer: Pick<UserProps, 'id' | 'name'>;
-  pickers: Pick<UserProps, 'id'>[];
-  answered: boolean;
+  card: CardProps;
   setAnswered: React.Dispatch<SetStateAction<boolean>>;
   disabled: boolean;
   setDisabled: React.Dispatch<SetStateAction<boolean>>;
@@ -29,25 +24,27 @@ const CardHeader = ({
   );
 
   const [isPicker, setIsPicker] = useState(
-    pickers.some(picker => picker.id === user.id),
+    card.pickers.some(picker => picker.id === user.id),
   );
-  const [pickersState, setPickersState] = useState(pickers);
+  const [pickersState, setPickersState] = useState(card.pickers);
 
   const handleAnsweredOnMutation = useMutation({
     mutationFn: () => {
       setDisabled(true);
-      return authAxios.patch(`/card/${id}/answered`, {
-        isAnswered: !answered,
+      setAnswered(prev => !prev);
+      return authAxios.patch(`/card/${card.id}/answered`, {
+        isAnswered: !card.isAnswered,
       });
     },
     onSuccess: () => {
       pushAlertQueue(
-        `기도제목이 ${!answered ? '-응답받았음-' : '-아직 응답받지 못했음-'}\n으로 표시되었습니다.`,
+        `기도제목이 ${!card.isAnswered ? '-응답받았음-' : '-아직 응답받지 못했음-'}\n으로 표시되었습니다.`,
         'success',
       );
-      setAnswered(prev => !prev);
     },
     onError: (error: any) => {
+      setAnswered(prev => !prev);
+
       if (error.status === 401) {
         pushAlertQueue('권한이 없습니다.', 'failure');
       } else {
@@ -62,9 +59,23 @@ const CardHeader = ({
   const handlePickedOnMutation = useMutation({
     mutationFn: () => {
       setDisabled(true);
-      return authAxios.patch(`/card/${id}/pick`);
+      const existPicker = pickersState.some(picker => picker.id === user.id);
+      if (existPicker) {
+        setIsPicker(false);
+        setPickersState(prev => prev.filter(picker => picker.id !== user.id));
+      } else {
+        setIsPicker(true);
+        setPickersState(prev => [...prev, { id: user.id }]);
+      }
+      return authAxios.patch(`/card/${card.id}/pick`);
     },
     onSuccess: () => {
+      pushAlertQueue(
+        `기도대상${!isPicker ? '으로 선택' : '에서 제외'}되었습니다.`,
+        'success',
+      );
+    },
+    onError: (error: any) => {
       const existPicker = pickersState.some(picker => picker.id === user.id);
       if (existPicker) {
         setIsPicker(false);
@@ -74,12 +85,6 @@ const CardHeader = ({
         setPickersState(prev => [...prev, { id: user.id }]);
       }
 
-      pushAlertQueue(
-        `기도대상${!isPicker ? '으로 선택' : '에서 제외'}되었습니다.`,
-        'success',
-      );
-    },
-    onError: (error: any) => {
       if (error.status === 401) {
         pushAlertQueue('권한이 없습니다.', 'failure');
       } else {
@@ -96,11 +101,11 @@ const CardHeader = ({
       <span className={style.cardInfo}>
         {svgIcons.heart()}
         <strong>{`${pickersState.length}명`}</strong>
-        <span>{`이 이 기도제목을 위해 기도${answered ? '했습니다.' : '하고있습니다.'}`}</span>
+        <span>{`이 이 기도제목을 위해 기도${card.isAnswered ? '했습니다.' : '하고있습니다.'}`}</span>
       </span>
 
       <span>
-        {user.id === writer.id ? (
+        {user.id === card.writer.id ? (
           <button
             type={'button'}
             name={'isAnswered'}
@@ -112,7 +117,7 @@ const CardHeader = ({
           >
             {svgIcons.answered()}
           </button>
-        ) : answered ? (
+        ) : card.isAnswered ? (
           svgIcons.answered()
         ) : (
           <button

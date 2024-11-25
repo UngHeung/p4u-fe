@@ -1,19 +1,22 @@
 import { authAxios } from '@/apis/axiosInstance';
 import { useAlertStore } from '@/stores/alert/alertStore';
 import { useCardTypeStore } from '@/stores/card/cardTypeStore';
-import { UserProps, useUserStore } from '@/stores/user/userStore';
+import { useUserStore } from '@/stores/user/userStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SetStateAction, useState } from 'react';
+import { CardProps } from './Card';
 import style from './styles/card.module.css';
 
 const CardMenu = ({
-  cardId,
-  writer,
+  card,
   setIsMenuOpen,
+  isActive,
+  setIsActive,
 }: {
-  cardId: number;
-  writer: Pick<UserProps, 'id' | 'name'>;
+  card: CardProps;
   setIsMenuOpen: React.Dispatch<SetStateAction<boolean>>;
+  isActive: boolean;
+  setIsActive: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   const cardListType = useCardTypeStore(state => state.cardListType);
   const user = useUserStore(state => state.user);
@@ -25,7 +28,7 @@ const CardMenu = ({
 
   const handleReportMutation = useMutation({
     mutationFn: async () => {
-      return await authAxios.patch(`/card/${cardId}/report`);
+      return await authAxios.patch(`/card/${card.id}/report`);
     },
     onSuccess: () => {
       pushAlertQueue('신고가 완료되었습니다.', 'success');
@@ -45,7 +48,7 @@ const CardMenu = ({
 
   const handleResetReportMutation = useMutation({
     mutationFn: async () => {
-      return await authAxios.patch(`/card/${cardId}/reporter/reset`);
+      return await authAxios.patch(`/card/${card.id}/reporter/reset`);
     },
     onSuccess: () => {
       pushAlertQueue('신고 초기화가 완료되었습니다.', 'success');
@@ -63,7 +66,9 @@ const CardMenu = ({
 
   const handleActivateMutation = useMutation({
     mutationFn: async () => {
-      const url = `/card/${cardId}/activate`;
+      const url = `/card/${card.id}/activate`;
+      setIsActive(prev => !prev);
+
       return await authAxios.patch(url);
     },
     onSuccess: (data: any) => {
@@ -74,6 +79,7 @@ const CardMenu = ({
       queryClient.invalidateQueries({ queryKey: ['cards', cardListType] });
     },
     onError: (error: any) => {
+      setIsActive(prev => !prev);
       console.error(error);
       if (error.status === 403 || error.status === 401) {
         pushAlertQueue('권한이 없습니다.', 'failure');
@@ -86,7 +92,7 @@ const CardMenu = ({
 
   const handleDeleteMutation = useMutation({
     mutationFn: async () => {
-      return await authAxios.delete(`/card/${cardId}/delete`);
+      return await authAxios.delete(`/card/${card.id}/delete`);
     },
     onSuccess: () => {
       pushAlertQueue('삭제가 완료되었습니다.', 'success');
@@ -106,7 +112,7 @@ const CardMenu = ({
   return (
     <ul className={style.cardMenu}>
       {user.role !== 'ROLE_ADMIN' ? (
-        user.id !== writer.id ? (
+        user.id !== card.writer.id ? (
           <li>
             <button
               onClick={event => {
@@ -116,6 +122,7 @@ const CardMenu = ({
                 setIsMenuOpen(false);
                 setDisabled(false);
               }}
+              disabled={disabled}
             >
               {'신고'}
             </button>
@@ -130,6 +137,7 @@ const CardMenu = ({
                 setIsMenuOpen(false);
                 setDisabled(false);
               }}
+              disabled={disabled}
             >
               {'삭제'}
             </button>
@@ -146,6 +154,7 @@ const CardMenu = ({
                 setIsMenuOpen(false);
                 setDisabled(false);
               }}
+              disabled={disabled}
             >
               {'신고 초기화'}
             </button>
@@ -159,8 +168,9 @@ const CardMenu = ({
                 setIsMenuOpen(false);
                 setDisabled(false);
               }}
+              disabled={disabled}
             >
-              {'비활성화'}
+              {isActive ? '활성화' : '비활성화'}
             </button>
           </li>
           <li>
