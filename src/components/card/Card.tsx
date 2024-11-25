@@ -42,6 +42,7 @@ const Card = ({ card }: { card: CardProps }) => {
       <section className={style.cardFront}>
         <CardHeader
           card={card}
+          answered={answered}
           setAnswered={setAnswered}
           disabled={disabled}
           setDisabled={setDisabled}
@@ -53,6 +54,7 @@ const Card = ({ card }: { card: CardProps }) => {
       <section className={style.cardBack}>
         <CardHeader
           card={card}
+          answered={answered}
           setAnswered={setAnswered}
           disabled={disabled}
           setDisabled={setDisabled}
