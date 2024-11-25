@@ -136,7 +136,7 @@ const MainNav = () => {
                 type={'button'}
                 className={style.loggedButton}
                 value={{ icon: svgIcons.login('#222222') }}
-                onClick={handleLogout}
+                onClick={() => router.replace('/')}
               />
             </li>
           </>
