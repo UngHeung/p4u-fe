@@ -17,12 +17,15 @@
   letter-spacing: -3px;
 }
 
+.mainNavWrap {
+  width: 100%;
+}
+
 .mainNav {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 20px;
-  width: 100%;
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-medium);
   color: #333333;
@@ -53,6 +56,8 @@
 }
 
 .navWrap {
+  display: flex;
+  justify-content: space-between;
   position: relative;
   width: 100%;
 }
@@ -68,9 +73,8 @@
 }
 
 .loggedButton {
-  position: fixed;
-  top: 12.5px;
-  right: 20px;
+  position: relative;
+  top: 1.5px;
 }
 
 .menuIcon {
@@ -107,7 +111,9 @@
   }
 
   .menuButton {
-    position: relative;
+    position: fixed;
+    top: 10px;
+    right: 20px;
     display: block;
     z-index: 100;
   }

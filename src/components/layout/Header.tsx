@@ -18,7 +18,7 @@ const Header = () => {
         <h2 className={style.logo}>P4U</h2>
       </section>
 
-      <section>
+      <section className={style.mainNavWrap}>
         <MainNav />
       </section>
     </header>
