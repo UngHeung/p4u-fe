@@ -1,20 +1,14 @@
 import { useCardSearchStore } from '@/stores/card/cardSearchStore';
 import { useCardTypeStore } from '@/stores/card/cardTypeStore';
-import { UserProps } from '@/stores/user/userStore';
-import Tag, { TagProps } from '../tag/Tag';
+import Tag from '../tag/Tag';
+import { CardProps } from './Card';
 import style from './styles/card.module.css';
 
 const CardContent = ({
-  title,
-  writer,
-  tags,
-  isAnonymity,
+  card,
   answered,
 }: {
-  title: string;
-  writer: Pick<UserProps, 'id' | 'name'>;
-  tags: TagProps[];
-  isAnonymity: boolean;
+  card: CardProps;
   answered: boolean;
 }) => {
   const cardListType = useCardTypeStore(state => state.cardListType);
@@ -27,18 +21,18 @@ const CardContent = ({
     <>
       <strong className={style.cardTitle}>
         {cardListType === 'keyword'
-          ? findKeywordFromTitle(title, searchKeyword)
-          : title}
+          ? findKeywordFromTitle(card.title, searchKeyword)
+          : card.title}
       </strong>
 
       <span className={style.cardWriter}>
-        {isAnonymity ? '익명' : writer.name}
+        {card.isAnonymity ? '익명' : card.writer.name}
       </span>
       <section className={style.cardTagWrap}>
         <ul className={style.cardTagList}>
-          {tags &&
-            tags.length > 0 &&
-            tags.map((tag, idx) => {
+          {card.tags &&
+            card.tags.length > 0 &&
+            card.tags.map((tag, idx) => {
               if (
                 cardListType === 'tag' &&
                 tagKeywordsArr.includes(tag.keyword)
