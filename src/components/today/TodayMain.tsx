@@ -12,11 +12,15 @@ const TodayMain = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (card) {
-      setTimeout(() => {
+    const timer = setTimeout(() => {
+      if (card) {
         setIsShowGuide(true);
-      }, 500);
-    }
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [card]);
 
   return (
@@ -35,7 +39,11 @@ const TodayMain = () => {
           {'오늘의 카드를 찾아보세요!'}
         </span>
       )}
-      <TodayCardPick setCard={setCard} setIsLoading={setIsLoading} />
+      <TodayCardPick
+        setCard={setCard}
+        setIsLoading={setIsLoading}
+        setIsShowGuide={setIsShowGuide}
+      />
     </section>
   );
 };

@@ -9,11 +9,13 @@ import style from './styles/card.module.css';
 
 const CardHeader = ({
   card,
+  answered,
   setAnswered,
   disabled,
   setDisabled,
 }: {
   card: CardProps;
+  answered: boolean;
   setAnswered: React.Dispatch<SetStateAction<boolean>>;
   disabled: boolean;
   setDisabled: React.Dispatch<SetStateAction<boolean>>;
@@ -33,12 +35,12 @@ const CardHeader = ({
       setDisabled(true);
       setAnswered(prev => !prev);
       return authAxios.patch(`/card/${card.id}/answered`, {
-        isAnswered: !card.isAnswered,
+        isAnswered: !answered,
       });
     },
     onSuccess: () => {
       pushAlertQueue(
-        `기도제목이 ${!card.isAnswered ? '-응답받았음-' : '-아직 응답받지 못했음-'}\n으로 표시되었습니다.`,
+        `기도제목이 ${answered ? '-응답받았음-' : '-아직 응답받지 못했음-'}\n으로 표시되었습니다.`,
         'success',
       );
     },
@@ -71,7 +73,7 @@ const CardHeader = ({
     },
     onSuccess: () => {
       pushAlertQueue(
-        `기도대상${!isPicker ? '으로 선택' : '에서 제외'}되었습니다.`,
+        `기도대상${isPicker ? '으로 선택' : '에서 제외'}되었습니다.`,
         'success',
       );
     },

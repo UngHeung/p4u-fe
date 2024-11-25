@@ -7,9 +7,11 @@ import { svgIcons } from '../common/functions/getSvg';
 const TodayCardPick = ({
   setCard,
   setIsLoading,
+  setIsShowGuide,
 }: {
   setCard: Dispatch<SetStateAction<CardProps | undefined>>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setIsShowGuide: Dispatch<SetStateAction<boolean>>;
 }) => {
   const pushAlertQueue = useAlertStore(
     (state: AlertStore) => state.pushAlertQueue,
@@ -43,7 +45,7 @@ const TodayCardPick = ({
       onClick={() => {
         setDisabled(true);
         setIsLoading(true);
-
+        setIsShowGuide(false);
         setTimeout(() => {
           handlePickCard();
 

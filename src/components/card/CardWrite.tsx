@@ -172,6 +172,11 @@ const CardWrite = () => {
                     VALIDATION_MESSAGE_ENUM.WRONG_FULL_CARD_TAGS_LIST,
                     'failure',
                   );
+                } else if (tag.length < 2) {
+                  pushAlertQueue(
+                    VALIDATION_MESSAGE_ENUM.WRONG_TAG_KEYWORD,
+                    'failure',
+                  );
                 } else {
                   setTagList(prev => [...prev, tag]);
                 }

@@ -90,7 +90,7 @@ const CardSearch = () => {
           setValue={setTagKeyword}
         />
         <button type={'submit'} className={style.searchButton}>
-          <>{svgIcons.search()}</>
+          <>{svgIcons.search('var(--color-placeholder)')}</>
         </button>
       </section>
       <section className={style.searchTagsWrap}>

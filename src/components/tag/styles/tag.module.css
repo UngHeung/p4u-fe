@@ -3,7 +3,13 @@
   position: relative;
   padding: 1px 10px 0 20px;
   background-color: var(--color-tag-bg);
-  border-radius: 15px
+  border: 2px solid transparent;
+  border-radius: 15px;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.tagWrap:hover {
+  border-color: var(--color-main);
 }
 
 .tagWrap.answered {
