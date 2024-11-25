@@ -11,28 +11,6 @@ import style from './styles/layout.module.css';
 
 const Header = () => {
   const router = useRouter();
-  const isLoggedIn = useUserStore((state: UserStore) => state.isLoggedIn);
-  const setIsLoggedIn = useUserStore((state: UserStore) => state.setIsLoggedIn);
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
-
-  const handleLogout = async () => {
-    try {
-      const response = await baseAxios.post(`/auth/logout`);
-
-      if (response.status === 201) {
-        pushAlertQueue('로그아웃이 완료되었습니다.', 'success');
-      }
-    } catch (error: any) {
-      console.error(error);
-    } finally {
-      setIsLoggedIn(false);
-      setToken({ isAccess: true, accessToken: '' });
-      localStorage.clear();
-      router.push('/');
-    }
-  };
 
   return (
     <header className={style.mainHeader}>
@@ -42,18 +20,6 @@ const Header = () => {
 
       <section>
         <MainNav />
-      </section>
-
-      <section className={style.buttonWrap}>
-        {isLoggedIn && (
-          <BaseButton
-            id={''}
-            type={'button'}
-            className={''}
-            value={{ text: '로그아웃' }}
-            onClick={handleLogout}
-          />
-        )}
       </section>
     </header>
   );
