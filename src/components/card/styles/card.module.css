@@ -405,6 +405,49 @@
   background-color: var(--color-button-submit);
 }
 
+.cardMenuWrap {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  z-index: 1;
+}
+
+.cardMenu {
+  position: absolute;
+  bottom: 40px;
+  right: 0;
+  min-width: 120px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transform-origin: bottom right;
+  animation: slideUp 0.2s ease-out;
+}
+
+.cardMenu button {
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: var(--font-size-14);
+  color: #333333;
+  transition: all 0.2s ease;
+}
+
+.cardMenu button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--color-main);
+}
+
+/* 신고 버튼 특별 스타일 */
+.cardMenu li:first-child button {
+  color: #E22929;
+}
+
+.cardMenu li:first-child button:hover {
+  background-color: rgba(226, 41, 41, 0.1);
+}
+
 @media screen and (max-width: 600px) {
   .searchForm {
     padding: 0 10px;
@@ -430,5 +473,17 @@
 
   .writeContentWrap>textarea {
     font-size: var(--font-size-16);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
