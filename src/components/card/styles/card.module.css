@@ -9,10 +9,11 @@
 
 .searchForm {
   position: sticky;
-  top: 0;
+  top: 50px;
   width: 100%;
   max-width: 400px;
   margin: 40px auto 0;
+  padding-top: 50px;
   background-color: #ffffff;
   z-index: 3;
 }
