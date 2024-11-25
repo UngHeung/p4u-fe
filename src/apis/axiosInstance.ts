@@ -1,5 +1,6 @@
-import { getToken } from '@/components/common/constants/accessToken';
+import { getToken, setToken } from '@/components/common/constants/accessToken';
 import reissueToken from '@/components/common/functions/reissueToken';
+import { useUserStore } from '@/stores/user/userStore';
 import axios, {
   AxiosRequestConfig,
   AxiosResponse,
@@ -44,10 +45,6 @@ export const setAuthAxios = async (
 ) => {
   const token = getToken(isAccess);
 
-  if (!token) {
-    //
-  }
-
   config.headers['Authorization'] = `Bearer ${token}`;
   return config;
 };
@@ -69,16 +66,27 @@ export const callbackResponseError = async (error: any, isAccess: boolean) => {
     try {
       const newToken = await reissueToken(isAccess);
 
-      if (!newToken) {
+      console.log('newToken', newToken);
+
+      if (newToken.status === 401) {
+        handleLogout();
         return Promise.reject(newToken);
       }
 
       originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
 
       return authAxios.request(originalRequest);
-    } catch (error) {
+    } catch (error: any) {
       return Promise.reject(error);
     }
   }
   return Promise.reject(error);
+};
+
+export const handleLogout = () => {
+  console.log('로그아웃');
+  setToken({ accessToken: '', refreshToken: '' });
+  localStorage.clear();
+
+  window.location.href = '/';
 };
