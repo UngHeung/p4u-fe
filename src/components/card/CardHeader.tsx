@@ -71,7 +71,7 @@ const CardHeader = ({
     },
     onSuccess: () => {
       pushAlertQueue(
-        `기도대상${!isPicker ? '으로 선택' : '에서 제외'}되었습니다.`,
+        `기도대상${isPicker ? '으로 선택' : '에서 제외'}되었습니다.`,
         'success',
       );
     },
