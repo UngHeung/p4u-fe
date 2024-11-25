@@ -2,7 +2,7 @@
 
 import { useCardSearchStore } from '@/stores/card/cardSearchStore';
 import { useCardTypeStore } from '@/stores/card/cardTypeStore';
-import { UserProps } from '@/stores/user/userStore';
+import { UserProps, useUserStore } from '@/stores/user/userStore';
 import { useState } from 'react';
 import { svgIcons } from '../common/functions/getSvg';
 import { TagProps } from '../tag/Tag';
@@ -24,12 +24,17 @@ export interface CardProps {
 }
 
 const Card = ({ card }: { card: CardProps }) => {
+  const user = useUserStore(state => state.user);
   const cardListType = useCardTypeStore(state => state.cardListType);
   const searchKeyword = useCardSearchStore(state => state.searchKeyword);
 
   const [isFliped, setIsFliped] = useState(false);
   const [answered, setAnswered] = useState<boolean>(card.isAnswered);
   const [isActive, setIsActive] = useState<boolean>(card.isActive);
+  const [isPicker, setIsPicker] = useState<boolean>(
+    card.pickers.some(picker => picker.id === user.id),
+  );
+  const [pickersState, setPickersState] = useState(card.pickers);
   const [disabled, setDisabled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -44,6 +49,10 @@ const Card = ({ card }: { card: CardProps }) => {
           card={card}
           answered={answered}
           setAnswered={setAnswered}
+          isPicker={isPicker}
+          setIsPicker={setIsPicker}
+          pickersState={pickersState}
+          setPickersState={setPickersState}
           disabled={disabled}
           setDisabled={setDisabled}
         />
@@ -56,6 +65,10 @@ const Card = ({ card }: { card: CardProps }) => {
           card={card}
           answered={answered}
           setAnswered={setAnswered}
+          isPicker={isPicker}
+          setIsPicker={setIsPicker}
+          pickersState={pickersState}
+          setPickersState={setPickersState}
           disabled={disabled}
           setDisabled={setDisabled}
         />

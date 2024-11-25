@@ -1,8 +1,8 @@
 import { authAxios } from '@/apis/axiosInstance';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
-import { UserStore, useUserStore } from '@/stores/user/userStore';
+import { UserProps, UserStore, useUserStore } from '@/stores/user/userStore';
 import { useMutation } from '@tanstack/react-query';
-import { SetStateAction, useState } from 'react';
+import { SetStateAction } from 'react';
 import { svgIcons } from '../common/functions/getSvg';
 import { CardProps } from './Card';
 import style from './styles/card.module.css';
@@ -11,12 +11,20 @@ const CardHeader = ({
   card,
   answered,
   setAnswered,
+  isPicker,
+  setIsPicker,
+  pickersState,
+  setPickersState,
   disabled,
   setDisabled,
 }: {
   card: CardProps;
   answered: boolean;
   setAnswered: React.Dispatch<SetStateAction<boolean>>;
+  isPicker: boolean;
+  setIsPicker: React.Dispatch<SetStateAction<boolean>>;
+  pickersState: Pick<UserProps, 'id'>[];
+  setPickersState: React.Dispatch<SetStateAction<Pick<UserProps, 'id'>[]>>;
   disabled: boolean;
   setDisabled: React.Dispatch<SetStateAction<boolean>>;
 }) => {
@@ -24,11 +32,6 @@ const CardHeader = ({
   const pushAlertQueue = useAlertStore(
     (state: AlertStore) => state.pushAlertQueue,
   );
-
-  const [isPicker, setIsPicker] = useState(
-    card.pickers.some(picker => picker.id === user.id),
-  );
-  const [pickersState, setPickersState] = useState(card.pickers);
 
   const handleAnsweredOnMutation = useMutation({
     mutationFn: () => {
