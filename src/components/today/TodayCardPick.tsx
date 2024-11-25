@@ -6,8 +6,10 @@ import { svgIcons } from '../common/functions/getSvg';
 
 const TodayCardPick = ({
   setCard,
+  setIsLoading,
 }: {
   setCard: Dispatch<SetStateAction<CardProps | undefined>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }) => {
   const pushAlertQueue = useAlertStore(
     (state: AlertStore) => state.pushAlertQueue,
@@ -16,8 +18,6 @@ const TodayCardPick = ({
   const [disabled, setDisabled] = useState(false);
 
   const handlePickCard = async () => {
-    setDisabled(true);
-
     try {
       const response = await authAxios.get('/card/random');
 
@@ -34,8 +34,6 @@ const TodayCardPick = ({
       } else {
         pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
       }
-    } finally {
-      setDisabled(false);
     }
   };
 
@@ -43,12 +41,14 @@ const TodayCardPick = ({
     <button
       type={'button'}
       onClick={() => {
-        // 카드 찾기 버튼 클릭시 1초간 찾는 중 표시
         setDisabled(true);
+        setIsLoading(true);
 
         setTimeout(() => {
           handlePickCard();
+
           setDisabled(false);
+          setIsLoading(false);
         }, 1000);
       }}
       disabled={disabled}

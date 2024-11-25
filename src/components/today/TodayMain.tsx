@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { CardProps } from '../card/Card';
+import Loading from '../common/Loading';
+import Guide from '../guide/Guide';
 import TodayCard from './TodayCard';
 import TodayCardPick from './TodayCardPick';
 import style from './styles/today.module.css';
-import { CardProps } from '../card/Card';
-import Guide from '../guide/Guide';
 
 const TodayMain = () => {
   const [card, setCard] = useState<CardProps | undefined>(undefined);
   const [isShowGuide, setIsShowGuide] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (card) {
@@ -24,14 +26,16 @@ const TodayMain = () => {
         className={`${style.todayGuide}${isShowGuide ? ' ' + style.show : ''}`}
       />
 
-      {card ? (
+      {isLoading ? (
+        <Loading color={'#111111'} />
+      ) : card ? (
         <TodayCard card={card} />
       ) : (
         <span className={style.todayCardNotFound}>
           {'오늘의 카드를 찾아보세요!'}
         </span>
       )}
-      <TodayCardPick setCard={setCard} />
+      <TodayCardPick setCard={setCard} setIsLoading={setIsLoading} />
     </section>
   );
 };
