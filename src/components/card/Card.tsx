@@ -4,9 +4,11 @@ import { useCardSearchStore } from '@/stores/card/cardSearchStore';
 import { useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { UserProps } from '@/stores/user/userStore';
 import { useState } from 'react';
+import { svgIcons } from '../common/functions/getSvg';
 import { TagProps } from '../tag/Tag';
 import CardContent from './CardContent';
 import CardHeader from './CardHeader';
+import CardMenu from './CardMenu';
 import style from './styles/card.module.css';
 
 export interface CardProps {
@@ -36,6 +38,8 @@ const Card = ({
   const [isFliped, setIsFliped] = useState(false);
   const [answered, setAnswered] = useState<boolean>(isAnswered);
   const [disabled, setDisabled] = useState(false);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <article
@@ -82,6 +86,29 @@ const Card = ({
           </pre>
         )}
       </section>
+
+      {!isFliped && (
+        <section className={style.cardMenuWrap}>
+          {isMenuOpen && (
+            <CardMenu
+              cardId={id}
+              writer={writer}
+              setIsMenuOpen={setIsMenuOpen}
+            />
+          )}
+          <button
+            id={''}
+            type={'button'}
+            className={style.cardMenuButton}
+            onClick={event => {
+              event.stopPropagation();
+              setIsMenuOpen(prev => !prev);
+            }}
+          >
+            {svgIcons.menu('#ffffff')}
+          </button>
+        </section>
+      )}
     </article>
   );
 };
