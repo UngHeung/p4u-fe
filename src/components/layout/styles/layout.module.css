@@ -28,10 +28,154 @@
   color: #333333;
 }
 
+.mainNav li {
+  position: relative;
+}
+
+.mainNav li>a {
+  position: relative;
+  padding: 5px 0;
+}
+
+.mainNav li>a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-main);
+  transition: width 0.3s ease;
+}
+
+.mainNav li>a:hover::after {
+  width: 100%;
+}
+
+.navWrap {
+  position: relative;
+  width: 100%;
+}
+
+.menuButton {
+  display: none;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.loggedButton {
+  position: fixed;
+  top: 12.5px;
+  right: 20px;
+}
+
+.menuIcon {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: var(--color-main);
+}
+
+.menuIcon::before,
+.menuIcon::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background-color: var(--color-main);
+  transition: transform 0.3s;
+}
+
+.menuIcon::before {
+  top: -6px;
+}
+
+.menuIcon::after {
+  bottom: -6px;
+}
+
 @media screen and (max-width: 600px) {
   .mainHeader {
     justify-content: space-between;
     gap: 0;
     margin-right: 0;
+  }
+
+  .menuButton {
+    position: relative;
+    display: block;
+    z-index: 100;
+  }
+
+  .loggedButton {
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+
+  .loggedButton path {
+    fill: #ffffff;
+    stroke: #ffffff;
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+  }
+
+  .mainNav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 240px;
+    height: 100vh;
+    padding: 60px 20px;
+    background-color: var(--color-main);
+    box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s, background-color 0.3s;
+    z-index: 99;
+  }
+
+  .mainNav li>a {
+    color: #fff;
+    font-size: var(--font-size-18);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .mainNav li {
+    padding: 15px 0;
+  }
+
+  .mainNav.open {
+    right: 0;
+  }
+
+  .mainNav.open+.menuButton .menuIcon {
+    background-color: transparent;
+  }
+
+  .mainNav.open+.menuButton .menuIcon::before {
+    top: 0;
+    background-color: #fff;
+    transform: rotate(45deg);
+  }
+
+  .mainNav.open+.menuButton .menuIcon::after {
+    bottom: 0;
+    background-color: #fff;
+    transform: rotate(-45deg);
   }
 }
