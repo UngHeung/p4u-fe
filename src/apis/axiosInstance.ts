@@ -1,6 +1,5 @@
 import { getToken, setToken } from '@/components/common/constants/accessToken';
 import reissueToken from '@/components/common/functions/reissueToken';
-import { useUserStore } from '@/stores/user/userStore';
 import axios, {
   AxiosRequestConfig,
   AxiosResponse,
@@ -66,8 +65,6 @@ export const callbackResponseError = async (error: any, isAccess: boolean) => {
     try {
       const newToken = await reissueToken(isAccess);
 
-      console.log('newToken', newToken);
-
       if (newToken.status === 401) {
         handleLogout();
         return Promise.reject(newToken);
@@ -84,7 +81,6 @@ export const callbackResponseError = async (error: any, isAccess: boolean) => {
 };
 
 export const handleLogout = () => {
-  console.log('로그아웃');
   setToken({ accessToken: '', refreshToken: '' });
   localStorage.clear();
 
