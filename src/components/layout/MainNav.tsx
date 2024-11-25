@@ -72,6 +72,8 @@ const MainNav = () => {
                   } else {
                     pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
                   }
+                } finally {
+                  setIsMenuOpen(false);
                 }
               }}
               href={'/admin'}
@@ -83,7 +85,9 @@ const MainNav = () => {
         {isLoggedIn ? (
           <>
             <li>
-              <Link href={'/card/write'}>기도카드쓰기</Link>
+              <Link href={'/card/write'} onClick={() => setIsMenuOpen(false)}>
+                기도카드쓰기
+              </Link>
             </li>
             <li>
               <Link
@@ -91,6 +95,7 @@ const MainNav = () => {
                 onClick={event => {
                   event.preventDefault();
                   setCardTypeStore('my');
+                  setIsMenuOpen(false);
                   router.push('/card/list');
                 }}
               >
@@ -103,6 +108,7 @@ const MainNav = () => {
                 onClick={event => {
                   event.preventDefault();
                   setCardTypeStore('all');
+                  setIsMenuOpen(false);
                   router.push('/card/list');
                 }}
               >
@@ -110,7 +116,9 @@ const MainNav = () => {
               </Link>
             </li>
             <li>
-              <Link href={'/card/today'}>오늘의카드</Link>
+              <Link href={'/card/today'} onClick={() => setIsMenuOpen(false)}>
+                오늘의카드
+              </Link>
             </li>
             <li>
               <BaseButton
@@ -118,7 +126,10 @@ const MainNav = () => {
                 type={'button'}
                 className={style.loggedButton}
                 value={{ icon: svgIcons.logout('#222222') }}
-                onClick={handleLogout}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  handleLogout();
+                }}
               />
             </li>
           </>
@@ -136,7 +147,10 @@ const MainNav = () => {
                 type={'button'}
                 className={style.loggedButton}
                 value={{ icon: svgIcons.login('#222222') }}
-                onClick={() => router.replace('/')}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  router.replace('/');
+                }}
               />
             </li>
           </>
