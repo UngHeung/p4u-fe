@@ -22,7 +22,7 @@ const CardList = ({
     <>
       <section className={style.listWrap}>
         <ul className={style.cardListWrap}>
-          {!isLoadingTagSearch ? (
+          {!isLoadingTagSearch && !isLoading ? (
             postList && postList.length > 0 ? (
               postList.map((card, idx) => {
                 return (
@@ -44,11 +44,11 @@ const CardList = ({
               <div ref={ref}></div>
             </li>
           )}
-          {isLoading && (
+          {/* {isLoading && (
             <li key={'loadkey2'} className={style.loading}>
               <Loading color={'#222222'} />
             </li>
-          )}
+          )} */}
         </ul>
       </section>
     </>
