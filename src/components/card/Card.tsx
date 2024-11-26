@@ -37,11 +37,15 @@ const Card = ({ card }: { card: CardProps }) => {
   const [pickersState, setPickersState] = useState(card.pickers);
   const [disabled, setDisabled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   return (
     <article
       className={`${style.cardWrap}${answered ? ' ' + style.answered : ''}`}
-      onClick={() => setIsFliped(prev => !prev)}
+      onClick={() => {
+        if (isDragging) return;
+        setIsFliped(prev => !prev);
+      }}
       style={{ transform: `rotateY(${isFliped ? 180 : 0}deg)` }}
     >
       <section className={style.cardFront}>
@@ -57,7 +61,12 @@ const Card = ({ card }: { card: CardProps }) => {
           setDisabled={setDisabled}
         />
 
-        <CardContent card={card} answered={answered} />
+        <CardContent
+          card={card}
+          answered={answered}
+          isDragging={isDragging}
+          setIsDragging={setIsDragging}
+        />
       </section>
 
       <section className={style.cardBack}>

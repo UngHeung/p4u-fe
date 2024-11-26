@@ -1,15 +1,19 @@
 import { useCardSearchStore } from '@/stores/card/cardSearchStore';
 import { useCardTypeStore } from '@/stores/card/cardTypeStore';
-import Tag from '../tag/Tag';
 import { CardProps } from './Card';
+import CardTagList from './CardTagList';
 import style from './styles/card.module.css';
 
 const CardContent = ({
   card,
   answered,
+  isDragging,
+  setIsDragging,
 }: {
   card: CardProps;
   answered: boolean;
+  isDragging: boolean;
+  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const cardListType = useCardTypeStore(state => state.cardListType);
   const searchKeyword = useCardSearchStore(state => state.searchKeyword);
@@ -29,28 +33,13 @@ const CardContent = ({
         {card.isAnonymity ? '익명' : card.writer.name}
       </span>
       <section className={style.cardTagWrap}>
-        <ul className={style.cardTagList}>
-          {card.tags &&
-            card.tags.length > 0 &&
-            card.tags.map((tag, idx) => {
-              if (
-                cardListType === 'tag' &&
-                tagKeywordsArr.includes(tag.keyword)
-              ) {
-                return (
-                  <li key={idx} className={style.searchTag}>
-                    <Tag keyword={tag.keyword} answered={answered} />
-                  </li>
-                );
-              } else {
-                return (
-                  <li key={idx}>
-                    <Tag keyword={tag.keyword} answered={answered} />
-                  </li>
-                );
-              }
-            })}
-        </ul>
+        <CardTagList
+          card={card}
+          answered={answered}
+          tagKeywordsArr={tagKeywordsArr}
+          isDragging={isDragging}
+          setIsDragging={setIsDragging}
+        />
       </section>
     </>
   );
