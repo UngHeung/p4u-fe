@@ -13,8 +13,10 @@
   width: 100%;
   max-width: 400px;
   margin: 40px auto 0;
-  padding-top: 50px;
+  padding: 50px 10px 10px;
   background-color: #ffffff;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
   z-index: 3;
 }
 
@@ -111,7 +113,7 @@
   position: relative;
   width: 100%;
   max-width: 400px;
-  height: 240px;
+  min-height: 240px;
   margin: 0 auto;
   padding: 20px;
   border-radius: 25px;
@@ -187,12 +189,22 @@
 
 .cardTagList {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   width: 100%;
   margin-top: 30px;
+  padding: 3px 5px;
+  overflow-x: scroll;
+}
+
+.cardTagList::-webkit-scrollbar {
+  display: none;
+}
+
+.cardTagList>li {
+  flex-shrink: 0;
 }
 
 .searchTag>article {
@@ -339,6 +351,17 @@
   height: 150px;
 }
 
+.writeContentWrap textarea::-webkit-scrollbar {
+  width: 4px;
+  background-color: transparent;
+}
+
+.writeContentWrap textarea::-webkit-scrollbar-thumb {
+  width: 4px;
+  border-radius: 2px;
+  background-color: #494949;
+}
+
 .writeContentWrap>label {
   position: absolute;
   right: 0;
@@ -370,8 +393,9 @@
 
 .addTagWrap {
   width: 100%;
-  min-height: 50px;
+  min-height: 60px;
   padding: 10px;
+  transition: height .3s;
 }
 
 .addTagWrap>ul {
@@ -439,19 +463,19 @@
 
 .cardMenuWrap {
   position: absolute;
-  bottom: 15px;
-  right: 15px;
+  bottom: 10px;
+  right: 20px;
   z-index: 1;
 }
 
 .cardMenu {
   position: absolute;
-  bottom: 40px;
+  bottom: 35px;
   right: 0;
   min-width: 120px;
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   transform-origin: bottom right;
   animation: slideUp 0.2s ease-out;
@@ -517,5 +541,17 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
