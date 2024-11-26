@@ -10,11 +10,10 @@ import {
 } from '../alert/constants/message.enum';
 import AuthIcons from '../auth/AuthIcons';
 import MainButton from '../common/button/MainButton';
-import { svgIcons } from '../common/functions/getSvg';
 import CardInput from '../common/input/CardInput';
 import CardTextarea from '../common/textarea/CardTextarea';
-import Tag from '../tag/Tag';
 import style from './styles/card.module.css';
+import TagMain from './TagMain';
 
 const CardWrite = () => {
   const router = useRouter();
@@ -27,10 +26,6 @@ const CardWrite = () => {
   const pushAlertQueue = useAlertStore(
     (state: AlertStore) => state.pushAlertQueue,
   );
-
-  const handleDeleteTag = (idx: number) => {
-    setTagList(tagList.filter((item, i) => (idx !== i ? item : null)));
-  };
 
   const handleWriteCardOnMutation = useMutation({
     mutationFn: (data: {
@@ -134,57 +129,13 @@ const CardWrite = () => {
           </section>
         </div>
         <div className={style.tagWrap}>
-          <section className={style.addTagWrap}>
-            <ul>
-              {tagList.map((item, idx) => {
-                return (
-                  <li key={idx} onClick={() => handleDeleteTag(idx)}>
-                    <Tag keyword={item} answered={false} />
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-          <section className={style.inputTagWrap}>
-            <input
-              type={'text'}
-              name={'tag'}
-              id={'tag'}
-              placeholder={'#태그를 추가해주세요. (최대 5개)'}
-              maxLength={8}
-              value={tag}
-              onChange={event => setTag(event.target.value)}
-            />
-
-            <button
-              type={'submit'}
-              className={style.tagIcon}
-              onClick={event => {
-                event.preventDefault();
-                setTag('');
-                if (tagList.includes(tag)) {
-                  pushAlertQueue(
-                    VALIDATION_MESSAGE_ENUM.WRONG_IS_ALEADY_TAG,
-                    'failure',
-                  );
-                } else if (tagList.length === 5) {
-                  pushAlertQueue(
-                    VALIDATION_MESSAGE_ENUM.WRONG_FULL_CARD_TAGS_LIST,
-                    'failure',
-                  );
-                } else if (tag.length < 2) {
-                  pushAlertQueue(
-                    VALIDATION_MESSAGE_ENUM.WRONG_TAG_KEYWORD,
-                    'failure',
-                  );
-                } else {
-                  setTagList(prev => [...prev, tag]);
-                }
-              }}
-            >
-              {svgIcons.enter('medium', '#222222')}
-            </button>
-          </section>
+          <TagMain
+            tag={tag}
+            setTag={setTag}
+            tagList={tagList}
+            setTagList={setTagList}
+            pushAlertQueue={pushAlertQueue}
+          />
         </div>
         <section className={style.buttonWrap}>
           <MainButton
