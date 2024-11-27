@@ -1,0 +1,177 @@
+/* ThanksMain */
+.thanksMain {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  height: calc(100vh - 50px);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.listContainer {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.writeFormContainer {
+  width: 100%;
+}
+
+.thanksWriteForm {
+  position: relative;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.thanksWriteForm textarea {
+  width: 100%;
+  min-height: 50px;
+  padding: 10px 40px 10px 10px;
+  border: none;
+  border-bottom: 2px solid #222222;
+  border-top-left-radius: 10px;
+  background-color: #ffffff;
+  font-size: var(--font-size-18);
+  transition: background-color .3s ease-in-out, border-bottom-color .3s ease-in-out;
+  resize: none;
+}
+
+.thanksWriteForm textarea:focus {
+  outline: none;
+  background-color: #f1f1f1;
+  border-bottom-color: var(--color-main);
+}
+
+.thanksWriteForm textarea:focus::-webkit-scrollbar {
+  width: 2px;
+}
+
+.thanksWriteForm textarea:focus::-webkit-scrollbar-thumb {
+  background-color: var(--color-placeholder);
+  border-radius: 1px;
+}
+
+.thanksWriteForm .placeholder {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: calc(100% - 20px);
+  text-align: left;
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-medium);
+  line-height: 24px;
+  color: var(--color-placeholder);
+  cursor: text;
+}
+
+.thanksWriteForm button {
+  position: absolute;
+  right: 10px;
+  bottom: 17px;
+  width: 30px;
+  transition: fill .3s ease-in-out, path .3s ease-in-out;
+}
+
+/* ThanksBox */
+.thanksBoxList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.thanksBoxList>li {
+  width: 100%;
+}
+
+.thanksBox {
+  position: relative;
+  width: calc(100% - 40px);
+  max-width: 560px;
+  padding: 20px;
+  border-radius: 25px;
+  background-color: #f1f1f1;
+}
+
+.myBox {
+  left: 40px;
+  background-color: var(--color-main);
+}
+
+.myBox .thanksContent {
+  color: #ffffff;
+}
+
+.myBox .reactionWrap {
+  background-color: #25bdd1;
+}
+
+.thanksBoxMenuButton {
+  position: absolute;
+  bottom: 14px;
+  right: 20px;
+}
+
+/* ThanksContent */
+.thanksContent {
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-medium);
+  line-height: 24px;
+}
+
+/* Reaction */
+.reactionList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3px;
+}
+
+.reactionWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  margin: 10px 5px 0 0;
+  height: 19px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  line-height: 19px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, .1);
+}
+
+.reactionWrap.myReaction {
+  background-color: var(--color-main);
+  color: #ffffff;
+}
+
+.reaction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 15px;
+  height: 15px;
+  overflow: hidden;
+}
+
+.reactionCount {
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  font-style: italic;
+  color: #222222;
+}
+
+/* AddReactionButton */
+.addReactionButton {
+  width: 15px;
+  height: 15px;
+  overflow: hidden;
+  object-position: 0 0;
+}
