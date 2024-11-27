@@ -117,7 +117,12 @@ const MainNav = () => {
             </li>
             <li>
               <Link href={'/card/today'} onClick={() => setIsMenuOpen(false)}>
-                오늘의카드
+                오늘의기도카드
+              </Link>
+            </li>
+            <li>
+              <Link href={'/thanks'} onClick={() => setIsMenuOpen(false)}>
+                오늘도감사하기
               </Link>
             </li>
             <li>
