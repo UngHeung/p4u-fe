@@ -12,8 +12,11 @@
 }
 
 .listContainer {
+  display: flex;
+  flex-direction: column-reverse;
   width: 100%;
-  margin-bottom: 20px;
+  padding: 20px 0;
+  overflow: auto;
 }
 
 .writeFormContainer {
@@ -75,12 +78,96 @@
   transition: fill .3s ease-in-out, path .3s ease-in-out;
 }
 
-/* ThanksBox */
-.thanksBoxList {
+/* ThanksUpdateForm */
+
+.thanksUpdateCover {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  height: calc(100svh - 50px);
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 97;
+}
+
+.thanksUpdateWrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  max-width: 560px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 25px;
+  transform: translate(-50%, -50%);
+}
+
+.thanksUpdate {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.thanksUpdate {
+  width: 100%;
+  min-height: 50px;
+  padding: 20px;
+  background-color: #ffffff;
+  border: none;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom: 2px solid #222222;
+  font-size: var(--font-size-18);
+  resize: none;
+  transition: background-color .3s ease-in-out, border-bottom-color .3s ease-in-out;
+}
+
+.thanksUpdate:focus {
+  outline: none;
+  border-bottom-color: var(--color-main);
+  background-color: #f1f1f1;
+}
+
+.thanksUpdate::-webkit-scrollbar {
+  width: 4px;
+}
+
+.thanksUpdate::-webkit-scrollbar-thumb {
+  background-color: var(--color-placeholder);
+  border-radius: 4px
+}
+
+.thanksUpdateButtonWrap {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 10px;
+  text-align: right;
+}
+
+.thanksUpdateButton {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  gap: 5px;
+  margin-left: 10px;
+  transition: background-color .3s;
+}
+
+.thanksUpdateButton:disabled {
+  background-color: var(--color-button-back);
+}
+
+.thanksUpdateButton.submit {
+  background-color: var(--color-button-submit);
+}
+
+/* ThanksBox */
+.thanksBoxList {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
   gap: 20px;
   width: 100%;
 }
@@ -98,6 +185,27 @@
   background-color: #f1f1f1;
 }
 
+.thanksBoxInfo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 5px;
+}
+
+.thanksBoxWriter {
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-medium);
+  line-height: 24px;
+}
+
+.thanksBoxTime {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
+  line-height: 22px;
+  color: #999999;
+}
+
 .myBox {
   left: 40px;
   background-color: var(--color-main);
@@ -105,10 +213,54 @@
 
 .myBox .thanksContent {
   color: #ffffff;
+  white-space: pre-wrap;
 }
 
 .myBox .reactionWrap {
   background-color: #25bdd1;
+}
+
+
+.myBox .thanksBoxWriter {
+  color: #ffffff;
+}
+
+.thanksMenu {
+  position: absolute;
+  bottom: 25px;
+  right: 8px;
+  min-width: 120px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+  transform-origin: bottom right;
+  animation: slideUp 0.2s ease-out;
+}
+
+.thanksMenu button {
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: var(--font-size-14);
+  color: #333333;
+  transition: all 0.2s ease;
+}
+
+.thanksMenu button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--color-main);
+}
+
+.thanksMenu button.thanksMenuReport {
+  color: #E22929;
+}
+
+.thanksMenu button.thanksMenuReport:hover {
+  background-color: rgba(226, 41, 41, 0.1);
+}
+
+.myBox .thanksBoxTime {
+  color: #cfcfcf;
 }
 
 .thanksBoxMenuButton {
@@ -169,9 +321,23 @@
 }
 
 /* AddReactionButton */
+
 .addReactionButton {
   width: 15px;
   height: 15px;
+  margin-top: 10px;
   overflow: hidden;
   object-position: 0 0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
