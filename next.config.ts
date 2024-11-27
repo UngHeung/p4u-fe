@@ -34,19 +34,23 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/auth/:path*',
-        destination: `${PROTOCOL}://${AWS_DB_HOST}/auth/:path*`,
+        destination: `${PROTOCOL}://${AWS_DB_HOST}/p4u-api/auth/:path*`,
       },
       {
         source: '/card/:path*',
-        destination: `${PROTOCOL}://${AWS_DB_HOST}/card/:path*`,
+        destination: `${PROTOCOL}://${AWS_DB_HOST}/p4u-api/card/:path*`,
       },
       {
         source: '/tag/:path*',
-        destination: `${PROTOCOL}://${AWS_DB_HOST}/tag/:path*`,
+        destination: `${PROTOCOL}://${AWS_DB_HOST}/p4u-api/tag/:path*`,
       },
       {
         source: '/user/:path*',
-        destination: `${PROTOCOL}://${AWS_DB_HOST}/user/:path*`,
+        destination: `${PROTOCOL}://${AWS_DB_HOST}/p4u-api/user/:path*`,
+      },
+      {
+        source: '/thanks/:path*',
+        destination: `${PROTOCOL}://${AWS_DB_HOST}/p4u-api/thanks/:path*`,
       },
     ];
   },
