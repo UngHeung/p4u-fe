@@ -1,33 +1,46 @@
-import ThanksBox, { ThanksBoxProps } from './ThanksBox';
+import { useThanksTypeStore } from '@/stores/thanks/thanksListTypeStore';
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+import Loading from '../common/Loading';
+import ThanksBox from './ThanksBox';
+import { useThanksListQuery } from './handlers/useThanksListQuery';
 import styles from './styles/thanks.module.css';
 
 const ThanksBoxList = () => {
-  const thanksBoxes: ThanksBoxProps[] = [
-    {
-      content: '오늘도 하루를 허락해주셔서 감사해요.',
-      reactions: [{ type: 'smile', count: 1 }],
-    },
-    {
-      content: '오늘도 하루를 허락해주셔서 감사해요.',
-      reactions: [
-        { type: 'clap', count: 12 },
-        { type: 'heart', count: 6 },
-        { type: 'thumbsup', count: 3 },
-      ],
-    },
-    {
-      content: '오늘도 하루를 허락해주셔서 감사해요.',
-      reactions: [{ type: 'heart', count: 5 }],
-    },
-  ];
+  const thanksListType = useThanksTypeStore(state => state.thanksListType);
+  const thanksListOrder = useThanksTypeStore(state => state.thanksListOrder);
+
+  const { data, fetchNextPage, hasNextPage, isLoading } = useThanksListQuery(
+    thanksListType,
+    thanksListOrder,
+  );
+
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   return (
     <ul className={styles.thanksBoxList}>
-      {thanksBoxes.map((thanksBox, index) => (
-        <li key={index}>
-          <ThanksBox {...thanksBox} />
+      {hasNextPage && (
+        <li key={'moreFetch'}>
+          <div ref={ref} />
         </li>
-      ))}
+      )}
+      {isLoading ? (
+        <Loading color={'#222222'} />
+      ) : data && data?.items.length > 0 ? (
+        data?.items.map((thanksBox, index) => (
+          <li key={index}>
+            <ThanksBox {...thanksBox} />
+          </li>
+        ))
+      ) : (
+        <li className={styles.empty}>{'감사 목록이 없습니다.'}</li>
+      )}
     </ul>
   );
 };
