@@ -49,7 +49,7 @@ const ThanksWriteForm = () => {
           {
             list: [
               {
-                id: old?.pages[0]?.list[0]?.id + 1 ?? 0,
+                id: (old && old.pages[0] && old.pages[0].list[0]?.id + 1) ?? 0,
                 content: newThanks.content,
                 writer: user,
                 createdAt: new Date().toISOString(),
