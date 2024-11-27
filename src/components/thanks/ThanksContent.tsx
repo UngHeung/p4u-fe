@@ -5,7 +5,7 @@ interface ThanksContentProps {
 }
 
 const ThanksContent = ({ content }: ThanksContentProps) => {
-  return <section className={styles.thanksContent}>{content}</section>;
+  return <pre className={styles.thanksContent}>{content}</pre>;
 };
 
 export default ThanksContent;
