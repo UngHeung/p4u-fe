@@ -8,8 +8,8 @@ import {
   SUCCESS_MESSAGE_ENUM,
   VALIDATION_MESSAGE_ENUM,
 } from '../alert/constants/message.enum';
-import AuthIcons from '../auth/AuthIcons';
 import MainButton from '../common/button/MainButton';
+import { svgIcons } from '../common/functions/getSvg';
 import CardInput from '../common/input/CardInput';
 import CardTextarea from '../common/textarea/CardTextarea';
 import style from './styles/card.module.css';
@@ -143,9 +143,7 @@ const CardWrite = () => {
             type={'submit'}
             value={{
               text: '저장',
-              icon: (
-                <AuthIcons size="small" type="enter" className={style.icon} />
-              ),
+              icon: svgIcons.enter('medium'),
             }}
             className={`${style.button} ${style.submit}`}
             disabled={disabled}
