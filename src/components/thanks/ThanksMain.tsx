@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styles from './styles/thanks.module.css';
 import ThanksBoxList from './ThanksBoxList';
 import ThanksWriteForm from './ThanksWriteForm';
