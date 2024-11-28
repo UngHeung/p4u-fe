@@ -91,7 +91,7 @@ const CardWrite = () => {
   };
 
   return (
-    <>
+    <section>
       <form className={style.cardWriteForm} onSubmit={handleWriteCard}>
         <div className={style.cardWriteWrap}>
           <section className={style.checkAnonymityWrap}>
@@ -150,7 +150,7 @@ const CardWrite = () => {
           />
         </section>
       </form>
-    </>
+    </section>
   );
 };
 
