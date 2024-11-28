@@ -6,6 +6,7 @@ export interface AlertProps {
   message: string;
   index?: number;
   type: AlertTypes;
+  isExiting?: boolean;
 }
 
 export interface AlertStore {
@@ -13,7 +14,7 @@ export interface AlertStore {
   pushAlertQueue: (message: string, type: AlertTypes) => void;
   shiftAlertQueue: () => void;
   deleteAlertQueue: (idx: number) => void;
-  emptyAlertQueue: () => void;
+  resetAlertQueue: () => void;
 }
 
 export const useAlertStore = create<AlertStore>(set => ({
@@ -24,19 +25,23 @@ export const useAlertStore = create<AlertStore>(set => ({
     }));
   },
 
-  shiftAlertQueue: () =>
+  shiftAlertQueue: () => {
     set(state => ({
       alertQueue: state.alertQueue.filter((item, idx) =>
         idx !== 0 ? item : null,
       ),
-    })),
+    }));
+  },
 
-  deleteAlertQueue: (index: number) =>
+  deleteAlertQueue: (index: number) => {
     set(state => ({
       alertQueue: state.alertQueue.filter((item, idx) =>
         idx !== index ? item : null,
       ),
-    })),
+    }));
+  },
 
-  emptyAlertQueue: () => set({ alertQueue: [] }),
+  resetAlertQueue: () => {
+    set({ alertQueue: [] });
+  },
 }));

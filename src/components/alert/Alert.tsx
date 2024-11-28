@@ -7,33 +7,17 @@ import {
   useAlertStore,
 } from '@/stores/alert/alertStore';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 import style from './styles/alert.module.css';
 
-const Alert = ({ message, index, type }: AlertProps) => {
+const Alert = ({ message, index, type, isExiting }: AlertProps) => {
   const deleteAlertQueue = useAlertStore(
     (state: AlertStore) => state.deleteAlertQueue,
   );
 
-  const [opacity, setOpacity] = useState(0);
-  const [bottom, setBottom] = useState(0);
-
-  useEffect(() => {
-    setOpacity(1);
-    setBottom(15);
-
-    setTimeout(() => {
-      setOpacity(0);
-      setBottom(0);
-    }, 2700);
-  }, []);
-
   return (
     <article
-      className={style.alertWrap}
+      className={`${style.alertWrap}${isExiting ? ' ' + style.fadeOut : ''}`}
       style={{
-        opacity,
-        bottom,
         backgroundColor:
           type === 'success'
             ? '#00695C'

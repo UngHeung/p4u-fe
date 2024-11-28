@@ -3,18 +3,25 @@ import {
   AlertStore,
   useAlertStore,
 } from '@/stores/alert/alertStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Alert from './Alert';
 import style from './styles/alert.module.css';
 
 const AlertQueue = ({ alerts }: { alerts: AlertProps[] }) => {
+  const [isExiting, setIsExiting] = useState(false);
   const alertQueue = useAlertStore((state: AlertStore) => state.alertQueue);
-  const emptyAlertQueue = useAlertStore(
-    (state: AlertStore) => state.emptyAlertQueue,
+  const resetAlertQueue = useAlertStore(
+    (state: AlertStore) => state.resetAlertQueue,
   );
 
   useEffect(() => {
-    const timer = setTimeout(() => emptyAlertQueue(), 3000);
+    const timer = setTimeout(() => {
+      setIsExiting(true);
+      setTimeout(() => {
+        resetAlertQueue();
+        setIsExiting(false);
+      }, 300);
+    }, 1200);
 
     return () => {
       clearTimeout(timer);
@@ -23,10 +30,15 @@ const AlertQueue = ({ alerts }: { alerts: AlertProps[] }) => {
 
   return (
     <ul className={style.alertQueue}>
-      {alerts.map((alert, idx) => {
+      {[...alerts].map((alert, idx) => {
         return (
           <li key={idx}>
-            <Alert message={alert.message} index={idx} type={alert.type} />
+            <Alert
+              message={alert.message}
+              index={idx}
+              type={alert.type}
+              isExiting={isExiting}
+            />
           </li>
         );
       })}

@@ -2,6 +2,7 @@ import { authAxios, baseAxios } from '@/apis/axiosInstance';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { CardTypeStore, useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { UserStore, useUserStore } from '@/stores/user/userStore';
+import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -25,6 +26,8 @@ const MainNav = () => {
   const userRole = useUserStore((state: UserStore) => state.user.role);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const handleLogout = async () => {
     try {
@@ -94,6 +97,7 @@ const MainNav = () => {
                 href={'/card/list'}
                 onClick={event => {
                   event.preventDefault();
+                  queryClient.removeQueries({ queryKey: ['cards'] });
                   setCardTypeStore('my');
                   setIsMenuOpen(false);
                   router.push('/card/list');
