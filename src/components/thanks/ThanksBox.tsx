@@ -16,7 +16,7 @@ export interface ThanksBoxProps {
   reactionsCount: {
     smile: number;
     heart: number;
-    thumbs_up: number;
+    thumbsup: number;
     clap: number;
     party: number;
   };
