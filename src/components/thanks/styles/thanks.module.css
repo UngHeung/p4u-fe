@@ -206,6 +206,10 @@
   color: #999999;
 }
 
+.thanksContent {
+  white-space: pre-wrap;
+}
+
 .myBox {
   left: 40px;
   background-color: var(--color-main);
@@ -213,7 +217,6 @@
 
 .myBox .thanksContent {
   color: #ffffff;
-  white-space: pre-wrap;
 }
 
 .myBox .reactionWrap {
