@@ -170,6 +170,8 @@
   align-items: center;
   gap: 20px;
   width: 100%;
+  max-height: calc(100svh - 100px);
+  overflow: auto;
 }
 
 .thanksBoxList>li {
