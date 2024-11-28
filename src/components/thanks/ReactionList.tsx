@@ -13,7 +13,7 @@ const ReactionList = ({
   reactionsCount: {
     smile: number;
     heart: number;
-    thumbsup: number;
+    thumbs_up: number;
     clap: number;
     party: number;
   };
@@ -23,22 +23,23 @@ const ReactionList = ({
 }) => {
   return (
     <ul className={styles.reactionList}>
-      {Object?.entries(reactionsCount).map(([type, count], index) => {
-        if (count > 0) {
-          return (
-            <li key={index}>
-              <Reaction
-                id={id}
-                type={type as ReactionType}
-                count={count}
-                reactions={reactions}
-                isDisabled={isDisabled}
-                setIsDisabled={setIsDisabled}
-              />
-            </li>
-          );
-        }
-      })}
+      {reactions &&
+        Object?.entries(reactionsCount).map(([type, count], index) => {
+          if (count > 0) {
+            return (
+              <li key={index}>
+                <Reaction
+                  id={id}
+                  type={type as ReactionType}
+                  count={count}
+                  reactions={reactions}
+                  isDisabled={isDisabled}
+                  setIsDisabled={setIsDisabled}
+                />
+              </li>
+            );
+          }
+        })}
     </ul>
   );
 };

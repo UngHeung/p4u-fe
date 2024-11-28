@@ -55,6 +55,13 @@ const ThanksWriteForm = () => {
                 createdAt: new Date().toISOString(),
                 reactions: [],
                 reports: [],
+                reactionsCount: {
+                  smile: 0,
+                  heart: 0,
+                  thumbs_up: 0,
+                  clap: 0,
+                  party: 0,
+                },
               },
               ...(old?.pages[0]?.list || []),
             ],
