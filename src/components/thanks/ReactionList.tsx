@@ -5,7 +5,7 @@ import styles from './styles/thanks.module.css';
 const ReactionList = ({
   id,
   reactionsCount,
-  reactions,
+  reactions = [],
   isDisabled,
   setIsDisabled,
 }: {
@@ -23,7 +23,7 @@ const ReactionList = ({
 }) => {
   return (
     <ul className={styles.reactionList}>
-      {Object.entries(reactionsCount).map(([type, count], index) => {
+      {Object?.entries(reactionsCount).map(([type, count], index) => {
         if (count > 0) {
           return (
             <li key={index}>
