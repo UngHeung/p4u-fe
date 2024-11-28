@@ -9,7 +9,7 @@ import { Dispatch, SetStateAction } from 'react';
 import useReactionQuery from './handlers/useReactionQuery';
 import styles from './styles/thanks.module.css';
 
-export type ReactionType = 'smile' | 'heart' | 'thumbs_up' | 'clap' | 'party';
+export type ReactionType = 'smile' | 'heart' | 'thumbsup' | 'clap' | 'party';
 
 export interface MyReactionProps {
   id: number;
@@ -68,7 +68,7 @@ const Reaction = ({
             objectPosition:
               type === 'heart'
                 ? '25px 0'
-                : type === 'thumbs_up'
+                : type === 'thumbsup'
                   ? '0 0'
                   : type === 'clap'
                     ? '-25px 0'

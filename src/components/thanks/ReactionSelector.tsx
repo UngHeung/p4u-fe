@@ -97,7 +97,7 @@ const ReactionSelector = ({
           type="button"
           className={styles.reactionSelectorButton}
           onClick={() => {
-            reactionMutation.mutate({ type: 'thumbs_up' });
+            reactionMutation.mutate({ type: 'thumbsup' });
             setIsDisabled(false);
             setIsOpen(false);
           }}
