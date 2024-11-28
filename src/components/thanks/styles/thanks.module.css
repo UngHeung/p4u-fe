@@ -235,6 +235,7 @@
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
   transform-origin: bottom right;
   animation: slideUp 0.2s ease-out;
+  z-index: 50;
 }
 
 .thanksMenu button {
