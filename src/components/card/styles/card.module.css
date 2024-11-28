@@ -496,11 +496,11 @@
 }
 
 /* 신고 버튼 특별 스타일 */
-.cardMenu li:first-child button {
+.cardMenu button.cardMenuReport {
   color: #E22929;
 }
 
-.cardMenu li:first-child button:hover {
+.cardMenu button.cardMenuReport:hover {
   background-color: rgba(226, 41, 41, 0.1);
 }
 

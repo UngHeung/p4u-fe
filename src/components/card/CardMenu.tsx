@@ -115,6 +115,8 @@ const CardMenu = ({
         user.id !== card.writer.id ? (
           <li>
             <button
+              className={style.cardMenuReport}
+              type={'button'}
               onClick={event => {
                 event.stopPropagation();
                 setDisabled(true);
@@ -130,6 +132,7 @@ const CardMenu = ({
         ) : (
           <li>
             <button
+              type={'button'}
               onClick={event => {
                 event.stopPropagation();
                 setDisabled(true);
@@ -147,6 +150,7 @@ const CardMenu = ({
         <>
           <li>
             <button
+              type={'button'}
               onClick={event => {
                 event.stopPropagation();
                 setDisabled(true);
@@ -161,6 +165,7 @@ const CardMenu = ({
           </li>
           <li>
             <button
+              type={'button'}
               onClick={event => {
                 setDisabled(true);
                 event.stopPropagation();
@@ -175,6 +180,7 @@ const CardMenu = ({
           </li>
           <li>
             <button
+              type={'button'}
               onClick={event => {
                 event.stopPropagation();
                 setDisabled(true);
