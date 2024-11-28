@@ -62,12 +62,21 @@ const ThanksUpdateForm = ({
 
       return { previousThanks };
     },
-    onError: (error: any) => {
+    onError: async (error: any, context: any) => {
+      queryClient.setQueryData(
+        ['thanks', thanksListType],
+        context?.previousThanks,
+      );
+
       if (error.status === 401) {
         pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
+      } else {
+        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
       }
     },
     onSuccess: () => {
+      pushAlertQueue('감사메시지를 수정했습니다.', 'success');
+
       queryClient.invalidateQueries({ queryKey: ['thanks', thanksListType] });
     },
     onSettled: () => {
@@ -77,8 +86,6 @@ const ThanksUpdateForm = ({
   });
 
   const handleThanksUpdate = () => {
-    console.log(content);
-
     if (!content) {
       pushAlertQueue('감사메시지를 입력해주세요.', 'failure');
       return;
@@ -102,6 +109,7 @@ const ThanksUpdateForm = ({
           className={styles.thanksUpdate}
           value={content}
           onChange={event => setContent(event.target.value)}
+          aria-label="감사메시지 수정"
         />
         <section className={styles.thanksUpdateButtonWrap}>
           <MainButton

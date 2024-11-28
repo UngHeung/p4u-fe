@@ -277,6 +277,13 @@
 }
 
 /* Reaction */
+.thanksBoxReactions {
+  display: flex;
+  flex-direction: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
 .reactionList {
   display: flex;
   flex-wrap: wrap;
@@ -285,31 +292,41 @@
   gap: 3px;
 }
 
-.reactionWrap {
+.reactionButton {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 3px;
   margin: 10px 5px 0 0;
-  height: 19px;
+  height: 25px;
   padding: 0 10px;
+  border: 2px solid transparent;
   border-radius: 10px;
   background-color: #f9f9f9;
-  line-height: 19px;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, .1);
+  transition: border-color .3s ease-in-out;
 }
 
-.reactionWrap.myReaction {
-  background-color: var(--color-main);
-  color: #ffffff;
+.myBox .reactionButton {
+  background-color: #32cbe0;
 }
+
+.reactionButton.myReaction {
+  border-color: var(--color-main);
+}
+
+.myBox .reactionButton.myReaction {
+  border-color: #ffffff;
+}
+
 
 .reaction {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  width: 15px;
-  height: 15px;
+  width: 25px;
+  height: 25px;
   overflow: hidden;
 }
 
@@ -323,11 +340,81 @@
 /* AddReactionButton */
 
 .addReactionButton {
-  width: 15px;
-  height: 15px;
   margin-top: 10px;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
   overflow: hidden;
+}
+
+.addReactionButton:hover {
+  background-color: #ffffff;
+}
+
+.addReactionButton.myButton {
+  background-color: #32cbe0;
+}
+
+.addReactionButton.myButton:hover {
+  background-color: #50cede;
+}
+
+.addReactionButton img {
+  object-position: -50px 0;
+}
+
+/* ReactionSelector */
+
+.reactionSelector {
+  position: absolute;
+  bottom: -15px;
+  left: 45px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  width: 180px;
+  padding: 5px 0;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
+  border-radius: 15px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: slideLeft 0.2s ease-out forwards;
+}
+
+.reactionSelector.mySelector {
+  background-color: #32cbe0;
+}
+
+.reactionSelectorButton {
+  width: 25px;
+  height: 25px;
+  overflow: hidden;
+}
+
+.smile {
   object-position: 0 0;
+}
+
+.heart {
+  object-position: -25px 0;
+}
+
+.thumbsup {
+  object-position: -50px 0;
+}
+
+.clap {
+  object-position: -75px 0;
+}
+
+.party {
+  object-position: -100px 0;
 }
 
 @keyframes slideUp {
@@ -339,5 +426,17 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
