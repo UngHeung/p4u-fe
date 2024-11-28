@@ -4,8 +4,27 @@ import { ThanksListType } from '@/stores/thanks/thanksListTypeStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction } from 'react';
 import { ReactionType } from '../Reaction';
+import { ThanksBoxProps } from '../ThanksBox';
 
-const useReactionQuery = (
+interface CurrentDataProps {
+  pageParams: number | undefined;
+  pages: [
+    {
+      list: ThanksBoxProps[];
+      cursor: number;
+    },
+  ];
+}
+
+const reactionMutationState: {
+  isOnReaction: boolean;
+  previousData: CurrentDataProps | undefined;
+} = {
+  isOnReaction: true,
+  previousData: undefined,
+};
+
+const useReactionMutation = (
   queryType: 'new' | 'update',
   pushAlertQueue: (message: string, type: 'success' | 'failure') => void,
   thanksListType: ThanksListType,
@@ -15,7 +34,7 @@ const useReactionQuery = (
 ) => {
   const queryClient = useQueryClient();
 
-  const reactionMutation = useMutation({
+  return useMutation({
     mutationKey: ['thanks', thanksListType],
     mutationFn: async ({ type }: { type: ReactionType }) => {
       if (queryType === 'new') {
@@ -26,28 +45,84 @@ const useReactionQuery = (
         await authAxios.put(url, { type });
       }
     },
-    onMutate: ({ type }) => {
+    onMutate: async ({ type }: { type: ReactionType }) => {
       setIsDisabled(true);
+      reactionMutationState.isOnReaction = true;
 
-      queryClient.cancelQueries({ queryKey: ['thanks', thanksListType] });
+      reactionMutationState.previousData = queryClient.getQueryData([
+        'thanks',
+        thanksListType,
+      ]);
 
-      const previousData = queryClient.getQueryData(['thanks', thanksListType]);
+      await queryClient.cancelQueries({ queryKey: ['thanks', thanksListType] });
 
-      queryClient.setQueryData(['thanks', thanksListType], (old: any) => {
-        if (!old) return old;
-        return {
-          ...old,
-          reactions: [type],
-        };
-      });
+      console.log('previousData : ', reactionMutationState.previousData);
 
-      return { previousData };
+      queryClient.setQueryData(
+        ['thanks', thanksListType],
+        (currentData: CurrentDataProps) => {
+          if (!currentData) return currentData;
+
+          const newPages = currentData.pages.map(page => ({
+            ...page,
+            list: page.list.map((item: ThanksBoxProps) => {
+              if (queryType === 'new' && item.id === thanksId) {
+                const newItem = {
+                  ...item,
+                  reactions: [{ type, id: reactionId }],
+                  reactionsCount: {
+                    ...item.reactionsCount,
+                    [type]: item.reactionsCount[type] + 1,
+                  },
+                };
+
+                return newItem;
+              } else if (queryType === 'update' && item.id === thanksId) {
+                const currReactionType: ReactionType = item.reactions[0].type;
+
+                if (currReactionType === type) {
+                  reactionMutationState.isOnReaction = false;
+                  return {
+                    ...item,
+                    reactions: [],
+                    reactionsCount: {
+                      ...item.reactionsCount,
+                      [type]: item.reactionsCount[type] - 1,
+                    },
+                  };
+                } else {
+                  return {
+                    ...item,
+                    reactions: [{ type, id: reactionId }],
+                    reactionsCount: {
+                      ...item.reactionsCount,
+                      [currReactionType]:
+                        item.reactionsCount[currReactionType] - 1,
+                      [type]: item.reactionsCount[type] + 1,
+                    },
+                  };
+                }
+              }
+              return item;
+            }),
+          }));
+
+          return {
+            ...currentData,
+            pages: newPages,
+          };
+        },
+      );
+
+      return reactionMutationState.previousData;
     },
-    onError: (error: any, context: any) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(
+    onError: async (error: any) => {
+      console.log('previousData : ', reactionMutationState.previousData);
+
+      if (reactionMutationState.previousData) {
+        await queryClient.setQueryData(
           ['thanks', thanksListType],
-          context.previousData,
+          reactionMutationState.previousData,
         );
       }
 
@@ -58,7 +133,10 @@ const useReactionQuery = (
       }
     },
     onSuccess: () => {
-      pushAlertQueue('이모지로 공감을 표시했습니다.', 'success');
+      pushAlertQueue(
+        `이모지로 공감을 ${reactionMutationState.isOnReaction ? '표시' : '취소'}했습니다.`,
+        'success',
+      );
 
       setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['thanks', thanksListType] });
@@ -68,8 +146,6 @@ const useReactionQuery = (
       setIsDisabled(false);
     },
   });
-
-  return reactionMutation;
 };
 
-export default useReactionQuery;
+export default useReactionMutation;
