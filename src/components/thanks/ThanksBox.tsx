@@ -1,7 +1,7 @@
 import { UserProps, useUserStore } from '@/stores/user/userStore';
 import { useState } from 'react';
 import AddReactionButton from './AddReactionButton';
-import { ReactionProps } from './Reaction';
+import { MyReactionProps } from './Reaction';
 import ReactionList from './ReactionList';
 import styles from './styles/thanks.module.css';
 import ThanksBoxMenu from './ThanksBoxMenu';
@@ -12,7 +12,14 @@ export interface ThanksBoxProps {
   id: number;
   writer: UserProps;
   content: string;
-  reactions: ReactionProps[];
+  reactions: MyReactionProps[];
+  reactionsCount: {
+    smile: number;
+    heart: number;
+    thumbsup: number;
+    clap: number;
+    party: number;
+  };
   reports: Pick<UserProps, 'id'>[];
   isActive: boolean;
   createdAt: string;
@@ -24,13 +31,16 @@ const ThanksBox = ({
   writer,
   content,
   reactions,
+  reactionsCount,
   createdAt,
   isActive,
   updatedAt,
   reports,
 }: ThanksBoxProps) => {
   const user = useUserStore(state => state.user);
+
   const [isEdit, setIsEdit] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   return (
     <>
@@ -46,16 +56,27 @@ const ThanksBox = ({
           </span>
         </section>
         <ThanksContent content={content} />
-        {reactions && reactions.length ? (
-          <ReactionList reactions={reactions} />
-        ) : (
-          <AddReactionButton />
-        )}
+        <section className={styles.thanksBoxReactions}>
+          <AddReactionButton
+            id={id}
+            reactions={reactions}
+            writer={writer}
+            setIsDisabled={setIsDisabled}
+          />
+          <ReactionList
+            id={id}
+            reactionsCount={reactionsCount}
+            reactions={reactions}
+            isDisabled={isDisabled}
+            setIsDisabled={setIsDisabled}
+          />
+        </section>
         <ThanksBoxMenu
           id={id}
           isActive={isActive}
           writer={writer}
           content={content}
+          reactionsCount={reactionsCount}
           reactions={reactions}
           reports={reports}
           createdAt={createdAt}
