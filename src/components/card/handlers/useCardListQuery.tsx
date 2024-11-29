@@ -20,7 +20,7 @@ export const useCardListQuery = (
         };
       }
 
-      const axiosInstance = cardListType === 'my' ? authAxios : baseAxios;
+      const axiosInstance = cardListType === 'all' ? baseAxios : authAxios;
 
       let query = '/card';
 
@@ -30,11 +30,14 @@ export const useCardListQuery = (
         query += `/search/tag?keyword=${tagKeywords}&take=${take}&cursor=${pageParam}`;
       } else if (cardListType === 'keyword') {
         query += `/search?keyword=${searchKeyword}&take=${take}&cursor=${pageParam}`;
+      } else if (cardListType === 'inactive') {
+        query += `?type=inactive&take=${take}&cursor=${pageParam}`;
       } else {
-        query += `?take=${take}&cursor=${pageParam}`;
+        query += `?type=all&take=${take}&cursor=${pageParam}`;
       }
 
       const { data } = await axiosInstance.get(query);
+      console.log(query);
 
       return data;
     },
