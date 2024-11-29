@@ -1,6 +1,6 @@
 import { authAxios } from '@/apis/axiosInstance';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
-import { useThanksTypeStore } from '@/stores/thanks/thanksListTypeStore';
+import { useThanksListStore } from '@/stores/thanks/thanksListTypeStore';
 import { useUserStore } from '@/stores/user/userStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useRef, useState } from 'react';
@@ -11,7 +11,7 @@ import { ThanksBoxProps } from './ThanksBox';
 
 const ThanksWriteForm = () => {
   const user = useUserStore(state => state.user);
-  const thanksListType = useThanksTypeStore(state => state.thanksListType);
+  const thanksListType = useThanksListStore(state => state.thanksListType);
   const pushAlertQueue = useAlertStore(
     (state: AlertStore) => state.pushAlertQueue,
   );

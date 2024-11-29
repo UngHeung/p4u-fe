@@ -1,4 +1,4 @@
-import { useThanksTypeStore } from '@/stores/thanks/thanksListTypeStore';
+import { useThanksListStore } from '@/stores/thanks/thanksListTypeStore';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import Loading from '../common/Loading';
@@ -7,8 +7,8 @@ import { useThanksListQuery } from './handlers/useThanksListQuery';
 import styles from './styles/thanks.module.css';
 
 const ThanksBoxList = () => {
-  const thanksListType = useThanksTypeStore(state => state.thanksListType);
-  const thanksListOrder = useThanksTypeStore(state => state.thanksListOrder);
+  const thanksListType = useThanksListStore(state => state.thanksListType);
+  const thanksListOrder = useThanksListStore(state => state.thanksListOrder);
 
   const { data, fetchNextPage, hasNextPage, isLoading } = useThanksListQuery(
     thanksListType,

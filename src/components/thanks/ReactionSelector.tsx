@@ -1,8 +1,8 @@
 import emojis from '@/public/emoji/emoji.png';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import {
-  ThanksTypeProps,
-  useThanksTypeStore,
+  ThanksListStore,
+  useThanksListStore,
 } from '@/stores/thanks/thanksListTypeStore';
 import { UserProps, useUserStore } from '@/stores/user/userStore';
 import Image from 'next/image';
@@ -30,8 +30,8 @@ const ReactionSelector = ({
   const pushAlertQueue = useAlertStore(
     (state: AlertStore) => state.pushAlertQueue,
   );
-  const thanksListType = useThanksTypeStore(
-    (state: ThanksTypeProps) => state.thanksListType,
+  const thanksListType = useThanksListStore(
+    (state: ThanksListStore) => state.thanksListType,
   );
 
   const reactionMutation = useReactionQuery(
