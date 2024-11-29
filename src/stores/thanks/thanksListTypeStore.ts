@@ -3,7 +3,7 @@ import { create } from 'zustand';
 export type ThanksListType = 'all' | 'my';
 export type ThanksListOrder = 'DESC' | 'ASC';
 
-export interface ThanksTypeProps {
+export interface ThanksListStore {
   thanksListType: ThanksListType;
   setThanksListType: (thanksListType: ThanksListType) => void;
 
@@ -11,7 +11,7 @@ export interface ThanksTypeProps {
   setThanksListOrder: (thanksListOrder: ThanksListOrder) => void;
 }
 
-export const useThanksTypeStore = create<ThanksTypeProps>(set => ({
+export const useThanksListStore = create<ThanksListStore>(set => ({
   thanksListType: 'all',
   setThanksListType: thanksListType => set({ thanksListType }),
 
