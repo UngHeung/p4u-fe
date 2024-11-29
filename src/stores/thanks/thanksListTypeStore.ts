@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type ThanksListType = 'all' | 'my';
+export type ThanksListType = 'all' | 'my' | 'inactive';
 export type ThanksListOrder = 'DESC' | 'ASC';
 
 export interface ThanksListStore {

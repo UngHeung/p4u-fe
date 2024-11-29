@@ -179,6 +179,11 @@
   width: 100%;
 }
 
+.thanksBoxList>.empty {
+  width: 100%;
+  text-align: center;
+}
+
 .thanksBox {
   position: relative;
   width: calc(100% - 40px);
@@ -233,14 +238,14 @@
 
 .thanksMenu {
   position: absolute;
-  bottom: 25px;
-  right: 8px;
+  top: 12px;
+  right: 25px;
   min-width: 120px;
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 8px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
   transform-origin: bottom right;
-  animation: slideUp 0.2s ease-out;
+  animation: slideDown 0.2s ease-out;
   z-index: 50;
 }
 
@@ -272,7 +277,7 @@
 
 .thanksBoxMenuButton {
   position: absolute;
-  bottom: 14px;
+  top: 20px;
   right: 20px;
 }
 
@@ -425,10 +430,10 @@
   object-position: -100px 0;
 }
 
-@keyframes slideUp {
+@keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(-10px);
   }
 
   to {

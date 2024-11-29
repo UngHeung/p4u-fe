@@ -76,9 +76,26 @@ const ThanksBoxMenu = ({
   });
 
   const handleActivateMutation = useMutation({
-    mutationFn: async ({ id }: { id: number }) => {
+    mutationFn: async ({ id, isActive }: { id: number; isActive: boolean }) => {
       setDisabled(true);
-      await authAxios.patch(`/thanks/${id}/activate`);
+      await authAxios.patch(`/thanks/${id}/active?isActive=${!isActive}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['thanks', thanksListType] });
+      pushAlertQueue(
+        `감사메시지가 ${isActive ? '비활성화' : '활성화'}되었습니다.`,
+        'success',
+      );
+    },
+    onError: (error: any) => {
+      if (error.status === 401) {
+        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
+      } else {
+        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
+      }
+    },
+    onSettled: () => {
+      setDisabled(false);
     },
   });
 
@@ -181,12 +198,12 @@ const ThanksBoxMenu = ({
                   <button
                     onClick={event => {
                       event.stopPropagation();
-                      handleActivateMutation.mutate({ id });
+                      handleActivateMutation.mutate({ id, isActive });
                       setIsMenuOpen(false);
                     }}
                     disabled={disabled}
                   >
-                    {isActive ? '활성화' : '비활성화'}
+                    {isActive ? '비활성화' : '활성화'}
                   </button>
                 </li>
                 <li>
