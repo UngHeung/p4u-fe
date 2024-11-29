@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type CardListType = 'all' | 'keyword' | 'tag' | 'my';
+export type CardListType = 'all' | 'keyword' | 'tag' | 'my' | 'inactive';
 
 export interface CardTypeStore {
   cardListType: CardListType;
