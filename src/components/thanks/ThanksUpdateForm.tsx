@@ -1,6 +1,6 @@
 import { authAxios } from '@/apis/axiosInstance';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
-import { useThanksTypeStore } from '@/stores/thanks/thanksListTypeStore';
+import { useThanksListStore } from '@/stores/thanks/thanksListTypeStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { ERROR_MESSAGE_ENUM } from '../alert/constants/message.enum';
@@ -17,7 +17,7 @@ const ThanksUpdateForm = ({
   currentContent: string;
   setIsEdit: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const thanksListType = useThanksTypeStore(state => state.thanksListType);
+  const thanksListType = useThanksListStore(state => state.thanksListType);
   const pushAlertQueue = useAlertStore(
     (state: AlertStore) => state.pushAlertQueue,
   );
