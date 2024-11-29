@@ -1,5 +1,9 @@
 import { authAxios } from '@/apis/axiosInstance';
-import { useAlertStore } from '@/stores/alert/alertStore';
+import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
+import {
+  ThanksListStore,
+  useThanksListStore,
+} from '@/stores/thanks/thanksListTypeStore';
 import { useUserStore } from '@/stores/user/userStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useState } from 'react';
@@ -7,6 +11,7 @@ import { ERROR_MESSAGE_ENUM } from '../alert/constants/message.enum';
 import { svgIcons } from '../common/functions/getSvg';
 import styles from './styles/thanks.module.css';
 import { ThanksBoxProps } from './ThanksBox';
+
 const ThanksBoxMenu = ({
   id,
   isActive,
@@ -14,24 +19,59 @@ const ThanksBoxMenu = ({
   setIsEdit,
 }: ThanksBoxProps & { setIsEdit: Dispatch<SetStateAction<boolean>> }) => {
   const user = useUserStore(state => state.user);
-  const pushAlertQueue = useAlertStore(state => state.pushAlertQueue);
+  const thanksListType = useThanksListStore(
+    (state: ThanksListStore) => state.thanksListType,
+  );
+  const pushAlertQueue = useAlertStore(
+    (state: AlertStore) => state.pushAlertQueue,
+  );
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const handleReportMutation = useMutation({
+  const handleReportQuery = useMutation({
     mutationFn: async ({ id }: { id: number }) => {
       setDisabled(true);
       await authAxios.patch(`/thanks/${id}/report`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['thanks', thanksListType] });
+      pushAlertQueue('신고가 완료되었습니다.', 'success');
+    },
+    onError: (error: any) => {
+      if (error.status === 400) {
+        pushAlertQueue('이미 신고한 감사메시지입니다.', 'failure');
+      } else if (error.status === 401) {
+        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
+      } else {
+        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
+      }
+    },
+    onSettled: () => {
+      setDisabled(false);
     },
   });
 
   const handleResetReportMutation = useMutation({
     mutationFn: async ({ id }: { id: number }) => {
       setDisabled(true);
-      await authAxios.patch(`/thanks/${id}/reporter/reset`);
+      await authAxios.patch(`/thanks/${id}/report/reset`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['thanks', thanksListType] });
+      pushAlertQueue('신고가 초기화되었습니다.', 'success');
+    },
+    onError: (error: any) => {
+      if (error.status === 401) {
+        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
+      } else {
+        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
+      }
+    },
+    onSettled: () => {
+      setDisabled(false);
     },
   });
 
@@ -49,7 +89,7 @@ const ThanksBoxMenu = ({
     },
     onSuccess: () => {
       pushAlertQueue('감사메시지가 삭제되었습니다.', 'success');
-      queryClient.invalidateQueries({ queryKey: ['thanks'] });
+      queryClient.invalidateQueries({ queryKey: ['thanks', thanksListType] });
     },
     onError: (error: any) => {
       if (error.status === 401) {
@@ -85,7 +125,7 @@ const ThanksBoxMenu = ({
                     onClick={event => {
                       event.stopPropagation();
                       setDisabled(true);
-                      handleReportMutation.mutate({ id });
+                      handleReportQuery.mutate({ id });
                       setIsMenuOpen(false);
                       setDisabled(false);
                     }}
