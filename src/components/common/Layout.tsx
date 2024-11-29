@@ -6,13 +6,11 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import AlertQueue from '../alert/AlertQueue';
 import Header from '../layout/Header';
+import AdminMenu from '../admin/AdminMenu';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
-
   const alerts = useAlertStore((state: AlertStore) => state.alertQueue);
   const user = useUserStore((state: UserStore) => state.user);
-  const setUser = useUserStore((state: UserStore) => state.setUser);
   const isHydrate = useUserStore((state: UserStore) => state.isHydrated);
 
   return (
@@ -22,6 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <Header />
           {children}
           {alerts.length > 0 && <AlertQueue alerts={alerts} />}
+          {user.role === 'ROLE_ADMIN' && <AdminMenu />}
         </>
       )}
     </>

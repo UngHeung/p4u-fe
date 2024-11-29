@@ -18,6 +18,9 @@
   --color-tag-bg-answered: #0f9384;
   --color-tag-none-select-bg: #ECEFF1;
   --color-message-bg: var(--color-main);
+  --color-error-bg: #FFEBEE;
+  --color-error-text: var(--color-red-warn);
+  --color-error-border: #E53935;
 
   --font-color-basic: #263238;
   --font-color-negative: #FFFFFF;

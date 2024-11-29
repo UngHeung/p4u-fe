@@ -1,4 +1,4 @@
-import { authAxios, baseAxios } from '@/apis/axiosInstance';
+import { baseAxios } from '@/apis/axiosInstance';
 import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { CardTypeStore, useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { UserStore, useUserStore } from '@/stores/user/userStore';
@@ -23,7 +23,6 @@ const MainNav = () => {
 
   const setIsLoggedIn = useUserStore((state: UserStore) => state.setIsLoggedIn);
   const isLoggedIn = useUserStore((state: UserStore) => state.isLoggedIn);
-  const userRole = useUserStore((state: UserStore) => state.user.role);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -55,36 +54,6 @@ const MainNav = () => {
         ></div>
       )}
       <ul className={`${style.mainNav}${isMenuOpen ? ' ' + style.open : ''}`}>
-        {userRole === 'ROLE_ADMIN' && (
-          <li>
-            <Link
-              onClick={async event => {
-                event.preventDefault();
-                try {
-                  const response = await authAxios.get('/auth/isadmin');
-
-                  if (response.status === 200) {
-                    router.push('/admin');
-
-                    pushAlertQueue('관리자 인증이 완료되었습니다.', 'success');
-                  }
-                } catch (error: any) {
-                  console.error(error);
-                  if (error.status === 403) {
-                    pushAlertQueue('권한이 없습니다.', 'failure');
-                  } else {
-                    pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
-                  }
-                } finally {
-                  setIsMenuOpen(false);
-                }
-              }}
-              href={'/admin'}
-            >
-              관리자
-            </Link>
-          </li>
-        )}
         {isLoggedIn ? (
           <>
             <li>
