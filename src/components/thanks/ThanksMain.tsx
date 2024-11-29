@@ -10,6 +10,9 @@ import ThanksWriteForm from './ThanksWriteForm';
 
 const ThanksMain = () => {
   const thanksListType = useThanksListStore(state => state.thanksListType);
+  const setThanksListType = useThanksListStore(
+    state => state.setThanksListType,
+  );
   const thanksListOrder = useThanksListStore(state => state.thanksListOrder);
 
   const { data, fetchNextPage, hasNextPage, isLoading } = useThanksListQuery(
@@ -20,6 +23,10 @@ const ThanksMain = () => {
   const { ref, inView } = useInView();
 
   useEffect(() => {
+    if (thanksListType !== 'all') {
+      setThanksListType('all');
+    }
+
     if (inView && hasNextPage && !isLoading) {
       fetchNextPage();
     }
