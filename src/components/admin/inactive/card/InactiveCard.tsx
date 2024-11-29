@@ -15,8 +15,6 @@ const InactiveCardList = () => {
     '',
   );
 
-  console.log(data);
-
   const { ref, inView } = useInView();
 
   const queryClient = useQueryClient();
