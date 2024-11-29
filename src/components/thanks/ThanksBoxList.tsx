@@ -1,28 +1,20 @@
-import { useThanksListStore } from '@/stores/thanks/thanksListTypeStore';
-import { useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
 import Loading from '../common/Loading';
-import ThanksBox from './ThanksBox';
-import { useThanksListQuery } from './handlers/useThanksListQuery';
+import ThanksBox, { ThanksBoxProps } from './ThanksBox';
 import styles from './styles/thanks.module.css';
 
-const ThanksBoxList = () => {
-  const thanksListType = useThanksListStore(state => state.thanksListType);
-  const thanksListOrder = useThanksListStore(state => state.thanksListOrder);
+interface ThanksBoxListProps {
+  data: any;
+  ref: any;
+  hasNextPage: boolean;
+  isLoading: boolean;
+}
 
-  const { data, fetchNextPage, hasNextPage, isLoading } = useThanksListQuery(
-    thanksListType,
-    thanksListOrder,
-  );
-
-  const { ref, inView } = useInView();
-
-  useEffect(() => {
-    if (inView && hasNextPage && !isLoading) {
-      fetchNextPage();
-    }
-  }, [inView]);
-
+const ThanksBoxList = ({
+  data,
+  ref,
+  hasNextPage,
+  isLoading,
+}: ThanksBoxListProps) => {
   return (
     <ul className={styles.thanksBoxList}>
       {hasNextPage && (
@@ -33,7 +25,7 @@ const ThanksBoxList = () => {
       {isLoading ? (
         <Loading color={'#222222'} />
       ) : data && data?.items.length > 0 ? (
-        data?.items.map((thanksBox, index) => (
+        data?.items.map((thanksBox: ThanksBoxProps, index: number) => (
           <li key={index}>
             <ThanksBox {...thanksBox} />
           </li>
