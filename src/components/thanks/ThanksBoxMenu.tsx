@@ -109,7 +109,9 @@ const ThanksBoxMenu = ({
       queryClient.invalidateQueries({ queryKey: ['thanks', thanksListType] });
     },
     onError: (error: any) => {
-      if (error.status === 401) {
+      if (error.status === 404) {
+        pushAlertQueue('존재하지 않는 감사메시지입니다.', 'failure');
+      } else if (error.status === 401) {
         pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
       } else {
         pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');

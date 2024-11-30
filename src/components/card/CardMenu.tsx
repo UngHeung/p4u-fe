@@ -175,7 +175,7 @@ const CardMenu = ({
               }}
               disabled={disabled}
             >
-              {isActive ? '활성화' : '비활성화'}
+              {isActive ? '비활성화' : '활성화'}
             </button>
           </li>
           <li>
