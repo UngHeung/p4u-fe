@@ -127,6 +127,10 @@ const SignIn = () => {
             disabled={disabled}
           />
         </div>
+
+        <div className={style.forgotPasswordLink}>
+          <Link href={'/forgot'}>비밀번호를 잊으셨나요?</Link>
+        </div>
       </section>
     </form>
   );
