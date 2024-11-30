@@ -79,3 +79,10 @@
 .button:disabled {
   background-color: var(--color-button-back);
 }
+
+.forgotPasswordLink {
+  margin-top: 10px;
+  color: var(--color-placeholder);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
+}
