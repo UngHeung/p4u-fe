@@ -179,7 +179,7 @@ const ForgotPassword = () => {
             id={'submitButton'}
             type={'submit'}
             value={{
-              text: `${recievedResetCode ? '재설정' : '찾기'}`,
+              text: `${recievedResetCode ? '재설정' : '인증번호'}`,
               icon: svgIcons.enter('medium'),
             }}
             className={`${style.button} ${style.submit}`}
