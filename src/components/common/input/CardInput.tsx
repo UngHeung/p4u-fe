@@ -9,7 +9,7 @@ const CardInput = ({
   name,
   className,
   onChange,
-  readonly,
+  readOnly,
   placeholder,
   value,
   setValue,
@@ -21,7 +21,7 @@ const CardInput = ({
       name={name}
       className={className ?? ''}
       onChange={onChange}
-      readonly={readonly}
+      readOnly={readOnly}
       placeholder={placeholder}
       value={value}
       setValue={setValue}
