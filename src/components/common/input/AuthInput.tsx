@@ -12,10 +12,12 @@ const AuthInput = ({
   type,
   className,
   onChange,
+  value,
   labelValue,
   labelClass,
   maxLength,
   readOnly,
+  setValue,
 }: AuthinputProps) => {
   return (
     <BaseInput
@@ -25,9 +27,11 @@ const AuthInput = ({
       className={`${style.authInput}${className ? ' ' + className : ''}`}
       readOnly={readOnly}
       onChange={onChange}
+      value={value}
       labelValue={labelValue}
       labelClass={`${style.authInputLabel}${labelClass ? ' ' + labelClass : ''}`}
       maxLength={maxLength}
+      setValue={setValue}
     />
   );
 };
