@@ -7,7 +7,9 @@ export interface BaseInputProps {
   name: string;
   type: BaseInputTypes;
   className: string;
-  readonly?: boolean;
+  readOnly?: boolean;
+  minLength?: number;
+  maxLength?: number;
   onChange?: (event?: ChangeEvent<HTMLInputElement>) => void;
   labelValue?: string;
   labelClass?: string;
@@ -21,13 +23,15 @@ const BaseInput = ({
   name,
   onChange,
   type,
-  readonly,
+  readOnly,
   className,
   labelValue,
   labelClass,
   placeholder,
   value,
   setValue,
+  maxLength,
+  minLength,
 }: BaseInputProps) => {
   const [baseValue, setBaseValue] = useState('');
 
@@ -45,6 +49,8 @@ const BaseInput = ({
         type={type}
         className={className}
         placeholder={placeholder}
+        maxLength={maxLength}
+        minLength={minLength}
         onChange={event => {
           if (setValue) {
             setValue(event.target.value);
@@ -56,7 +62,7 @@ const BaseInput = ({
             onChange();
           }
         }}
-        readOnly={readonly ?? false}
+        readOnly={readOnly ?? false}
       />
     </>
   );

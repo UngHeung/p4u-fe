@@ -20,7 +20,7 @@ const MainNav = () => {
   const pushAlertQueue = useAlertStore(
     (state: AlertStore) => state.pushAlertQueue,
   );
-
+  const user = useUserStore((state: UserStore) => state.user);
   const setIsLoggedIn = useUserStore((state: UserStore) => state.setIsLoggedIn);
   const isLoggedIn = useUserStore((state: UserStore) => state.isLoggedIn);
 
@@ -56,6 +56,12 @@ const MainNav = () => {
       <ul className={`${style.mainNav}${isMenuOpen ? ' ' + style.open : ''}`}>
         {isLoggedIn ? (
           <>
+            <li>
+              <Link href={'/my'} onClick={() => setIsMenuOpen(false)}>
+                <strong className={style.userName}>{user?.name}</strong>
+              </Link>
+              <span className={style.welcome}>님 환영합니다.</span>
+            </li>
             <li>
               <Link href={'/card/write'} onClick={() => setIsMenuOpen(false)}>
                 기도카드쓰기

@@ -36,12 +36,21 @@ export enum ERROR_MESSAGE_ENUM {
   FORBIDDEN_EXCEPTION = '권한이 없습니다.',
   UNAUTHENTICATED_EXCEPTION = '로그인이 필요합니다.',
   UNAUTHORIZED_EXCEPTION = '아이디 또는 비밀번호를 확인해주세요.',
+
+  NOT_FOUND_USER = '존재하지 않는 유저입니다.',
+  NOT_FOUND_EMAIL = '존재하지 않는 이메일입니다.',
+  NOT_FOUND_RESET_CODE = '존재하지 않는 재설정 코드입니다.',
+
+  UNAUTHORIZED_RESET_CODE = '재설정 코드가 만료되었습니다.',
+  UNAUTHORIZED_PASSWORD = '비밀번호가 일치하지 않습니다.',
+  UNAUTHORIZED_EMAIL = '이메일이 일치하지 않습니다.',
 }
 
 export enum SUCCESS_MESSAGE_ENUM {
   SUCCESS_SIGN_IN = '로그인 성공!\n환영합니다.',
   SUCCESS_SIGN_UP = '회원가입 성공!\n축하합니다.',
   SUCCESS_WRITE_CARD = '카드가 등록되었습니다.',
+  SUCCESS_RESET_PASSWORD = '비밀번호가 변경되었습니다.',
 }
 
 export enum FAILURE_MESSAGE_ENUM {
@@ -54,9 +63,12 @@ export enum VALIDATION_MESSAGE_ENUM {
   EMPTY_NAME = '이름을 입력해주세요.',
   EMPTY_ID = '아이디를 입력해주세요.',
   EMPTY_PASSWORD = '비밀번호를 입력해주세요.',
+  EMPTY_NEW_PASSWORD = '새로운 비밀번호를 입력해주세요.',
+  EMPTY_EMAIL = '이메일을 입력해주세요.',
   EMPTY_CARD_TITLE = '제목을 입력해주세요.',
   EMPTY_CARD_CONTENT = '내용을 입력해주세요.',
   EMPTY_TAG_KEYWORD = '태그는 공백 없이\n최소 2자~8자로 입력해주세요.',
+  EMPTY_RESET_CODE = '재설정 코드를 입력해주세요.',
 
   WRONG_ID = '아이디는 영문 소문자와 숫자\n6자~12자로 입력해주세요.',
   WRONG_NAME = '이름은 한글 또는 영문\n2~12자로 입력해주세요.',
@@ -67,4 +79,8 @@ export enum VALIDATION_MESSAGE_ENUM {
   WRONG_FULL_CARD_TAGS_LIST = '태그는 최대 5개까지 등록이 가능합니다.',
   WRONG_TAG_KEYWORD = '태그는 최소 2자~8자로\n입력해주세요.',
   WRONG_IS_ALEADY_TAG = '이미 등록된 태그입니다.',
+}
+
+export enum NOTIFICATION_MESSAGE_ENUM {
+  NOTIFICATION_SEND_EMAIL_FORGOT_PASSWORD = '비밀번호 변경을 위한\n메일이 전송되었습니다.',
 }
