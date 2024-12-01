@@ -159,6 +159,19 @@
     z-index: 99;
   }
 
+  .userName {
+    color: #ffffff;
+    margin-right: 3px;
+    text-decoration: 2px dashed underline;
+    text-underline-offset: 3px;
+  }
+
+  .welcome {
+    color: #ffffff;
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-medium);
+  }
+
   .mainNav li>a {
     color: #fff;
     font-size: var(--font-size-18);
