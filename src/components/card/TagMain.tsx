@@ -29,7 +29,7 @@ const TagMain = ({
           type={'text'}
           name={'tag'}
           id={'tag'}
-          placeholder={'#태그를 추가해주세요. (최대 5개)'}
+          placeholder={'#태그를 추가해주세요. (샾# 제외, 최대 5개)'}
           maxLength={8}
           value={tag}
           onChange={event => setTag(event.target.value)}
