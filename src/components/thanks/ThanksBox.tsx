@@ -50,7 +50,9 @@ const ThanksBox = ({
         }`}
       >
         <section className={styles.thanksBoxInfo}>
-          <span className={styles.thanksBoxWriter}>{writer.name}</span>
+          <span className={styles.thanksBoxWriter}>
+            {writer.isShowNickname ? writer.nickname : writer.name}
+          </span>
           <span className={styles.thanksBoxTime}>
             {`${updatedAt !== createdAt ? getTimeAgo(updatedAt) + ' 수정됨' : getTimeAgo(createdAt)}`}
           </span>
