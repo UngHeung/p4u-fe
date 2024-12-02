@@ -1,5 +1,6 @@
 export enum TargetTypeEnum {
   LOGIN = '로그인',
+  LOGOUT = '로그아웃',
   SIGNUP = '회원가입',
   USER = '유저',
   ID = '아이디',
@@ -44,6 +45,7 @@ export enum TargetTypeEnum {
   THANKS_REPORT_RESET = '감사 신고 초기화',
   THANKS_REACTION = '리액션',
   THANKS_REACTION_CANCEL = '리액션 취소',
+  DELETE_UNUSED_TAG = '미사용 태그 삭제',
 }
 
 export enum AlertTypeEnum {
@@ -68,6 +70,7 @@ export enum ReasonTypeEnum {
   TAG_LENGTH = '태그 길이가 올바르지 않습니다.',
   TAG_COUNT = '태그 개수가 올바르지 않습니다.',
   THANKS_LENGTH = '감사 길이가 올바르지 않습니다.',
+  ALREADY_REPORTED = '이미 신고한 게시물입니다.',
 }
 
 export enum SolutionTypeEnum {
@@ -81,4 +84,5 @@ export enum SolutionTypeEnum {
   TAG_LENGTH = '태그 길이는 2자 이상 8자 이하입니다.',
   TAG_COUNT = '태그 개수는 1개 이상 5개 이하입니다.',
   THANKS_LENGTH = '감사 길이는 2자 이상 100자 이하입니다.',
+  ALREADY_REPORTED = '한 게시물에 한 번만 신고할 수 있습니다.',
 }

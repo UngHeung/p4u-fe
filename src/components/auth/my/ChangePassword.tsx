@@ -1,12 +1,8 @@
 import { authAxios } from '@/apis/axiosInstance';
-import {
-  ERROR_MESSAGE_ENUM,
-  VALIDATION_MESSAGE_ENUM,
-} from '@/components/alert/constants/message.enum';
+import useAlert from '@/components/common/alert/useAlert';
 import MainButton from '@/components/common/button/MainButton';
 import { svgIcons } from '@/components/common/functions/getSvg';
 import AuthInput from '@/components/common/input/AuthInput';
-import { useAlertStore } from '@/stores/alert/alertStore';
 import { Dispatch, SetStateAction, useState } from 'react';
 import style from '../styles/my.module.css';
 
@@ -15,7 +11,7 @@ const ChangePassword = ({
 }: {
   setIsOnChangePassword: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const pushAlertQueue = useAlertStore(state => state.pushAlertQueue);
+  const { pushAlert } = useAlert();
 
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -29,13 +25,23 @@ const ChangePassword = ({
     setDisabled(true);
 
     if (!password) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_PASSWORD, 'failure');
+      pushAlert({
+        target: 'PASSWORD',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       setDisabled(false);
       return;
     }
 
     if (!newPassword) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_NEW_PASSWORD, 'failure');
+      pushAlert({
+        target: 'PASSWORD',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       setDisabled(false);
       return;
     }
@@ -47,16 +53,20 @@ const ChangePassword = ({
       });
 
       if (response.status === 200) {
-        pushAlertQueue('비밀번호가 변경되었습니다.', 'success');
+        pushAlert({
+          target: 'PASSWORD',
+          type: 'SUCCESS',
+          status: 200,
+        });
         setIsOnChangePassword(false);
       }
     } catch (error: any) {
-      if (error.status === 401) {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHORIZED_PASSWORD, 'failure');
-      } else {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
-        console.error(error);
-      }
+      pushAlert({
+        target: 'PASSWORD',
+        type: 'FAILURE',
+        status: error.status,
+        reason: error.status === 401 ? 'UNAUTHORIZED' : 'INTERNAL_SERVER_ERROR',
+      });
     } finally {
       setDisabled(false);
     }

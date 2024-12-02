@@ -1,9 +1,9 @@
 import { authAxios } from '@/apis/axiosInstance';
-import { useAlertStore } from '@/stores/alert/alertStore';
 import { useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { useUserStore } from '@/stores/user/userStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SetStateAction, useState } from 'react';
+import useAlert from '../common/alert/useAlert';
 import { CardProps } from './Card';
 import style from './styles/card.module.css';
 
@@ -20,7 +20,8 @@ const CardMenu = ({
 }) => {
   const cardListType = useCardTypeStore(state => state.cardListType);
   const user = useUserStore(state => state.user);
-  const pushAlertQueue = useAlertStore(state => state.pushAlertQueue);
+
+  const { pushAlert } = useAlert();
 
   const [disabled, setDisabled] = useState(false);
 
@@ -31,19 +32,28 @@ const CardMenu = ({
       return await authAxios.patch(`/card/${card.id}/report`);
     },
     onSuccess: () => {
-      pushAlertQueue('신고가 완료되었습니다.', 'success');
+      pushAlert({
+        target: 'CARD_REPORT',
+        type: 'SUCCESS',
+        status: 200,
+      });
     },
     onError: (error: any) => {
-      console.error(error);
-      if (error.status === 409) {
-        pushAlertQueue('이미 신고한 기도제목입니다.', 'failure');
-      } else if (error.status === 403 || error.status === 401) {
-        pushAlertQueue('권한이 없습니다.', 'failure');
-      } else {
-        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
-      }
+      pushAlert({
+        target: 'CARD_REPORT',
+        type: 'FAILURE',
+        status: error.status,
+        reason:
+          error.status === 409
+            ? 'ALREADY_REPORTED'
+            : error.status === 403 || error.status === 401
+              ? 'UNAUTHORIZED'
+              : 'INTERNAL_SERVER_ERROR',
+      });
     },
-    onSettled: () => {},
+    onSettled: () => {
+      setDisabled(false);
+    },
   });
 
   const handleResetReportMutation = useMutation({
@@ -51,17 +61,26 @@ const CardMenu = ({
       return await authAxios.patch(`/card/${card.id}/reporter/reset`);
     },
     onSuccess: () => {
-      pushAlertQueue('신고 초기화가 완료되었습니다.', 'success');
+      pushAlert({
+        target: 'CARD_REPORT_RESET',
+        type: 'SUCCESS',
+        status: 200,
+      });
     },
     onError: (error: any) => {
-      console.error(error);
-      if (error.status === 403 || error.status === 401) {
-        pushAlertQueue('권한이 없습니다.', 'failure');
-      } else {
-        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
-      }
+      pushAlert({
+        target: 'CARD_REPORT_RESET',
+        type: 'FAILURE',
+        status: error.status,
+        reason:
+          error.status === 403 || error.status === 401
+            ? 'UNAUTHORIZED'
+            : 'INTERNAL_SERVER_ERROR',
+      });
     },
-    onSettled: () => {},
+    onSettled: () => {
+      setDisabled(false);
+    },
   });
 
   const handleActivateMutation = useMutation({
@@ -71,23 +90,29 @@ const CardMenu = ({
 
       return await authAxios.patch(url);
     },
-    onSuccess: (data: any) => {
-      pushAlertQueue(
-        `${data.data.isActive ? '활성화' : '비활성화'}가 완료되었습니다.`,
-        'success',
-      );
+    onSuccess: () => {
+      pushAlert({
+        target: 'CARD_ACTIVATE',
+        type: 'SUCCESS',
+        status: 200,
+      });
       queryClient.invalidateQueries({ queryKey: ['cards', cardListType] });
     },
     onError: (error: any) => {
       setIsActive(prev => !prev);
-      console.error(error);
-      if (error.status === 403 || error.status === 401) {
-        pushAlertQueue('권한이 없습니다.', 'failure');
-      } else {
-        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
-      }
+      pushAlert({
+        target: 'CARD_ACTIVATE',
+        type: 'FAILURE',
+        status: error.status,
+        reason:
+          error.status === 403 || error.status === 401
+            ? 'UNAUTHORIZED'
+            : 'INTERNAL_SERVER_ERROR',
+      });
     },
-    onSettled: () => {},
+    onSettled: () => {
+      setDisabled(false);
+    },
   });
 
   const handleDeleteMutation = useMutation({
@@ -95,18 +120,27 @@ const CardMenu = ({
       return await authAxios.delete(`/card/${card.id}/delete`);
     },
     onSuccess: () => {
-      pushAlertQueue('삭제가 완료되었습니다.', 'success');
+      pushAlert({
+        target: 'CARD_DELETE',
+        type: 'SUCCESS',
+        status: 200,
+      });
       queryClient.invalidateQueries({ queryKey: ['cards', cardListType] });
     },
     onError: (error: any) => {
-      console.error(error);
-      if (error.status === 403 || error.status === 401) {
-        pushAlertQueue('권한이 없습니다.', 'failure');
-      } else {
-        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
-      }
+      pushAlert({
+        target: 'CARD_DELETE',
+        type: 'FAILURE',
+        status: error.status,
+        reason:
+          error.status === 403 || error.status === 401
+            ? 'UNAUTHORIZED'
+            : 'INTERNAL_SERVER_ERROR',
+      });
     },
-    onSettled: () => {},
+    onSettled: () => {
+      setDisabled(false);
+    },
   });
 
   return (
@@ -122,7 +156,6 @@ const CardMenu = ({
                 setDisabled(true);
                 handleReportMutation.mutate();
                 setIsMenuOpen(false);
-                setDisabled(false);
               }}
               disabled={disabled}
             >
@@ -138,7 +171,6 @@ const CardMenu = ({
                 setDisabled(true);
                 handleDeleteMutation.mutate();
                 setIsMenuOpen(false);
-                setDisabled(false);
               }}
               disabled={disabled}
             >
@@ -156,7 +188,6 @@ const CardMenu = ({
                 setDisabled(true);
                 handleResetReportMutation.mutate();
                 setIsMenuOpen(false);
-                setDisabled(false);
               }}
               disabled={disabled}
             >
@@ -167,11 +198,10 @@ const CardMenu = ({
             <button
               type={'button'}
               onClick={event => {
-                setDisabled(true);
                 event.stopPropagation();
+                setDisabled(true);
                 handleActivateMutation.mutate();
                 setIsMenuOpen(false);
-                setDisabled(false);
               }}
               disabled={disabled}
             >
@@ -186,7 +216,6 @@ const CardMenu = ({
                 setDisabled(true);
                 handleDeleteMutation.mutate();
                 setIsMenuOpen(false);
-                setDisabled(false);
               }}
             >
               {'삭제'}

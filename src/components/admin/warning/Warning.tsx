@@ -1,12 +1,10 @@
 import { authAxios } from '@/apis/axiosInstance';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
+import useAlert from '@/components/common/alert/useAlert';
 import { useState } from 'react';
 import style from '../styles/admin.module.css';
 
 const WarningSection = () => {
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
+  const { pushAlert } = useAlert();
 
   const [disabled, setDisabled] = useState(false);
 
@@ -16,14 +14,19 @@ const WarningSection = () => {
       const response = await authAxios.delete(`/tag/clear`);
 
       if (response.status === 200) {
-        pushAlertQueue('미사용 태그 삭제가 완료되었습니다.', 'success');
+        pushAlert({
+          target: 'DELETE_UNUSED_TAG',
+          type: 'SUCCESS',
+          status: 200,
+        });
       }
     } catch (error: any) {
-      if (error.status === 403) {
-        pushAlertQueue('권한이 없습니다.', 'failure');
-      } else {
-        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
-      }
+      pushAlert({
+        target: 'TAG',
+        type: 'FAILURE',
+        status: error.status,
+        reason: error.status === 403 ? 'FORBIDDEN' : 'INTERNAL_SERVER_ERROR',
+      });
     } finally {
       setDisabled(false);
     }

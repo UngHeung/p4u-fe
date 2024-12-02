@@ -13,7 +13,8 @@ export type ReasonTypes =
   | 'NOT_FOUND_USER'
   | 'TAG_LENGTH'
   | 'TAG_COUNT'
-  | 'THANKS_LENGTH';
+  | 'THANKS_LENGTH'
+  | 'ALREADY_REPORTED';
 
 export type SolutionTypes =
   | 'BAD_REQUEST'
@@ -25,6 +26,7 @@ export type SolutionTypes =
 
 export type TargetTypes =
   | 'LOGIN'
+  | 'LOGOUT'
   | 'SIGNUP'
   | 'USER'
   | 'ID'
@@ -58,9 +60,14 @@ export type TargetTypes =
   | 'CARD_ANSWERED'
   | 'CARD_ANSWERED_CANCEL'
   | 'TAG'
+  | 'DELETE_UNUSED_TAG'
   | 'THANKS_WRITE'
   | 'THANKS_EDIT'
   | 'THANKS_DELETE'
+  | 'THANKS_ACTIVATE'
+  | 'THANKS_DEACTIVATE'
+  | 'THANKS_REPORT'
+  | 'THANKS_REPORT_RESET'
   | 'THANKS_PICK'
   | 'THANKS_UNPICK'
   | 'THANKS_REACTION'

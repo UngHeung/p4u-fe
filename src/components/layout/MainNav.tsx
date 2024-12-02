@@ -1,11 +1,11 @@
 import { baseAxios } from '@/apis/axiosInstance';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { CardTypeStore, useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { UserStore, useUserStore } from '@/stores/user/userStore';
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import useAlert from '../common/alert/useAlert';
 import BaseButton from '../common/button/BaseButton';
 import { setToken } from '../common/constants/accessToken';
 import { svgIcons } from '../common/functions/getSvg';
@@ -13,12 +13,10 @@ import style from './styles/layout.module.css';
 
 const MainNav = () => {
   const router = useRouter();
+  const { pushAlert } = useAlert();
 
   const setCardTypeStore = useCardTypeStore(
     (state: CardTypeStore) => state.setCardListType,
-  );
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
   );
   const user = useUserStore((state: UserStore) => state.user);
   const setIsLoggedIn = useUserStore((state: UserStore) => state.setIsLoggedIn);
@@ -33,7 +31,11 @@ const MainNav = () => {
       const response = await baseAxios.post(`/auth/logout`);
 
       if (response.status === 201) {
-        pushAlertQueue('로그아웃이 완료되었습니다.', 'success');
+        pushAlert({
+          target: 'LOGOUT',
+          type: 'SUCCESS',
+          status: 201,
+        });
       }
     } catch (error: any) {
       console.error(error);
