@@ -1,16 +1,10 @@
 'use client';
 
 import { baseAxios } from '@/apis/axiosInstance';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import {
-  ERROR_MESSAGE_ENUM,
-  NOTIFICATION_MESSAGE_ENUM,
-  SUCCESS_MESSAGE_ENUM,
-  VALIDATION_MESSAGE_ENUM,
-} from '../alert/constants/message.enum';
+import useAlert from '../common/alert/useAlert';
 import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
 import AuthInput from '../common/input/AuthInput';
@@ -18,9 +12,7 @@ import style from './styles/sign.module.css';
 
 const ForgotPassword = () => {
   const router = useRouter();
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
+  const { pushAlert } = useAlert();
 
   const [disabled, setDisabled] = useState(false);
   const [recievedResetCode, setRecievedResetCode] = useState(false);
@@ -42,14 +34,13 @@ const ForgotPassword = () => {
       newPassword: '',
     };
 
-    if (!data.account) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_ID, 'failure');
-      setDisabled(false);
-      return;
-    }
-
-    if (!data.email) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_EMAIL, 'failure');
+    if (!data.account || !data.email) {
+      pushAlert({
+        target: !data.account ? 'ID' : 'EMAIL',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       setDisabled(false);
       return;
     }
@@ -59,13 +50,23 @@ const ForgotPassword = () => {
       newData.newPassword = formData.get('newPassword') as string;
 
       if (!newData.resetCode) {
-        pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_RESET_CODE, 'failure');
+        pushAlert({
+          target: 'RESET_CODE',
+          type: 'FAILURE',
+          status: 400,
+          reason: 'NOT_FOUND',
+        });
         setDisabled(false);
         return;
       }
 
       if (!newData.newPassword) {
-        pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_PASSWORD, 'failure');
+        pushAlert({
+          target: 'RESET_PASSWORD',
+          type: 'FAILURE',
+          status: 400,
+          reason: 'NOT_FOUND',
+        });
         setDisabled(false);
         return;
       }
@@ -83,35 +84,47 @@ const ForgotPassword = () => {
 
       if (response.status === 200 || response.status === 201) {
         if (recievedResetCode) {
-          pushAlertQueue(
-            SUCCESS_MESSAGE_ENUM.SUCCESS_RESET_PASSWORD,
-            'success',
-          );
+          pushAlert({
+            target: 'RESET_PASSWORD',
+            type: 'SUCCESS',
+            status: response.status,
+          });
+
           router.push('/');
         } else {
-          pushAlertQueue(
-            NOTIFICATION_MESSAGE_ENUM.NOTIFICATION_SEND_EMAIL_FORGOT_PASSWORD,
-            'notification',
-          );
+          pushAlert({
+            target: 'EMAIL',
+            type: 'SUCCESS',
+            status: response.status,
+          });
+
           setRecievedResetCode(true);
         }
       }
     } catch (error: any) {
-      if (error.response.status === 404) {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.NOT_FOUND_USER, 'failure');
-      } else if (error.response.status === 401) {
-        if (recievedResetCode) {
-          pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHORIZED_RESET_CODE, 'failure');
-        } else {
-          pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHORIZED_EMAIL, 'failure');
-        }
-      } else if (error.response.status === 403) {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHORIZED_RESET_CODE, 'failure');
-      } else if (error.response.status === 400) {
-        pushAlertQueue('아이디 또는 이메일을 확인해주세요.', 'failure');
-      } else {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
-      }
+      const errMessage = error.response.data.message + '';
+      const target = errMessage.startsWith('인증 코드')
+        ? 'RESET_CODE'
+        : errMessage.startsWith('이메일')
+          ? 'EMAIL'
+          : errMessage.startsWith('password')
+            ? 'PASSWORD'
+            : 'ID';
+      const reason =
+        error.status === 400
+          ? 'BAD_REQUEST'
+          : error.status === 404
+            ? 'NOT_FOUND'
+            : error.status === 401
+              ? 'UNAUTHORIZED'
+              : 'INTERNAL_SERVER_ERROR';
+
+      pushAlert({
+        target,
+        type: 'FAILURE',
+        status: error.status,
+        reason,
+      });
     } finally {
       setDisabled(false);
     }

@@ -1,27 +1,21 @@
 'use client';
 
-import icons from '@/public/icons/icon.png';
-import {
-  AlertProps,
-  AlertStore,
-  useAlertStore,
-} from '@/stores/alert/alertStore';
-import Image from 'next/image';
+import { AlertProps } from '../common/alert/const/alertInterface';
+import useAlert from '../common/alert/useAlert';
+import { svgIcons } from '../common/functions/getSvg';
 import style from './styles/alert.module.css';
 
-const Alert = ({ message, index, type, isExiting }: AlertProps) => {
-  const deleteAlertQueue = useAlertStore(
-    (state: AlertStore) => state.deleteAlertQueue,
-  );
+const Alert = ({ message, index, type }: AlertProps) => {
+  const { deleteAlert } = useAlert();
 
   return (
     <article
-      className={`${style.alertWrap}${isExiting ? ' ' + style.fadeOut : ''}`}
+      className={style.alertWrap}
       style={{
         backgroundColor:
-          type === 'success'
+          type === 'SUCCESS'
             ? '#00695C'
-            : type === 'failure'
+            : type === 'FAILURE'
               ? '#E53935'
               : '#FFA000',
       }}
@@ -29,16 +23,10 @@ const Alert = ({ message, index, type, isExiting }: AlertProps) => {
       <span
         className={style.alertIcon}
         onClick={() => {
-          deleteAlertQueue(index!);
+          deleteAlert(index!);
         }}
       >
-        <Image
-          src={icons}
-          alt={'태그_아이콘'}
-          width={120}
-          height={100}
-          sizes="100%"
-        />
+        {svgIcons.close('#FFFFFF')}
       </span>
       <pre className={style.alertMessage}>{message}</pre>
     </article>

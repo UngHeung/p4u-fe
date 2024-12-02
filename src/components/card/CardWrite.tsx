@@ -14,18 +14,16 @@ import CardInput from '../common/input/CardInput';
 import CardTextarea from '../common/textarea/CardTextarea';
 import style from './styles/card.module.css';
 import TagMain from './TagMain';
+import useAlert from '../common/alert/useAlert';
 
 const CardWrite = () => {
   const router = useRouter();
+  const { pushAlert } = useAlert();
 
   const [isAnonymity, setIsAnonymity] = useState(false);
   const [tag, setTag] = useState('');
   const [tagList, setTagList] = useState<string[]>([]);
   const [disabled, setDisabled] = useState(false);
-
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
 
   const handleWriteCardOnMutation = useMutation({
     mutationFn: (data: {
@@ -39,14 +37,26 @@ const CardWrite = () => {
       return authAxios.post(`/card/new`, data);
     },
     onSuccess: () => {
-      pushAlertQueue(SUCCESS_MESSAGE_ENUM.SUCCESS_WRITE_CARD, 'success');
+      pushAlert({
+        target: 'CARD_WRITE',
+        type: 'SUCCESS',
+        status: 200,
+      });
       router.push('/card/list');
     },
     onError: (error: any) => {
       if (error?.status === 401) {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
+        pushAlert({
+          target: 'CARD_WRITE',
+          type: 'FAILURE',
+          status: 401,
+        });
       } else {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
+        pushAlert({
+          target: 'CARD_WRITE',
+          type: 'FAILURE',
+          status: 500,
+        });
       }
     },
     onSettled: () => {
@@ -67,22 +77,34 @@ const CardWrite = () => {
     };
 
     if (!data.title) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_CARD_TITLE, 'failure');
+      pushAlert({
+        target: 'TITLE',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       setDisabled(false);
       return;
     }
 
     if (!data.content) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_CARD_CONTENT, 'failure');
+      pushAlert({
+        target: 'CONTENT',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       setDisabled(false);
       return;
     }
 
     if (!data.keywords.length) {
-      pushAlertQueue(
-        VALIDATION_MESSAGE_ENUM.WRONG_EMPTY_CARD_TAGS_LIST,
-        'failure',
-      );
+      pushAlert({
+        target: 'TAG',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'TAG_COUNT',
+      });
       setDisabled(false);
       return;
     }
@@ -134,7 +156,6 @@ const CardWrite = () => {
             setTag={setTag}
             tagList={tagList}
             setTagList={setTagList}
-            pushAlertQueue={pushAlertQueue}
           />
         </div>
         <section className={style.buttonWrap}>

@@ -1,16 +1,11 @@
 'use client';
 
 import { baseAxios } from '@/apis/axiosInstance';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 
-import {
-  FAILURE_MESSAGE_ENUM,
-  SUCCESS_MESSAGE_ENUM,
-  VALIDATION_MESSAGE_ENUM,
-} from '../alert/constants/message.enum';
+import useAlert from '../common/alert/useAlert';
 import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
 import AuthInput from '../common/input/AuthInput';
@@ -19,9 +14,7 @@ import style from './styles/sign.module.css';
 
 const SignUp = () => {
   const router = useRouter();
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
+  const { pushAlert } = useAlert();
 
   const [opacity, setOpacity] = useState('1');
   const [zIndex, setZIndex] = useState('2');
@@ -40,19 +33,34 @@ const SignUp = () => {
     };
 
     if (!data.name) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_NAME, 'failure');
+      pushAlert({
+        target: 'NAME',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       setDisabled(false);
       return;
     }
 
     if (!data.account) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_ID, 'failure');
+      pushAlert({
+        target: 'ID',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       setDisabled(false);
       return;
     }
 
     if (!data.password) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_PASSWORD, 'failure');
+      pushAlert({
+        target: 'PASSWORD',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       setDisabled(false);
       return;
     }
@@ -61,23 +69,27 @@ const SignUp = () => {
       const response = await baseAxios.post(`/auth/signup`, data);
 
       if (response.status === 201) {
-        pushAlertQueue(SUCCESS_MESSAGE_ENUM.SUCCESS_SIGN_UP, 'success');
+        pushAlert({
+          target: 'SIGNUP',
+          type: 'SUCCESS',
+          status: 201,
+        });
         router.push('/');
       }
     } catch (error: any) {
-      console.log(error);
-      if (error.status === 409) {
-        pushAlertQueue(FAILURE_MESSAGE_ENUM.FAILURE_CONFLICT_ID, 'failure');
-      } else if (error.status === 400) {
-        const errMessage = error.response.data.message + '';
-        if (errMessage.startsWith('name')) {
-          pushAlertQueue(VALIDATION_MESSAGE_ENUM.WRONG_NAME, 'failure');
-        } else if (errMessage.startsWith('password')) {
-          pushAlertQueue(VALIDATION_MESSAGE_ENUM.WRONG_PASSWORD, 'failure');
-        } else if (errMessage.startsWith('account')) {
-          pushAlertQueue(VALIDATION_MESSAGE_ENUM.WRONG_ID, 'failure');
-        }
-      }
+      const errMessage = error.response.data.message + '';
+      const target = errMessage.startsWith('이름')
+        ? 'NAME'
+        : errMessage.startsWith('아이디')
+          ? 'ID'
+          : 'PASSWORD';
+
+      pushAlert({
+        target,
+        type: 'FAILURE',
+        status: error.status,
+        reason: error.status === 409 ? 'DUPLICATE' : 'BAD_REQUEST',
+      });
     } finally {
       setDisabled(false);
     }

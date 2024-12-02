@@ -4,17 +4,13 @@
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  width: 250px;
+  min-width: 250px;
   height: 80px;
-  padding: 10px;
+  padding: 0 20px 0 10px;
   background-color: #E22929;
   border-radius: 20px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   animation: slideIn 0.3s ease forwards;
-}
-
-.alertWrap.fadeOut {
-  animation: fadeOut 0.3s ease forwards;
 }
 
 .alertIcon {
@@ -60,15 +56,5 @@
   to {
     transform: translateY(-20px);
     opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
   }
 }

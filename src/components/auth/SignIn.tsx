@@ -1,16 +1,11 @@
 'use client';
 
 import { baseAxios } from '@/apis/axiosInstance';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { UserStore, useUserStore } from '@/stores/user/userStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import {
-  ERROR_MESSAGE_ENUM,
-  SUCCESS_MESSAGE_ENUM,
-  VALIDATION_MESSAGE_ENUM,
-} from '../alert/constants/message.enum';
+import useAlert from '../common/alert/useAlert';
 import MainButton from '../common/button/MainButton';
 import { setToken } from '../common/constants/accessToken';
 import { svgIcons } from '../common/functions/getSvg';
@@ -23,10 +18,8 @@ import style from './styles/sign.module.css';
 
 const SignIn = () => {
   const router = useRouter();
+  const { pushAlert } = useAlert();
 
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
   const setUser = useUserStore((state: UserStore) => state.setUser);
   const setIsLoggedIn = useUserStore((state: UserStore) => state.setIsLoggedIn);
 
@@ -44,13 +37,23 @@ const SignIn = () => {
     };
 
     if (!data.account) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_ID, 'failure');
+      pushAlert({
+        target: 'ID',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       setDisabled(false);
       return;
     }
 
     if (!data.password) {
-      pushAlertQueue(VALIDATION_MESSAGE_ENUM.EMPTY_PASSWORD, 'failure');
+      pushAlert({
+        target: 'PASSWORD',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       setDisabled(false);
       return;
     }
@@ -74,16 +77,16 @@ const SignIn = () => {
       setUser(user);
       setIsLoggedIn(true);
 
-      pushAlertQueue(SUCCESS_MESSAGE_ENUM.SUCCESS_SIGN_IN, 'success');
+      pushAlert({ target: 'LOGIN', type: 'SUCCESS' });
 
       router.replace('/card/list');
     } catch (error: any) {
-      console.error(error);
-      if (error.status === 404 || error.status === 401) {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHORIZED_EXCEPTION, 'failure');
-      } else {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
-      }
+      pushAlert({
+        target: 'ID_OR_PASSWORD',
+        type: 'FAILURE',
+        status: error.status,
+        reason: error.status === 404 ? 'NOT_FOUND_USER' : 'ID_OR_PASSWORD',
+      });
     } finally {
       setDisabled(false);
     }
