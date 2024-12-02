@@ -1,9 +1,8 @@
 import { authAxios } from '@/apis/axiosInstance';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { useThanksListStore } from '@/stores/thanks/thanksListTypeStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { ERROR_MESSAGE_ENUM } from '../alert/constants/message.enum';
+import useAlert from '../common/alert/useAlert';
 import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
 import { ThanksBoxProps } from './ThanksBox';
@@ -18,9 +17,7 @@ const ThanksUpdateForm = ({
   setIsEdit: Dispatch<SetStateAction<boolean>>;
 }) => {
   const thanksListType = useThanksListStore(state => state.thanksListType);
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
+  const { pushAlert } = useAlert();
 
   const [content, setContent] = useState(currentContent);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -68,14 +65,19 @@ const ThanksUpdateForm = ({
         context?.previousThanks,
       );
 
-      if (error.status === 401) {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
-      } else {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
-      }
+      pushAlert({
+        target: 'THANKS_EDIT',
+        type: 'FAILURE',
+        status: error.status,
+        reason: error.status === 401 ? 'UNAUTHORIZED' : 'INTERNAL_SERVER_ERROR',
+      });
     },
     onSuccess: () => {
-      pushAlertQueue('감사메시지를 수정했습니다.', 'success');
+      pushAlert({
+        target: 'THANKS_EDIT',
+        type: 'SUCCESS',
+        status: 200,
+      });
 
       queryClient.invalidateQueries({ queryKey: ['thanks', thanksListType] });
     },
@@ -87,12 +89,22 @@ const ThanksUpdateForm = ({
 
   const handleThanksUpdate = () => {
     if (!content) {
-      pushAlertQueue('감사메시지를 입력해주세요.', 'failure');
+      pushAlert({
+        target: 'CONTENT',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       return;
     }
 
     if (content.length > 100) {
-      pushAlertQueue('감사메시지는 최대 100자입니다.', 'failure');
+      pushAlert({
+        target: 'CONTENT',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'THANKS_LENGTH',
+      });
       return;
     }
 

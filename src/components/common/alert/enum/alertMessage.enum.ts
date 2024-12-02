@@ -18,6 +18,9 @@ export enum TargetTypeEnum {
   NICKNAME_UPDATE = '닉네임 변경',
   MY_INFO_EDIT = '내 정보 수정',
   NO_CHANGE = '변경할 내용이 없습니다.',
+  TITLE = '제목',
+  CONTENT = '내용',
+  KEYWORDS = '키워드',
   CARD_WRITE = '카드 작성',
   CARD_DELETE = '카드 삭제',
   CARD_ACTIVATE = '카드 활성화',
@@ -25,9 +28,13 @@ export enum TargetTypeEnum {
   CARD_REPORT = '카드 신고',
   CARD_REPORT_RESET = '카드 신고 초기화',
   CARD_PICK = '카드 선택',
+  CARD_TODAY = '오늘의 카드 찾기',
   CARD_UNPICK = '카드 선택 취소',
   CARD_ANSWERED = '카드 응답',
+  CARD_ANSWERED_CANCEL = '카드 응답 취소',
   TAG = '태그',
+  TAG_LENGTH = '태그 길이가 올바르지 않습니다.',
+  TAG_COUNT = '태그 개수가 올바르지 않습니다.',
   THANKS_WRITE = '감사 작성',
   THANKS_EDIT = '감사 수정',
   THANKS_DELETE = '감사 삭제',
@@ -58,6 +65,9 @@ export enum ReasonTypeEnum {
   NOT_VERIFIED = '이메일 인증을 진행해주세요.',
   NO_CHANGE = '변경할 내용이 없습니다.',
   NOT_FOUND_USER = '유저가 존재하지 않습니다.',
+  TAG_LENGTH = '태그 길이가 올바르지 않습니다.',
+  TAG_COUNT = '태그 개수가 올바르지 않습니다.',
+  THANKS_LENGTH = '감사 길이가 올바르지 않습니다.',
 }
 
 export enum SolutionTypeEnum {
@@ -68,4 +78,7 @@ export enum SolutionTypeEnum {
   ID_OR_PASSWORD = '아이디 또는 비밀번호를 확인해주세요.',
   INTERNAL_SERVER_ERROR = '관리자에게 문의해주세요.',
   NO_CHANGE = '변경후 다시 요청해주세요.',
+  TAG_LENGTH = '태그 길이는 2자 이상 8자 이하입니다.',
+  TAG_COUNT = '태그 개수는 1개 이상 5개 이하입니다.',
+  THANKS_LENGTH = '감사 길이는 2자 이상 100자 이하입니다.',
 }

@@ -10,7 +10,10 @@ export type ReasonTypes =
   | 'INTERNAL_SERVER_ERROR'
   | 'NO_CHANGE'
   | 'NOT_VERIFIED'
-  | 'NOT_FOUND_USER';
+  | 'NOT_FOUND_USER'
+  | 'TAG_LENGTH'
+  | 'TAG_COUNT'
+  | 'THANKS_LENGTH';
 
 export type SolutionTypes =
   | 'BAD_REQUEST'
@@ -40,6 +43,9 @@ export type TargetTypes =
   | 'NICKNAME_UPDATE'
   | 'MY_INFO_EDIT'
   | 'NO_CHANGE'
+  | 'TITLE'
+  | 'CONTENT'
+  | 'KEYWORDS'
   | 'CARD_WRITE'
   | 'CARD_DELETE'
   | 'CARD_ACTIVATE'
@@ -47,8 +53,10 @@ export type TargetTypes =
   | 'CARD_REPORT'
   | 'CARD_REPORT_RESET'
   | 'CARD_PICK'
+  | 'CARD_TODAY'
   | 'CARD_UNPICK'
   | 'CARD_ANSWERED'
+  | 'CARD_ANSWERED_CANCEL'
   | 'TAG'
   | 'THANKS_WRITE'
   | 'THANKS_EDIT'

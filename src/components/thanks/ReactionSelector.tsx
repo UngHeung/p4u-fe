@@ -1,5 +1,4 @@
 import emojis from '@/public/emoji/emoji.png';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import {
   ThanksListStore,
   useThanksListStore,
@@ -7,6 +6,7 @@ import {
 import { UserProps, useUserStore } from '@/stores/user/userStore';
 import Image from 'next/image';
 import { Dispatch, SetStateAction } from 'react';
+import useAlert from '../common/alert/useAlert';
 import useReactionQuery from './handlers/useReactionQuery';
 import { MyReactionProps } from './Reaction';
 import styles from './styles/thanks.module.css';
@@ -27,16 +27,16 @@ const ReactionSelector = ({
   setIsDisabled: Dispatch<SetStateAction<boolean>>;
 }) => {
   const user = useUserStore(state => state.user);
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
+
+  const { pushAlert } = useAlert();
+
   const thanksListType = useThanksListStore(
     (state: ThanksListStore) => state.thanksListType,
   );
 
   const reactionMutation = useReactionQuery(
     reactions.length > 0 ? 'update' : 'new',
-    pushAlertQueue,
+    pushAlert,
     thanksListType,
     id,
     reactions[0]?.id,
