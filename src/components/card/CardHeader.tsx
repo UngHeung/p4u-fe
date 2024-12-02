@@ -1,8 +1,8 @@
 import { authAxios } from '@/apis/axiosInstance';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { UserProps, UserStore, useUserStore } from '@/stores/user/userStore';
 import { useMutation } from '@tanstack/react-query';
 import { SetStateAction } from 'react';
+import useAlert from '../common/alert/useAlert';
 import { svgIcons } from '../common/functions/getSvg';
 import { CardProps } from './Card';
 import style from './styles/card.module.css';
@@ -29,9 +29,7 @@ const CardHeader = ({
   setDisabled: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   const user = useUserStore((state: UserStore) => state.user);
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
+  const { pushAlert } = useAlert();
 
   const handleAnsweredOnMutation = useMutation({
     mutationFn: () => {
@@ -42,19 +40,21 @@ const CardHeader = ({
       });
     },
     onSuccess: () => {
-      pushAlertQueue(
-        `기도제목이 ${answered ? '-응답받았음-' : '-아직 응답받지 못했음-'}\n으로 표시되었습니다.`,
-        'success',
-      );
+      pushAlert({
+        target: answered ? 'CARD_ANSWERED' : 'CARD_ANSWERED_CANCEL',
+        type: 'SUCCESS',
+        status: 200,
+      });
     },
     onError: (error: any) => {
       setAnswered(prev => !prev);
 
-      if (error.status === 401) {
-        pushAlertQueue('권한이 없습니다.', 'failure');
-      } else {
-        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
-      }
+      pushAlert({
+        target: 'CARD_ANSWERED',
+        type: 'FAILURE',
+        status: error.status,
+        reason: error.status === 401 ? 'UNAUTHORIZED' : 'INTERNAL_SERVER_ERROR',
+      });
     },
     onSettled: () => {
       setDisabled(false);
@@ -75,10 +75,11 @@ const CardHeader = ({
       return authAxios.patch(`/card/${card.id}/pick`);
     },
     onSuccess: () => {
-      pushAlertQueue(
-        `기도대상${isPicker ? '으로 선택' : '에서 제외'}되었습니다.`,
-        'success',
-      );
+      pushAlert({
+        target: isPicker ? 'CARD_PICK' : 'CARD_UNPICK',
+        type: 'SUCCESS',
+        status: 200,
+      });
     },
     onError: (error: any) => {
       const existPicker = pickersState.some(picker => picker.id === user.id);
@@ -90,11 +91,12 @@ const CardHeader = ({
         setPickersState(prev => [...prev, { id: user.id }]);
       }
 
-      if (error.status === 401) {
-        pushAlertQueue('권한이 없습니다.', 'failure');
-      } else {
-        pushAlertQueue('서버에 문제가 발생했습니다.', 'failure');
-      }
+      pushAlert({
+        target: isPicker ? 'CARD_PICK' : 'CARD_UNPICK',
+        type: 'FAILURE',
+        status: error.status,
+        reason: error.status === 401 ? 'UNAUTHORIZED' : 'INTERNAL_SERVER_ERROR',
+      });
     },
     onSettled: () => {
       setDisabled(false);

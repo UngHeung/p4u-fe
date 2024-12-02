@@ -1,5 +1,5 @@
 import { authAxios } from '@/apis/axiosInstance';
-import { ERROR_MESSAGE_ENUM } from '@/components/alert/constants/message.enum';
+import { AlertMessageProps } from '@/components/common/alert/const/alertInterface';
 import { ThanksListType } from '@/stores/thanks/thanksListTypeStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction } from 'react';
@@ -26,7 +26,7 @@ const reactionMutationState: {
 
 const useReactionMutation = (
   queryType: 'new' | 'update',
-  pushAlertQueue: (message: string, type: 'success' | 'failure') => void,
+  pushAlert: ({ target, type, status, reason }: AlertMessageProps) => void,
   thanksListType: ThanksListType,
   thanksId: number,
   reactionId: number,
@@ -55,8 +55,6 @@ const useReactionMutation = (
       ]);
 
       await queryClient.cancelQueries({ queryKey: ['thanks', thanksListType] });
-
-      console.log('previousData : ', reactionMutationState.previousData);
 
       queryClient.setQueryData(
         ['thanks', thanksListType],
@@ -117,8 +115,6 @@ const useReactionMutation = (
       return reactionMutationState.previousData;
     },
     onError: async (error: any) => {
-      console.log('previousData : ', reactionMutationState.previousData);
-
       if (reactionMutationState.previousData) {
         await queryClient.setQueryData(
           ['thanks', thanksListType],
@@ -126,17 +122,21 @@ const useReactionMutation = (
         );
       }
 
-      if (error.status === 401) {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
-      } else {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
-      }
+      pushAlert({
+        target: 'THANKS_REACTION',
+        type: 'FAILURE',
+        status: error.status,
+        reason: error.status === 401 ? 'UNAUTHORIZED' : 'INTERNAL_SERVER_ERROR',
+      });
     },
     onSuccess: () => {
-      pushAlertQueue(
-        `이모지로 공감을 ${reactionMutationState.isOnReaction ? '표시' : '취소'}했습니다.`,
-        'success',
-      );
+      pushAlert({
+        target: reactionMutationState.isOnReaction
+          ? 'THANKS_REACTION'
+          : 'THANKS_REACTION_CANCEL',
+        type: 'SUCCESS',
+        status: 200,
+      });
 
       setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['thanks', thanksListType] });

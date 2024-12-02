@@ -1,11 +1,11 @@
 import emojis from '@/public/emoji/emoji.png';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import {
   ThanksListStore,
   useThanksListStore,
 } from '@/stores/thanks/thanksListTypeStore';
 import Image from 'next/image';
 import { Dispatch, SetStateAction } from 'react';
+import useAlert from '../common/alert/useAlert';
 import useReactionQuery from './handlers/useReactionQuery';
 import styles from './styles/thanks.module.css';
 
@@ -31,16 +31,14 @@ const Reaction = ({
   isDisabled: boolean;
   setIsDisabled: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
+  const { pushAlert } = useAlert();
   const thanksListType = useThanksListStore(
     (state: ThanksListStore) => state.thanksListType,
   );
 
   const reactionMutation = useReactionQuery(
     reactions.length > 0 ? 'update' : 'new',
-    pushAlertQueue,
+    pushAlert,
     thanksListType,
     id,
     reactions[0]?.id,

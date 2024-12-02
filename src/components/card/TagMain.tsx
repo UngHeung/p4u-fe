@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { VALIDATION_MESSAGE_ENUM } from '../alert/constants/message.enum';
+import useAlert from '../common/alert/useAlert';
 import { svgIcons } from '../common/functions/getSvg';
 import style from './styles/card.module.css';
 import TagList from './TagList';
@@ -9,14 +9,13 @@ const TagMain = ({
   setTag,
   tagList,
   setTagList,
-  pushAlertQueue,
 }: {
   tag: string;
   setTag: Dispatch<SetStateAction<string>>;
   tagList: string[];
   setTagList: Dispatch<SetStateAction<string[]>>;
-  pushAlertQueue: (message: string, type: 'success' | 'failure') => void;
 }) => {
+  const { pushAlert } = useAlert();
   const handleDeleteTag = (idx: number) => {
     setTagList(tagList.filter((item, i) => (idx !== i ? item : null)));
   };
@@ -44,20 +43,26 @@ const TagMain = ({
             event.preventDefault();
             setTag('');
             if (tagList.includes(tag)) {
-              pushAlertQueue(
-                VALIDATION_MESSAGE_ENUM.WRONG_IS_ALEADY_TAG,
-                'failure',
-              );
+              pushAlert({
+                target: 'TAG',
+                type: 'FAILURE',
+                status: 400,
+                reason: 'DUPLICATE',
+              });
             } else if (tagList.length === 5) {
-              pushAlertQueue(
-                VALIDATION_MESSAGE_ENUM.WRONG_FULL_CARD_TAGS_LIST,
-                'failure',
-              );
-            } else if (tag.length < 2) {
-              pushAlertQueue(
-                VALIDATION_MESSAGE_ENUM.WRONG_TAG_KEYWORD,
-                'failure',
-              );
+              pushAlert({
+                target: 'TAG',
+                type: 'FAILURE',
+                status: 400,
+                reason: 'TAG_COUNT',
+              });
+            } else if (tag.length < 2 || tag.length > 8) {
+              pushAlert({
+                target: 'TAG',
+                type: 'FAILURE',
+                status: 400,
+                reason: 'TAG_LENGTH',
+              });
             } else {
               setTagList(prev => [...prev, tag]);
             }

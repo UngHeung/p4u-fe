@@ -1,20 +1,18 @@
 import { authAxios } from '@/apis/axiosInstance';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { useThanksListStore } from '@/stores/thanks/thanksListTypeStore';
 import { useUserStore } from '@/stores/user/userStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useRef, useState } from 'react';
-import { ERROR_MESSAGE_ENUM } from '../alert/constants/message.enum';
+import useAlert from '../common/alert/useAlert';
 import { svgIcons } from '../common/functions/getSvg';
 import styles from './styles/thanks.module.css';
 import { ThanksBoxProps } from './ThanksBox';
 
 const ThanksWriteForm = () => {
   const user = useUserStore(state => state.user);
+  const { pushAlert } = useAlert();
+
   const thanksListType = useThanksListStore(state => state.thanksListType);
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
 
   const [isFocused, setIsFocused] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -80,14 +78,19 @@ const ThanksWriteForm = () => {
         context?.previousThanks,
       );
 
-      if (error.status === 401) {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.UNAUTHENTICATED_EXCEPTION, 'failure');
-      } else {
-        pushAlertQueue(ERROR_MESSAGE_ENUM.INTERNAL_SERVER_EXCEPTION, 'failure');
-      }
+      pushAlert({
+        target: 'THANKS_WRITE',
+        type: 'FAILURE',
+        status: error.status,
+        reason: error.status === 401 ? 'UNAUTHORIZED' : 'INTERNAL_SERVER_ERROR',
+      });
     },
     onSuccess: () => {
-      pushAlertQueue('오늘의 감사메시지를 등록했습니다.', 'success');
+      pushAlert({
+        target: 'THANKS_WRITE',
+        type: 'SUCCESS',
+        status: 200,
+      });
       setContent('');
 
       queryClient.invalidateQueries({ queryKey: ['thanks', thanksListType] });
@@ -101,12 +104,22 @@ const ThanksWriteForm = () => {
     event.preventDefault();
 
     if (!content) {
-      pushAlertQueue('감사메시지를 입력해주세요.', 'failure');
+      pushAlert({
+        target: 'THANKS_WRITE',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
       return;
     }
 
     if (content.length > 100) {
-      pushAlertQueue('감사메시지는 최대 100자입니다.', 'failure');
+      pushAlert({
+        target: 'THANKS_WRITE',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'THANKS_LENGTH',
+      });
       return;
     }
 
