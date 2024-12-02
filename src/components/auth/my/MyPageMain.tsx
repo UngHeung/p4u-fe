@@ -1,20 +1,18 @@
 'use client';
 
 import { authAxios } from '@/apis/axiosInstance';
+import useAlert from '@/components/common/alert/useAlert';
 import MainButton from '@/components/common/button/MainButton';
 import { svgIcons } from '@/components/common/functions/getSvg';
 import AuthInput from '@/components/common/input/AuthInput';
 import Loading from '@/components/common/Loading';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import style from '../styles/my.module.css';
 import ChangePassword from './ChangePassword';
 
 const MyPageMain = () => {
-  const pushAlertQueue = useAlertStore(
-    (state: AlertStore) => state.pushAlertQueue,
-  );
+  const { pushAlert } = useAlert();
 
   const [disabled, setDisabled] = useState(false);
   const [isOnEdit, setIsOnEdit] = useState(false);
@@ -26,8 +24,6 @@ const MyPageMain = () => {
     queryFn: async () => {
       setIsLoading(true);
       const response = await getUser();
-
-      console.log(response);
 
       setIsLoading(false);
 
@@ -63,7 +59,11 @@ const MyPageMain = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
-      pushAlertQueue('수정에 성공했습니다.', 'success');
+      pushAlert({
+        target: 'MY_INFO_EDIT',
+        type: 'SUCCESS',
+        status: 200,
+      });
 
       currentUser.nickname = nickname;
       currentUser.isShowNickname = isShowNickname;
@@ -74,9 +74,19 @@ const MyPageMain = () => {
       setIsShowNickname(currentUser.isShowNickname);
 
       if (error.status === '409') {
-        pushAlertQueue('이미 사용중인 닉네임입니다.', 'failure');
+        pushAlert({
+          target: 'NICKNAME',
+          type: 'FAILURE',
+          status: error.status,
+          reason: 'DUPLICATE',
+        });
       } else {
-        pushAlertQueue('서버에 문제가 생겼습니다.', 'failure');
+        pushAlert({
+          target: 'MY_INFO_EDIT',
+          type: 'FAILURE',
+          status: error.status,
+          reason: 'INTERNAL_SERVER_ERROR',
+        });
       }
     },
     onSettled: () => {
@@ -111,13 +121,26 @@ const MyPageMain = () => {
       });
 
       if (response.status === 200 || response.status === 201) {
-        pushAlertQueue('이메일 인증 요청에 성공했습니다.', 'success');
+        pushAlert({
+          target: 'EMAIL_VERIFICATION',
+          type: 'SUCCESS',
+          status: response.status,
+        });
       }
     } catch (error: any) {
       if (error.status === '404') {
-        pushAlertQueue('이메일 인증에 실패했습니다.', 'failure');
+        pushAlert({
+          target: 'EMAIL_VERIFICATION',
+          type: 'FAILURE',
+          status: error.status,
+        });
       } else {
-        pushAlertQueue('서버에 문제가 생겼습니다.', 'failure');
+        pushAlert({
+          target: 'EMAIL_VERIFICATION',
+          type: 'FAILURE',
+          status: error.status,
+          reason: 'INTERNAL_SERVER_ERROR',
+        });
       }
     } finally {
       setIsOnEmailAuth(true);
@@ -134,15 +157,28 @@ const MyPageMain = () => {
       });
 
       if (response.status === 200 || response.status === 201) {
-        pushAlertQueue('이메일 인증에 성공했습니다.', 'success');
+        pushAlert({
+          target: 'EMAIL_VERIFICATION',
+          type: 'SUCCESS',
+          status: response.status,
+        });
         currentUser.email = email;
         setIsPassedEmailAuth(true);
       }
     } catch (error: any) {
       if (error.status === '404') {
-        pushAlertQueue('이메일 인증에 실패했습니다.', 'failure');
+        pushAlert({
+          target: 'EMAIL_VERIFICATION',
+          type: 'FAILURE',
+          status: error.status,
+        });
       } else {
-        pushAlertQueue('서버에 문제가 생겼습니다.', 'failure');
+        pushAlert({
+          target: 'EMAIL_VERIFICATION',
+          type: 'FAILURE',
+          status: error.status,
+          reason: 'INTERNAL_SERVER_ERROR',
+        });
       }
     } finally {
       setIsOnEmailAuth(false);
@@ -156,12 +192,19 @@ const MyPageMain = () => {
       return response.data;
     } catch (error: any) {
       if (error.status === '404') {
-        pushAlertQueue('유저가 존재하지 않습니다.', 'failure');
+        pushAlert({
+          target: 'USER',
+          type: 'FAILURE',
+          status: error.status,
+          reason: 'NOT_FOUND',
+        });
       } else {
-        pushAlertQueue(
-          '데이터를 불러오는 데 실패했습니다.\n잠시 후 다시 시도해주세요.',
-          'failure',
-        );
+        pushAlert({
+          target: 'USER',
+          type: 'FAILURE',
+          status: error.status,
+          reason: 'INTERNAL_SERVER_ERROR',
+        });
       }
     }
   };
@@ -173,12 +216,33 @@ const MyPageMain = () => {
       currentUser.nickname === nickname &&
       currentUser.isShowNickname === isShowNickname
     ) {
-      pushAlertQueue('변경할 내용이 없습니다.', 'failure');
+      pushAlert({
+        target: 'MY_INFO_EDIT',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NO_CHANGE',
+      });
       return;
     }
 
     if (currentUser.email !== email && !isPassedEmailAuth) {
-      pushAlertQueue('이메일 인증을 진행해주세요.', 'failure');
+      pushAlert({
+        target: 'EMAIL_VERIFICATION',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_VERIFIED',
+      });
+      return;
+    }
+
+    if (nickname.length === 0) {
+      pushAlert({
+        target: 'NICKNAME',
+        type: 'FAILURE',
+        status: 400,
+        reason: 'NOT_FOUND',
+      });
+      setNickname(currentUser.nickname);
       return;
     }
 
@@ -297,7 +361,12 @@ const MyPageMain = () => {
                 if (nickname && nickname.length > 0) {
                   setIsShowNickname(event.target.checked);
                 } else {
-                  pushAlertQueue('별명을 입력해주세요.', 'failure');
+                  pushAlert({
+                    target: 'NICKNAME',
+                    type: 'FAILURE',
+                    status: 400,
+                    reason: 'NOT_FOUND',
+                  });
                 }
               }}
               readOnly={!isOnEdit}
