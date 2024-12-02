@@ -41,8 +41,11 @@ const MyPageMain = () => {
     data?.emailVerified ?? false,
   );
 
-  const [nickname, setNickname] = useState(data?.nickname);
-  const [email, setEmail] = useState(data?.email);
+  const [nickname, setNickname] = useState<string>(data?.nickname ?? '');
+  const [isShowNickname, setIsShowNickname] = useState(
+    data?.isShowNickname ?? false,
+  );
+  const [email, setEmail] = useState<string>(data?.email ?? '');
   const [emailAuthCode, setEmailAuthCode] = useState('');
   const [isEmailAuthLoading, setIsEmailAuthLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,23 +58,23 @@ const MyPageMain = () => {
     mutationFn: () => {
       return authAxios.patch('/user/update/nickname', {
         nickname,
+        isShowNickname,
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
       pushAlertQueue('수정에 성공했습니다.', 'success');
 
-      setNickname(data?.nickname);
-      setEmail(data?.email);
+      setNickname(nickname);
+      setIsShowNickname(isShowNickname);
 
-      currentUser.nickname = data?.nickname;
-      currentUser.email = data?.email;
-
+      currentUser.nickname = nickname;
+      currentUser.isShowNickname = isShowNickname;
       setDisabled(false);
     },
     onError: (error: any) => {
-      setNickname(data?.nickname);
-      setEmail(data?.email);
+      setNickname(currentUser.nickname);
+      setIsShowNickname(currentUser.isShowNickname);
 
       if (error.status === '409') {
         pushAlertQueue('이미 사용중인 닉네임입니다.', 'failure');
@@ -100,7 +103,7 @@ const MyPageMain = () => {
 
     try {
       const response = await authAxios.post('/user/request/email', {
-        email: email,
+        email,
       });
 
       if (response.status === 200 || response.status === 201) {
@@ -122,12 +125,13 @@ const MyPageMain = () => {
   const handleEmailAuthComplete = async () => {
     try {
       const response = await authAxios.post('/user/verify/email', {
-        email: email,
+        email,
         code: emailAuthCode,
       });
 
       if (response.status === 200 || response.status === 201) {
         pushAlertQueue('이메일 인증에 성공했습니다.', 'success');
+        currentUser.email = email;
         setIsPassedEmailAuth(true);
       }
     } catch (error: any) {
@@ -160,7 +164,11 @@ const MyPageMain = () => {
 
   // 최종 저장
   const handleUpdateUser = () => {
-    if (currentUser.email === email && currentUser.nickname === nickname) {
+    if (
+      currentUser.email === email &&
+      currentUser.nickname === nickname &&
+      currentUser.isShowNickname === isShowNickname
+    ) {
       pushAlertQueue('변경할 내용이 없습니다.', 'failure');
       return;
     }
@@ -184,36 +192,14 @@ const MyPageMain = () => {
       <form onSubmit={handleUpdateUser} className={style.myUpdateForm}>
         <div className={style.inputWrap}>
           <AuthInput
-            id={'name'}
-            name={'name'}
-            labelValue={'이름'}
-            labelClass={style.inputLabel}
-            className={style.input}
-            readOnly
-            value={currentUser.name}
-          />
-
-          <AuthInput
-            id={'nickname'}
-            name={'nickname'}
-            labelValue={'별명'}
-            labelClass={style.inputLabel}
-            className={style.input}
-            readOnly={!isOnEdit}
-            value={nickname}
-            setValue={setNickname}
-            maxLength={6}
-          />
-
-          <AuthInput
             id={'email'}
             name={'email'}
             labelValue={'이메일'}
             labelClass={style.inputLabel}
             className={style.input}
-            readOnly={!isOnEdit}
             value={email}
             setValue={setEmail}
+            readOnly={isPassedEmailAuth}
           />
 
           <button
@@ -224,7 +210,12 @@ const MyPageMain = () => {
               }
             }}
             className={style.emailAuthButton}
-            disabled={isEmailAuthLoading}
+            disabled={
+              !email ||
+              !email.includes('@') ||
+              !email.includes('.') ||
+              isEmailAuthLoading
+            }
           >
             <span className={style.emailAuthButtonText}>
               {isEmailAuthLoading ? (
@@ -272,6 +263,53 @@ const MyPageMain = () => {
               </section>
             </div>
           )}
+
+          <div className={style.line}></div>
+
+          <AuthInput
+            id={'name'}
+            name={'name'}
+            labelValue={'이름'}
+            labelClass={style.inputLabel}
+            className={style.input}
+            readOnly
+            value={currentUser.name}
+          />
+
+          <AuthInput
+            id={'nickname'}
+            name={'nickname'}
+            labelValue={'별명'}
+            labelClass={style.inputLabel}
+            className={style.input}
+            readOnly={!isOnEdit}
+            value={nickname}
+            setValue={setNickname}
+            maxLength={6}
+          />
+
+          <div className={style.isShowNicknameWrap}>
+            <input
+              type={'checkbox'}
+              id={'isShowNickname'}
+              checked={isShowNickname}
+              onChange={event => {
+                if (nickname && nickname.length > 0) {
+                  setIsShowNickname(event.target.checked);
+                } else {
+                  pushAlertQueue('별명을 입력해주세요.', 'failure');
+                }
+              }}
+              readOnly={!isOnEdit}
+            />
+            <label
+              htmlFor={'isShowNickname'}
+              className={style.isShowNicknameLabel}
+            ></label>
+            <span className={style.isShowNicknameText}>
+              {`${isShowNickname ? '별명' : '이름'}으로 활동하기`}
+            </span>
+          </div>
         </div>
 
         {!isOnEdit && (
