@@ -13,7 +13,10 @@ import style from './styles/card.module.css';
 
 export interface CardProps {
   id: number;
-  writer: Pick<UserProps, 'id' | 'name'>;
+  writer: Pick<
+    UserProps,
+    'id' | 'name' | 'nickname' | 'isShowNickname' | 'userRole'
+  >;
   title: string;
   content: string;
   pickers: Pick<UserProps, 'id'>[];

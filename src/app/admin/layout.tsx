@@ -7,7 +7,7 @@ import { useUserStore } from '@/stores/user/userStore';
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const user = useUserStore(state => state.user);
 
-  if (!user || user.role !== 'ROLE_ADMIN') {
+  if (!user || user.userRole !== 'ROLE_ADMIN') {
     return <ErrorPage error="403" />;
   }
 

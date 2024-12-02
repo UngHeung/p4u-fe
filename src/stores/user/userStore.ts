@@ -4,8 +4,9 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 export interface UserProps {
   id: number;
   name: string;
-  account: string;
-  role: string;
+  nickname: string;
+  isShowNickname: boolean;
+  userRole: string;
 }
 
 export interface UserStore {
@@ -23,9 +24,9 @@ export interface UserStore {
 const initialUser = {
   id: -1,
   name: '',
-  account: '',
-  role: '',
-  createdAt: '',
+  nickname: '',
+  isShowNickname: true,
+  userRole: 'ROLE_USER',
 };
 
 export const useUserStore = create(

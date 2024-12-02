@@ -30,7 +30,11 @@ const CardContent = ({
       </strong>
 
       <span className={style.cardWriter}>
-        {card.isAnonymity ? '익명' : card.writer.name}
+        {card.isAnonymity
+          ? '익명'
+          : card.writer.isShowNickname
+            ? (card.writer.nickname ?? card.writer.name)
+            : card.writer.name}
       </span>
       <section className={style.cardTagWrap}>
         <CardTagList

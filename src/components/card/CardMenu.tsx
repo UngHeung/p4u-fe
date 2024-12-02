@@ -111,7 +111,7 @@ const CardMenu = ({
 
   return (
     <ul className={style.cardMenu}>
-      {user.role !== 'ROLE_ADMIN' ? (
+      {user.userRole !== 'ROLE_ADMIN' ? (
         user.id !== card.writer.id ? (
           <li>
             <button

@@ -136,7 +136,7 @@ const ThanksBoxMenu = ({
       {isMenuOpen && (
         <menu className={styles.thanksMenu}>
           <ul className={styles.thanksMenu}>
-            {user.role !== 'ROLE_ADMIN' ? (
+            {user.userRole !== 'ROLE_ADMIN' ? (
               user.id !== writer.id ? (
                 <li>
                   <button

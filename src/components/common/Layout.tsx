@@ -20,7 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <Header />
           {children}
           {alerts.length > 0 && <AlertQueue alerts={alerts} />}
-          {user.role === 'ROLE_ADMIN' && <AdminMenu />}
+          {user.userRole === 'ROLE_ADMIN' && <AdminMenu />}
         </>
       )}
     </>
