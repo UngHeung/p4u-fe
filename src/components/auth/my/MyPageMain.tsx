@@ -90,7 +90,7 @@ const MyPageMain = () => {
     setIsPassedEmailAuth(data?.emailVerified ?? false);
     setNickname(data?.nickname ?? '');
     setIsShowNickname(data?.isShowNickname ?? false);
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     if (email && email.length > 0 && email === data?.email) {
