@@ -1,13 +1,8 @@
+import {
+  AlertProps,
+  AlertTypes,
+} from '@/components/common/alert/const/alertInterface';
 import { create } from 'zustand';
-
-export type AlertTypes = 'success' | 'failure' | 'notification';
-
-export interface AlertProps {
-  message: string;
-  index?: number;
-  type: AlertTypes;
-  isExiting?: boolean;
-}
 
 export interface AlertStore {
   alertQueue: AlertProps[];
