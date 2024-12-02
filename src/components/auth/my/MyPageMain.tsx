@@ -27,8 +27,8 @@ const MyPageMain = () => {
       setIsLoading(true);
       const response = await getUser();
 
-      setNickname(response.nickname);
-      setEmail(response.email);
+      console.log(response);
+
       setIsLoading(false);
 
       return response;
@@ -65,9 +65,6 @@ const MyPageMain = () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
       pushAlertQueue('수정에 성공했습니다.', 'success');
 
-      setNickname(nickname);
-      setIsShowNickname(isShowNickname);
-
       currentUser.nickname = nickname;
       currentUser.isShowNickname = isShowNickname;
       setDisabled(false);
@@ -87,6 +84,13 @@ const MyPageMain = () => {
       setIsLoading(false);
     },
   });
+
+  useEffect(() => {
+    setEmail(data?.email ?? '');
+    setIsPassedEmailAuth(data?.emailVerified ?? false);
+    setNickname(data?.nickname ?? '');
+    setIsShowNickname(data?.isShowNickname ?? false);
+  }, []);
 
   useEffect(() => {
     if (email && email.length > 0 && email === data?.email) {
@@ -181,10 +185,6 @@ const MyPageMain = () => {
     updateUser.mutate();
   };
 
-  const handleChangePassword = () => {
-    setIsOnChangePassword(true);
-  };
-
   return isLoading ? (
     <Loading color={'#222222'} />
   ) : (
@@ -272,8 +272,8 @@ const MyPageMain = () => {
             labelValue={'이름'}
             labelClass={style.inputLabel}
             className={style.input}
-            readOnly
             value={currentUser.name}
+            readOnly
           />
 
           <AuthInput
