@@ -23,6 +23,7 @@
 
 .mainNavWrap {
   width: 100%;
+  overflow-x: auto;
 }
 
 .mainNav {
@@ -30,9 +31,14 @@
   justify-content: flex-end;
   align-items: center;
   gap: 20px;
+  width: fit-content;
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-medium);
   color: #333333;
+}
+
+.mainNav::-webkit-scrollbar {
+  display: none;
 }
 
 .mainNav li {
@@ -107,7 +113,7 @@
   bottom: -6px;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   .mainHeader {
     justify-content: space-between;
     gap: 0;
