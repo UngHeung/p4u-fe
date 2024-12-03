@@ -1,20 +1,14 @@
 import { authAxios } from '@/apis/axiosInstance';
-import { AlertStore, useAlertStore } from '@/stores/alert/alertStore';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import {
-  ERROR_MESSAGE_ENUM,
-  SUCCESS_MESSAGE_ENUM,
-  VALIDATION_MESSAGE_ENUM,
-} from '../alert/constants/message.enum';
+import useAlert from '../common/alert/useAlert';
 import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
 import CardInput from '../common/input/CardInput';
 import CardTextarea from '../common/textarea/CardTextarea';
 import style from './styles/card.module.css';
 import TagMain from './TagMain';
-import useAlert from '../common/alert/useAlert';
 
 const CardWrite = () => {
   const router = useRouter();
