@@ -40,6 +40,7 @@ export const useCardListQuery = (
 
       return data;
     },
+    staleTime: 1000 * 60 * 5,
     getNextPageParam: lastPage =>
       lastPage.cursor > -1 ? lastPage.cursor : undefined,
     select: data => ({
