@@ -37,7 +37,6 @@ export const useCardListQuery = (
       }
 
       const { data } = await axiosInstance.get(query);
-      console.log(query);
 
       return data;
     },
