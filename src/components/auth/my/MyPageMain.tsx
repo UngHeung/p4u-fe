@@ -225,16 +225,6 @@ const MyPageMain = () => {
       return;
     }
 
-    if (currentUser.email !== email && !isPassedEmailAuth) {
-      pushAlert({
-        target: 'EMAIL_VERIFICATION',
-        type: 'FAILURE',
-        status: 400,
-        reason: 'NOT_VERIFIED',
-      });
-      return;
-    }
-
     if (nickname.length === 0) {
       pushAlert({
         target: 'NICKNAME',
