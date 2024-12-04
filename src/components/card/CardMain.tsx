@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import CardList from './CardList';
 import CardSearch from './CardSearch';
-import { useCardListQuery } from './handlers/useCardListQuery';
+import { useCardListQuery } from './hooks/useCardListQuery';
 
 const CardMain = () => {
   const cardListType = useCardTypeStore(state => state.cardListType);

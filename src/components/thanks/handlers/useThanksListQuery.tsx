@@ -28,7 +28,7 @@ export const useThanksListQuery = (
 
       return data;
     },
-    staleTime: 0,
+    staleTime: 1000 * 60 * 5,
     getNextPageParam: lastPage => {
       return lastPage.cursor > -1 ? lastPage.cursor : undefined;
     },
