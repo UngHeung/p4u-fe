@@ -1,5 +1,5 @@
 import CardList from '@/components/card/CardList';
-import { useCardListQuery } from '@/components/card/handlers/useCardListQuery';
+import { useCardListQuery } from '@/components/card/hooks/useCardListQuery';
 import { useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
