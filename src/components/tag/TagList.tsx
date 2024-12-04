@@ -1,5 +1,5 @@
+import style from '../card/styles/card.module.css';
 import Tag from '../tag/Tag';
-import style from './styles/card.module.css';
 
 const TagList = ({
   tagList,

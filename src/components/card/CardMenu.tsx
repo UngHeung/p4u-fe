@@ -1,10 +1,9 @@
-import { authAxios } from '@/apis/axiosInstance';
-import { useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { useUserStore } from '@/stores/user/userStore';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SetStateAction, useState } from 'react';
-import useAlert from '../common/alert/useAlert';
 import { CardProps } from './Card';
+import useActivateCardMutation from './hooks/useActivateCardMutation';
+import useDeleteCardMutation from './hooks/useDeleteCardMutation';
+import useReportMutation from './hooks/useReportMutation';
 import style from './styles/card.module.css';
 
 const CardMenu = ({
@@ -18,129 +17,24 @@ const CardMenu = ({
   isActive: boolean;
   setIsActive: React.Dispatch<SetStateAction<boolean>>;
 }) => {
-  const cardListType = useCardTypeStore(state => state.cardListType);
   const user = useUserStore(state => state.user);
-
-  const { pushAlert } = useAlert();
 
   const [disabled, setDisabled] = useState(false);
 
-  const queryClient = useQueryClient();
-
-  const handleReportMutation = useMutation({
-    mutationFn: async () => {
-      return await authAxios.patch(`/card/${card.id}/report`);
-    },
-    onSuccess: () => {
-      pushAlert({
-        target: 'CARD_REPORT',
-        type: 'SUCCESS',
-        status: 200,
-      });
-    },
-    onError: (error: any) => {
-      pushAlert({
-        target: 'CARD_REPORT',
-        type: 'FAILURE',
-        status: error.status,
-        reason:
-          error.status === 409
-            ? 'ALREADY_REPORTED'
-            : error.status === 403 || error.status === 401
-              ? 'UNAUTHORIZED'
-              : 'INTERNAL_SERVER_ERROR',
-      });
-    },
-    onSettled: () => {
-      setDisabled(false);
-    },
+  const { setReportMutation, resetReportMutation } = useReportMutation({
+    card,
+    setDisabled,
   });
 
-  const handleResetReportMutation = useMutation({
-    mutationFn: async () => {
-      return await authAxios.patch(`/card/${card.id}/reporter/reset`);
-    },
-    onSuccess: () => {
-      pushAlert({
-        target: 'CARD_REPORT_RESET',
-        type: 'SUCCESS',
-        status: 200,
-      });
-    },
-    onError: (error: any) => {
-      pushAlert({
-        target: 'CARD_REPORT_RESET',
-        type: 'FAILURE',
-        status: error.status,
-        reason:
-          error.status === 403 || error.status === 401
-            ? 'UNAUTHORIZED'
-            : 'INTERNAL_SERVER_ERROR',
-      });
-    },
-    onSettled: () => {
-      setDisabled(false);
-    },
+  const handleActivateMutation = useActivateCardMutation({
+    card,
+    setIsActive,
+    setDisabled,
   });
 
-  const handleActivateMutation = useMutation({
-    mutationFn: async () => {
-      const url = `/card/${card.id}/activate`;
-      setIsActive(prev => !prev);
-
-      return await authAxios.patch(url);
-    },
-    onSuccess: () => {
-      pushAlert({
-        target: 'CARD_ACTIVATE',
-        type: 'SUCCESS',
-        status: 200,
-      });
-      queryClient.invalidateQueries({ queryKey: ['cards', cardListType] });
-    },
-    onError: (error: any) => {
-      setIsActive(prev => !prev);
-      pushAlert({
-        target: 'CARD_ACTIVATE',
-        type: 'FAILURE',
-        status: error.status,
-        reason:
-          error.status === 403 || error.status === 401
-            ? 'UNAUTHORIZED'
-            : 'INTERNAL_SERVER_ERROR',
-      });
-    },
-    onSettled: () => {
-      setDisabled(false);
-    },
-  });
-
-  const handleDeleteMutation = useMutation({
-    mutationFn: async () => {
-      return await authAxios.delete(`/card/${card.id}/delete`);
-    },
-    onSuccess: () => {
-      pushAlert({
-        target: 'CARD_DELETE',
-        type: 'SUCCESS',
-        status: 200,
-      });
-      queryClient.invalidateQueries({ queryKey: ['cards', cardListType] });
-    },
-    onError: (error: any) => {
-      pushAlert({
-        target: 'CARD_DELETE',
-        type: 'FAILURE',
-        status: error.status,
-        reason:
-          error.status === 403 || error.status === 401
-            ? 'UNAUTHORIZED'
-            : 'INTERNAL_SERVER_ERROR',
-      });
-    },
-    onSettled: () => {
-      setDisabled(false);
-    },
+  const handleDeleteMutation = useDeleteCardMutation({
+    card,
+    setDisabled,
   });
 
   return (
@@ -154,7 +48,7 @@ const CardMenu = ({
               onClick={event => {
                 event.stopPropagation();
                 setDisabled(true);
-                handleReportMutation.mutate();
+                setReportMutation.mutate();
                 setIsMenuOpen(false);
               }}
               disabled={disabled}
@@ -186,7 +80,7 @@ const CardMenu = ({
               onClick={event => {
                 event.stopPropagation();
                 setDisabled(true);
-                handleResetReportMutation.mutate();
+                resetReportMutation.mutate();
                 setIsMenuOpen(false);
               }}
               disabled={disabled}

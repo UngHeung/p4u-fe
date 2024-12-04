@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { SetStateAction } from 'react';
 
-const useCardWriteMutation = ({
+const useWriteCardMutation = ({
   setDisabled,
 }: {
   setDisabled: React.Dispatch<SetStateAction<boolean>>;
@@ -35,8 +35,8 @@ const useCardWriteMutation = ({
         status: 200,
       });
 
-      queryClient.refetchQueries({
-        queryKey: ['cardList', cardListType, '', ''],
+      queryClient.invalidateQueries({
+        queryKey: ['cards', cardListType],
       });
 
       router.push('/card/list');
@@ -54,4 +54,4 @@ const useCardWriteMutation = ({
   });
 };
 
-export default useCardWriteMutation;
+export default useWriteCardMutation;

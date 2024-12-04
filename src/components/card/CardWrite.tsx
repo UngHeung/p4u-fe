@@ -4,9 +4,9 @@ import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
 import CardInput from '../common/input/CardInput';
 import CardTextarea from '../common/textarea/CardTextarea';
-import useCardWriteMutation from './hooks/useCardWriteMutation';
+import TagMain from '../tag/TagMain';
+import useWriteCardMutation from './hooks/useWriteCardMutation';
 import style from './styles/card.module.css';
-import TagMain from './TagMain';
 
 const CardWrite = () => {
   const { pushAlert } = useAlert();
@@ -15,7 +15,7 @@ const CardWrite = () => {
   const [tagList, setTagList] = useState<string[]>([]);
   const [disabled, setDisabled] = useState(false);
 
-  const handleWriteCardOnMutation = useCardWriteMutation({
+  const handleWriteCardOnMutation = useWriteCardMutation({
     setDisabled,
   });
 

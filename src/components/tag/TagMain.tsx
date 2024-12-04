@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
+import style from '../card/styles/card.module.css';
 import useAlert from '../common/alert/useAlert';
 import { svgIcons } from '../common/functions/getSvg';
-import style from './styles/card.module.css';
 import TagList from './TagList';
 
 const TagMain = ({
