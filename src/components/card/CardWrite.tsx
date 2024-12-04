@@ -1,61 +1,22 @@
-import { authAxios } from '@/apis/axiosInstance';
-import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import useAlert from '../common/alert/useAlert';
 import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
 import CardInput from '../common/input/CardInput';
 import CardTextarea from '../common/textarea/CardTextarea';
+import useCardWriteMutation from './hooks/useCardWriteMutation';
 import style from './styles/card.module.css';
 import TagMain from './TagMain';
 
 const CardWrite = () => {
-  const router = useRouter();
   const { pushAlert } = useAlert();
-
   const [isAnonymity, setIsAnonymity] = useState(false);
   const [tag, setTag] = useState('');
   const [tagList, setTagList] = useState<string[]>([]);
   const [disabled, setDisabled] = useState(false);
 
-  const handleWriteCardOnMutation = useMutation({
-    mutationFn: (data: {
-      title: string;
-      content: string;
-      keywords: string[];
-      isAnonymity: boolean;
-    }) => {
-      setDisabled(true);
-
-      return authAxios.post(`/card/new`, data);
-    },
-    onSuccess: () => {
-      pushAlert({
-        target: 'CARD_WRITE',
-        type: 'SUCCESS',
-        status: 200,
-      });
-      router.push('/card/list');
-    },
-    onError: (error: any) => {
-      if (error?.status === 401) {
-        pushAlert({
-          target: 'CARD_WRITE',
-          type: 'FAILURE',
-          status: 401,
-        });
-      } else {
-        pushAlert({
-          target: 'CARD_WRITE',
-          type: 'FAILURE',
-          status: 500,
-        });
-      }
-    },
-    onSettled: () => {
-      setDisabled(false);
-    },
+  const handleWriteCardOnMutation = useCardWriteMutation({
+    setDisabled,
   });
 
   const handleWriteCard = async (event: FormEvent<HTMLFormElement>) => {
