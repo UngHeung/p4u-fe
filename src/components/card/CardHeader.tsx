@@ -1,10 +1,9 @@
-import { authAxios } from '@/apis/axiosInstance';
 import { UserProps, UserStore, useUserStore } from '@/stores/user/userStore';
-import { useMutation } from '@tanstack/react-query';
 import { SetStateAction } from 'react';
-import useAlert from '../common/alert/useAlert';
 import { svgIcons } from '../common/functions/getSvg';
 import { CardProps } from './Card';
+import useAnsweredMutation from './hooks/useAnsweredMutation';
+import usePickedMutation from './hooks/usePickedMutation';
 import style from './styles/card.module.css';
 
 const CardHeader = ({
@@ -29,78 +28,21 @@ const CardHeader = ({
   setDisabled: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   const user = useUserStore((state: UserStore) => state.user);
-  const { pushAlert } = useAlert();
 
-  const handleAnsweredOnMutation = useMutation({
-    mutationFn: () => {
-      setDisabled(true);
-      setAnswered(prev => !prev);
-      return authAxios.patch(`/card/${card.id}/answered`, {
-        isAnswered: !answered,
-      });
-    },
-    onSuccess: () => {
-      pushAlert({
-        target: answered ? 'CARD_ANSWERED' : 'CARD_ANSWERED_CANCEL',
-        type: 'SUCCESS',
-        status: 200,
-      });
-    },
-    onError: (error: any) => {
-      setAnswered(prev => !prev);
-
-      pushAlert({
-        target: 'CARD_ANSWERED',
-        type: 'FAILURE',
-        status: error.status,
-        reason: error.status === 401 ? 'UNAUTHORIZED' : 'INTERNAL_SERVER_ERROR',
-      });
-    },
-    onSettled: () => {
-      setDisabled(false);
-    },
+  const handleAnsweredOnMutation = useAnsweredMutation({
+    card,
+    answered,
+    setAnswered,
+    setDisabled,
   });
 
-  const handlePickedOnMutation = useMutation({
-    mutationFn: () => {
-      setDisabled(true);
-      const existPicker = pickersState.some(picker => picker.id === user.id);
-      if (existPicker) {
-        setIsPicker(false);
-        setPickersState(prev => prev.filter(picker => picker.id !== user.id));
-      } else {
-        setIsPicker(true);
-        setPickersState(prev => [...prev, { id: user.id }]);
-      }
-      return authAxios.patch(`/card/${card.id}/pick`);
-    },
-    onSuccess: () => {
-      pushAlert({
-        target: isPicker ? 'CARD_PICK' : 'CARD_UNPICK',
-        type: 'SUCCESS',
-        status: 200,
-      });
-    },
-    onError: (error: any) => {
-      const existPicker = pickersState.some(picker => picker.id === user.id);
-      if (existPicker) {
-        setIsPicker(false);
-        setPickersState(prev => prev.filter(picker => picker.id !== user.id));
-      } else {
-        setIsPicker(true);
-        setPickersState(prev => [...prev, { id: user.id }]);
-      }
-
-      pushAlert({
-        target: isPicker ? 'CARD_PICK' : 'CARD_UNPICK',
-        type: 'FAILURE',
-        status: error.status,
-        reason: error.status === 401 ? 'UNAUTHORIZED' : 'INTERNAL_SERVER_ERROR',
-      });
-    },
-    onSettled: () => {
-      setDisabled(false);
-    },
+  const handlePickedOnMutation = usePickedMutation({
+    card,
+    isPicker,
+    setIsPicker,
+    pickersState,
+    setPickersState,
+    setDisabled,
   });
 
   return (
