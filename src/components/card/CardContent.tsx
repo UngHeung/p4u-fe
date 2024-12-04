@@ -1,5 +1,6 @@
 import { useCardSearchStore } from '@/stores/card/cardSearchStore';
 import { useCardTypeStore } from '@/stores/card/cardTypeStore';
+import React from 'react';
 import { CardProps } from './Card';
 import CardTagList from './CardTagList';
 import style from './styles/card.module.css';
@@ -55,11 +56,11 @@ const findKeywordFromTitle = (title: string, searchKeyword: string) => {
   const titleArr = title.split(searchKeyword);
 
   return titleArr.map((text, idx) => (
-    <>
+    <React.Fragment key={idx}>
       {text}
       {idx === titleArr.length - 1 && text !== ' ' ? null : (
         <span className={style.keyword}>{searchKeyword}</span>
       )}
-    </>
+    </React.Fragment>
   ));
 };
