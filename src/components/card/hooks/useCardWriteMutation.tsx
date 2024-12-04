@@ -2,7 +2,7 @@ import { authAxios } from '@/apis/axiosInstance';
 import useAlert from '@/components/common/alert/useAlert';
 import { useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { SetStateAction } from 'react';
 
 const useCardWriteMutation = ({
