@@ -4,9 +4,9 @@ import MainButton from '../common/button/MainButton';
 import { svgIcons } from '../common/functions/getSvg';
 import CardInput from '../common/input/CardInput';
 import CardTextarea from '../common/textarea/CardTextarea';
+import TagMain from '../tag/TagMain';
 import useWriteCardMutation from './hooks/useWriteCardMutation';
 import style from './styles/card.module.css';
-import TagMain from './TagMain';
 
 const CardWrite = () => {
   const { pushAlert } = useAlert();
