@@ -12,7 +12,7 @@ import style from './styles/card.module.css';
 
 const CardSearch = () => {
   const setCardListType = useCardTypeStore(state => state.setCardListType);
-
+  const currCardList = useCardTypeStore(state => state.currCardList);
   const setTagKeywords = useCardSearchStore(state => state.setTagKeywords);
   const setSearchKeyword = useCardSearchStore(state => state.setSearchKeyword);
   const setIsLoadingTagSearch = useCardSearchStore(
@@ -47,7 +47,7 @@ const CardSearch = () => {
     setIsLoadingTagSearch(true);
     if (selectTagList.length === 0) {
       setTagKeywords('');
-      setCardListType('all');
+      setCardListType(currCardList);
       setIsLoadingTagSearch(false);
       return;
     }

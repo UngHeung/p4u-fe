@@ -1,7 +1,6 @@
 import { baseAxios } from '@/apis/axiosInstance';
 import { CardTypeStore, useCardTypeStore } from '@/stores/card/cardTypeStore';
 import { UserStore, useUserStore } from '@/stores/user/userStore';
-import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -18,13 +17,14 @@ const MainNav = () => {
   const setCardTypeStore = useCardTypeStore(
     (state: CardTypeStore) => state.setCardListType,
   );
+  const setCurrCardList = useCardTypeStore(
+    (state: CardTypeStore) => state.setCurrCardList,
+  );
   const user = useUserStore((state: UserStore) => state.user);
   const setIsLoggedIn = useUserStore((state: UserStore) => state.setIsLoggedIn);
   const isLoggedIn = useUserStore((state: UserStore) => state.isLoggedIn);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const queryClient = useQueryClient();
 
   const handleLogout = async () => {
     try {
@@ -74,8 +74,8 @@ const MainNav = () => {
                 href={'/card/list'}
                 onClick={event => {
                   event.preventDefault();
-                  queryClient.removeQueries({ queryKey: ['cards'] });
                   setCardTypeStore('my');
+                  setCurrCardList('my');
                   setIsMenuOpen(false);
                   router.push('/card/list');
                 }}
@@ -89,6 +89,7 @@ const MainNav = () => {
                 onClick={event => {
                   event.preventDefault();
                   setCardTypeStore('all');
+                  setCurrCardList('all');
                   setIsMenuOpen(false);
                   router.push('/card/list');
                 }}
