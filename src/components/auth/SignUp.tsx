@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 
 import useAlert from '../common/alert/useAlert';
-import MainButton from '../common/button/MainButton';
+import Button from '../common/button/Button';
 import { svgIcons } from '../common/functions/getSvg';
-import AuthInput from '../common/input/AuthInput';
+import TextInput from '../common/input/TextInput';
 import AuthIcons from './AuthIcons';
 import style from './styles/sign.module.css';
 
@@ -99,39 +99,50 @@ const SignUp = () => {
     <form onSubmit={handleSignUp} className={style.signUpForm}>
       <section className={style.inputNameWrap} style={{ opacity, zIndex }}>
         <div className={style.inputWrap}>
-          <AuthInput
-            id={'nameInput'}
-            name={'name'}
-            labelValue={'당신의 이름은?'}
-            labelClass={style.inputLabel}
-            className={style.input}
+          <TextInput
+            inputProps={{
+              id: 'signUpInputName',
+              name: 'name',
+              className: style.input,
+            }}
+            labelProps={{
+              htmlFor: 'signUpInputName',
+              value: '당신의 이름은?',
+            }}
           />
         </div>
 
         <div className={style.buttonWrap}>
           <Link href={'/'}>이미 계정이 있어요!</Link>
-          <MainButton
-            id={'nextButton'}
-            value={{ text: '다음', icon: svgIcons.enter('medium') }}
-            className={`${style.button} ${style.submit}`}
-            onClick={() => {
-              setOpacity('0');
-              setTimeout(() => {
-                setZIndex('-99');
-              }, 500);
+          <Button
+            props={{
+              id: 'signUpNextButton',
+              value: '다음',
+              className: `${style.button} ${style.submit}`,
+              onClick: () => {
+                setOpacity('0');
+                setTimeout(() => {
+                  setZIndex('-99');
+                }, 500);
+              },
             }}
+            icon={svgIcons.enter('medium')}
           />
         </div>
       </section>
 
       <section className={style.inputIdWrap}>
         <div className={style.inputWrap}>
-          <AuthInput
-            id={'account'}
-            name={'account'}
-            labelValue={'아이디를 입력해주세요.'}
-            labelClass={style.inputLabel}
-            className={style.input}
+          <TextInput
+            inputProps={{
+              id: 'signUpInputAccount',
+              name: 'account',
+              className: style.input,
+            }}
+            labelProps={{
+              htmlFor: 'signUpInputAccount',
+              value: '아이디를 입력해주세요',
+            }}
           />
 
           <span
@@ -144,32 +155,43 @@ const SignUp = () => {
               <AuthIcons type="pwIsShow" size="small" />
             )}
           </span>
-          <AuthInput
-            id={'password'}
-            name={'password'}
-            type={passwordIsShow ? 'text' : 'password'}
-            labelValue={'비밀번호를 입력해주세요.'}
-            labelClass={style.inputLabel}
-            className={style.input}
+          <TextInput
+            inputProps={{
+              id: 'signUpInputPassword',
+              name: 'password',
+              className: style.input,
+              type: passwordIsShow ? 'text' : 'password',
+            }}
+            labelProps={{
+              htmlFor: 'signUpInputPassword',
+              value: '비밀번호를 입력해주세요',
+            }}
           />
         </div>
 
         <div className={style.buttonWrap}>
-          <MainButton
-            id={'backButton'}
-            value={{ text: '이전', icon: svgIcons.back() }}
-            className={style.button}
-            onClick={() => {
-              setZIndex('2');
-              setOpacity('1');
+          <Button
+            props={{
+              id: 'backButton',
+              value: '이전',
+              className: style.button,
+              disabled: disabled,
+              onClick: () => {
+                setZIndex('2');
+                setOpacity('1');
+              },
             }}
+            icon={svgIcons.back()}
           />
-          <MainButton
-            id={'submitButton'}
-            type={'submit'}
-            value={{ text: '가입', icon: svgIcons.enter('medium') }}
-            className={`${style.button} ${style.submit}`}
-            disabled={disabled}
+          <Button
+            props={{
+              id: 'submitButton',
+              type: 'submit',
+              value: '가입',
+              className: `${style.button} ${style.submit}`,
+              disabled: disabled,
+            }}
+            icon={svgIcons.enter('medium')}
           />
         </div>
       </section>
