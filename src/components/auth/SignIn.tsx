@@ -9,7 +9,7 @@ import useAlert from '../common/alert/useAlert';
 import MainButton from '../common/button/MainButton';
 import { setToken } from '../common/constants/accessToken';
 import { svgIcons } from '../common/functions/getSvg';
-import AuthInput from '../common/input/AuthInput';
+import TextInput from '../common/input/TextInput';
 import {
   generateBasicToken,
   getUserByPayload,
@@ -96,12 +96,16 @@ const SignIn = () => {
     <form onSubmit={handleSignIn} className={style.signInForm}>
       <section className={style.inputIdWrap}>
         <div className={style.inputWrap}>
-          <AuthInput
-            id={'account'}
-            name={'account'}
-            labelValue={'아이디를 입력해주세요.'}
-            labelClass={style.inputLabel}
-            className={style.input}
+          <TextInput
+            inputProps={{
+              id: 'account',
+              name: 'account',
+              className: style.input,
+            }}
+            labelProps={{
+              htmlFor: 'account',
+              value: '아이디를 입력해주세요',
+            }}
           />
 
           <span
@@ -110,13 +114,18 @@ const SignIn = () => {
           >
             {passwordIsShow ? svgIcons.visible(false) : svgIcons.visible(true)}
           </span>
-          <AuthInput
-            id={'password'}
-            name={'password'}
-            type={passwordIsShow ? 'text' : 'password'}
-            labelValue={'비밀번호를 입력해주세요.'}
-            labelClass={style.inputLabel}
-            className={style.input}
+          <TextInput
+            inputProps={{
+              id: 'password',
+              name: 'password',
+              className: style.input,
+              type: passwordIsShow ? 'text' : 'password',
+            }}
+            labelProps={{
+              htmlFor: 'account',
+              value: '비밀번호를 입력해주세요',
+              className: style.inputLabel,
+            }}
           />
         </div>
 
