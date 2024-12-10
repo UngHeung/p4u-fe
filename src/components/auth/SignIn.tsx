@@ -6,10 +6,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import useAlert from '../common/alert/useAlert';
-import MainButton from '../common/button/MainButton';
+import Button from '../common/button/Button';
 import { setToken } from '../common/constants/accessToken';
 import { svgIcons } from '../common/functions/getSvg';
-import AuthInput from '../common/input/AuthInput';
+import TextInput from '../common/input/TextInput';
 import {
   generateBasicToken,
   getUserByPayload,
@@ -96,12 +96,16 @@ const SignIn = () => {
     <form onSubmit={handleSignIn} className={style.signInForm}>
       <section className={style.inputIdWrap}>
         <div className={style.inputWrap}>
-          <AuthInput
-            id={'account'}
-            name={'account'}
-            labelValue={'아이디를 입력해주세요.'}
-            labelClass={style.inputLabel}
-            className={style.input}
+          <TextInput
+            inputProps={{
+              id: 'loginInputAccount',
+              name: 'account',
+              className: style.input,
+            }}
+            labelProps={{
+              htmlFor: 'loginInputAccount',
+              value: '아이디를 입력해주세요',
+            }}
           />
 
           <span
@@ -110,24 +114,31 @@ const SignIn = () => {
           >
             {passwordIsShow ? svgIcons.visible(false) : svgIcons.visible(true)}
           </span>
-          <AuthInput
-            id={'password'}
-            name={'password'}
-            type={passwordIsShow ? 'text' : 'password'}
-            labelValue={'비밀번호를 입력해주세요.'}
-            labelClass={style.inputLabel}
-            className={style.input}
+          <TextInput
+            inputProps={{
+              id: 'loginInputPassword',
+              name: 'password',
+              className: style.input,
+              type: passwordIsShow ? 'text' : 'password',
+            }}
+            labelProps={{
+              htmlFor: 'loginInputPassword',
+              value: '비밀번호를 입력해주세요',
+            }}
           />
         </div>
 
         <div className={style.buttonWrap}>
           <Link href={'/signup'}>가입 하러가기!</Link>
-          <MainButton
-            id={'submitButton'}
-            type={'submit'}
-            value={{ text: '로그인', icon: svgIcons.enter('medium') }}
-            className={`${style.button} ${style.submit}`}
-            disabled={disabled}
+          <Button
+            props={{
+              id: 'submitButton',
+              type: 'submit',
+              value: '로그인',
+              className: `${style.button} ${style.submit}`,
+              disabled: disabled,
+            }}
+            icon={svgIcons.enter('medium')}
           />
         </div>
 
