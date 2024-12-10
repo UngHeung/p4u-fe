@@ -98,12 +98,12 @@ const SignIn = () => {
         <div className={style.inputWrap}>
           <TextInput
             inputProps={{
-              id: 'account',
+              id: 'loginInputAccount',
               name: 'account',
               className: style.input,
             }}
             labelProps={{
-              htmlFor: 'account',
+              htmlFor: 'loginInputAccount',
               value: '아이디를 입력해주세요',
             }}
           />
@@ -116,15 +116,14 @@ const SignIn = () => {
           </span>
           <TextInput
             inputProps={{
-              id: 'password',
+              id: 'loginInputPassword',
               name: 'password',
               className: style.input,
               type: passwordIsShow ? 'text' : 'password',
             }}
             labelProps={{
-              htmlFor: 'account',
+              htmlFor: 'loginInputPassword',
               value: '비밀번호를 입력해주세요',
-              className: style.inputLabel,
             }}
           />
         </div>
